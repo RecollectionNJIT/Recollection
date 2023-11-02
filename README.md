@@ -1,1 +1,144 @@
-# Recollection
+# Milestone 1 - Recollection (Unit 7)
+
+## Table of Contents
+
+1. [Overview](#Overview)
+1. [Product Spec](#Product-Spec)
+1. [Wireframes](#Wireframes)
+
+## Overview
+
+### Description
+
+There doesn't seem to exist an app that combines notes, reminders, your calendar, & spreadsheets all in one place. The idea is to essentially fill that gap and make a one stop shop for users to store their data across all four of those things. Calendar can cover any deadlines you might have. Notes can cover things like regular lists, images, map locations, so on and so forth. Reminders can be things you add to then.. be reminded about.. through notifcations. And then spreadsheets lets you do budgets & finances more officially.
+
+### App Evaluation
+- **Mobile**: It's more than a website because it links most of its aspects to work together. On top of that, the Notes can implement many aspects including images and map markers.  
+- **Story:** There doesn't exist an app that currently combines finance management, calendar, reminders, as well as notes in one easy to access place. This app could fill that gap and be the one stop shop for everything relating to reminders and notes.
+- **Market:** Essentially any user that wants to manage their finances alongside their calendar as well as recorded notes.
+- **Habit:** At the very least, it should at least be monthly. But the frequency of use really depends on how much information the user wants to keep track of. It will include "your day at a glance," so daily use is not out of the picture.
+- **Scope:** Each version will essentially be one major feature. As the features are built, so will the links between them. i.e. the calendar should connect to the reminders. A stripped down version is still interesting to build because it should still be useful.
+
+## Product Spec
+
+### 1. User Features (Required and Optional)
+
+**Required Features**
+
+1. Spreadsheet functionality to track finances.
+2. Notes functionality to keep record of various items:
+    - Text
+    - Todo Lists
+    - Images (Capture or Insert)
+    - Connectivity between notes to calendar and reminders.
+3. Calendar functionality to track events.
+    - Connectivity between calendar events going to reminders. 
+4. Reminders functionality to get push notifications for inserted items.
+    - Connectivity between reminders to calendar. 
+6. Login with Google
+7. Your day at a glance -- info from all four aspects as home screen.
+
+**Optional Features**
+
+1. Weather for your day at a glance.
+2. Connectivity between spreadsheets and the other three aspects.
+3. Notes functionality to integrate map markers/locations as a note item.
+4. Connectivity between notes map marks to calendar.
+5. Settings Screen (just for dark mode).
+
+
+### 2. Screen Archetypes
+
+- **Login/Register Screen**
+    - Login MUST happen with a Google account.
+- **Stream**
+    - Your day at a glance. (Initial Screen)
+    - Calendar
+    - Reminders
+    - Spreadsheets
+    - Notes
+- **Detail**
+    - Going into a specific note
+    - Going into a specific reminder
+    - Going into a specific spreadsheet
+    - Going into a specific calendar event.
+- **Creation**
+    - Adding a new note.
+    - Creating a new spreadsheet.
+    - Creating a new calendar event.
+    - Creating a new reminder.
+
+### 3. Navigation
+
+**Tab Navigation** (Tab to Screen)
+
+* Home
+* Calendar
+* Reminders
+* Spreadsheets
+* Notes
+
+**Flow Navigation** (Screen to Screen)
+
+- Login Screen
+    - => Your day at a glance (Home screen)
+- Stream Screen
+    - => Detail Screen
+    - => Creation Screen
+- Detail
+    - => Back to Stream
+- Creation
+    - => Back to Stream
+
+## Wireframes
+
+[Add picture of your hand sketched wireframes in this section] <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+
+<br>
+
+<br>
+
+### [BONUS] Digital Wireframes & Mockups
+
+### [BONUS] Interactive Prototype
+
+<br>
+
+# Milestone 2 - Build Sprint 1 (Unit 8)
+
+## GitHub Project board
+
+[Add screenshot of your Project Board with three milestones visible in
+this section]
+<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+
+## Issue cards
+
+- [Add screenshot of your Project Board with the issues that you've been working on for this unit's milestone] <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+- [Add screenshot of your Project Board with the issues that you're working on in the **NEXT sprint**. It should include issues for next unit with assigned owners.] <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+
+## Issues worked on this sprint
+
+- List the issues you completed this sprint
+- [Add giphy that shows current build progress for Milestone 2. Note: We will be looking for progression of work between Milestone 2 and 3. Make sure your giphys are not duplicated and clearly show the change from Sprint 1 to 2.]
+
+<br>
+
+# Milestone 3 - Build Sprint 2 (Unit 9)
+
+## GitHub Project board
+
+[Add screenshot of your Project Board with the updated status of issues for Milestone 3. Note that these should include the updated issues you worked on for this sprint and not be a duplicate of Milestone 2 Project board.] <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+
+## Completed user stories
+
+- List the completed user stories from this unit
+- List any pending user stories / any user stories you decided to cut
+from the original requirements
+
+[Add video/gif of your current application that shows build progress]
+<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+
+## App Demo Video
+
+- Embed the YouTube/Vimeo link of your Completed Demo Day prep video
