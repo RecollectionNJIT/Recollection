@@ -45,7 +45,7 @@ There doesn't seem to exist an app that combines notes, reminders, your calendar
 3. Notes functionality to integrate map markers/locations as a note item.
 4. Connectivity between notes map marks to calendar.
 5. Settings Screen (just for dark mode).
-
+6. Layout Responsivity
 
 ### 2. Screen Archetypes
 
