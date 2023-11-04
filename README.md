@@ -99,8 +99,14 @@ There doesn't seem to exist an app that combines notes, reminders, your calendar
 <br>
 
 ### [BONUS] Digital Wireframes & Mockups
+<img src='DigitalWireframe1.png' title='Digital Wireframe -- No Flow' width='' alt='Digital Wireframe -- No Flow' />
+<img src='DigitalWireframe2.png' title='Digital Wireframe -- With Flow' width='' alt='Digital Wireframe -- With Flow' />
 
 ### [BONUS] Interactive Prototype
+<img src='RecollectionPrototype.gif' title='Interactive Prototype' width='' alt='Interactive Prototype' />
+
+<!-- Replace this with whatever GIF tool you used! -->
+GIF created with [ShareX](https://getsharex.com/). 
 
 <br>
 
