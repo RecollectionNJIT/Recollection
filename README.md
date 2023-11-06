@@ -92,7 +92,7 @@ There doesn't seem to exist an app that combines notes, reminders, your calendar
 
 ## Wireframes
 
-[Add picture of your hand sketched wireframes in this section] <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+<img src='HanddrawnWireframes.jpg' title='Handdrawn Wireframes' width='' alt='Handdrawn Wireframes' />
 
 <br>
 
