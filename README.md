@@ -10,7 +10,7 @@
 
 ### Description
 
-There doesn't seem to exist an app that combines notes, reminders, your calendar, & spreadsheets all in one place. The idea is to essentially fill that gap and make a one stop shop for users to store their data across all four of those things. Calendar can cover any deadlines you might have. Notes can cover things like regular lists, images, map locations, so on and so forth. Reminders can be things you add to then.. be reminded about.. through notifcations. And then spreadsheets lets you do budgets & finances more officially.
+There doesn't seem to exist an app that combines notes, reminders, your calendar, & spreadsheets all in one place. The idea is to essentially fill that gap and make a one-stop shop for users to store their data across all four of those things. Calendar can cover any deadlines you might have. Notes can cover things like regular lists, images, map locations, and so on and so forth. Reminders can be things you add to then be reminded about through push notifications. Last but not least, spreadsheets let you do budgets & finances more officially.
 
 ### App Evaluation
 - **Mobile**: It's more than a website because it links most of its aspects to work together. On top of that, the Notes can implement many aspects including images and map markers.  
