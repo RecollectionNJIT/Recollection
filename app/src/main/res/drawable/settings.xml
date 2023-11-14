@@ -1,0 +1,20 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:gravity="fill"
+    android:drawable="@drawable/baseline_brightness_1_24"
+    />
+    <item
+        android:gravity="center"
+        android:drawable="@drawable/baseline_brightness_2_24"
+        android:width="45dp"
+        android:height="45dp"
+    />
+<item
+    android:gravity="center"
+    android:drawable="@drawable/baseline_settings_24"
+    android:top="10dp"
+    android:bottom="10dp"
+    android:left="10dp"
+    android:right="10dp"
+    />
+</layer-list>

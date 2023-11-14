@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "297948496797",
+    "project_id": "recollection-d018d",
+    "storage_bucket": "recollection-d018d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297948496797:android:af8156bcbeb07f1140e574",
+        "android_client_info": {
+          "package_name": "edu.njit.recollection"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "297948496797-2k0v9735s597utng4lmesiphue2vbusm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUupPtgpJB2knhnU44KEYa3-bmfn7YJYM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "297948496797-2k0v9735s597utng4lmesiphue2vbusm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
