@@ -1,11 +1,11 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 <item
     android:gravity="fill"
-    android:drawable="@drawable/baseline_brightness_1_24"
+    android:drawable="@drawable/settings_outline_circle"
     />
     <item
         android:gravity="center"
-        android:drawable="@drawable/baseline_brightness_2_24"
+        android:drawable="@drawable/settings_fill_circle"
         android:width="45dp"
         android:height="45dp"
     />

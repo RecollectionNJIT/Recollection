@@ -34,6 +34,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    packagingOptions {
+            exclude("META-INF/DEPENDENCIES")
+    }
     buildFeatures {
         viewBinding = true
     }
@@ -56,5 +59,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.api-client:google-api-client:2.0.0")
+    implementation("com.google.oauth-client:google-oauth-client-jetty:1.34.1")
+    implementation("com.google.apis:google-api-services-sheets:v4-rev20220927-2.0.0")
 }
 

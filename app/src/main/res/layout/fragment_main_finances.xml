@@ -1,52 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainFinancesFragment"
     android:background="@color/teal">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/tvFinanceHeader"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
         <TextView
-            android:id="@+id/textViewFinance"
+            android:id="@+id/tvFinanceHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello World - Finance!"
+            android:text="spreadsheets:"
+            android:textSize="30sp"
+            android:fontFamily="sans-serif-smallcaps"
             android:textColor="@color/white"
+            android:layout_marginBottom="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/rvFinance"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFinance"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            tools:listitem="@layout/rv_finance_item"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/btnAddFinances"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add"
-            app:layout_constraintBottom_toTopOf="@+id/btnDetailsFinances"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@null"
+            android:contentDescription="Add Button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewFinance"
-            android:textColor="@color/teal"
-            android:background="@drawable/rounded_corners"
-            android:theme="@style/White"/>
-
-        <Button
-            android:id="@+id/btnDetailsFinances"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Details"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewFinance"
-            android:textColor="@color/teal"
-            android:background="@drawable/rounded_corners"
-            android:theme="@style/White"/>
-
+            app:srcCompat="@drawable/add" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
