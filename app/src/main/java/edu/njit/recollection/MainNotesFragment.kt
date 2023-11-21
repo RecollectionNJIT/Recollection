@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.Button
+import androidx.recyclerview.widget.GridLayoutManager
 
 class MainNotesFragment : Fragment() {
     private lateinit var rvNotes: RecyclerView
@@ -18,6 +19,10 @@ class MainNotesFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,7 +31,7 @@ class MainNotesFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_main_notes, container, false)
         // do stuff here
         rvNotes = view.findViewById<RecyclerView>(R.id.rvNotes)
-        rvNotes.layoutManager = LinearLayoutManager(view.context)
+        rvNotes.layoutManager = GridLayoutManager(view.context, 2)
         adapter = NotesAdapter(view.context, notes)
         rvNotes.adapter = adapter
 
@@ -43,9 +48,26 @@ class MainNotesFragment : Fragment() {
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // Call the new method within onViewCreated
+        updateRV()
+    }
+
+
     companion object {
         fun newInstance() : MainNotesFragment {
             return MainNotesFragment()
         }
+    }
+
+    fun updateRV() {
+        notes.clear()
+        notes.add(Note("Hello","I'm bored",null))
+        notes.add(Note("It's me","I'm sick",null))
+        notes.add(Note("I don't remember","I'm tired",null))
+        notes.add(Note("The words to Adele's songs","I'm dying",null))
+        notes.add(Note("So goodnight","I'm ded",null))
+        adapter.notifyDataSetChanged()
     }
 }

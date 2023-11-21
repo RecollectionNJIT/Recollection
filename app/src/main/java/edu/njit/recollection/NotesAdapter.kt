@@ -36,15 +36,20 @@ class NotesAdapter (private val context: Context, private val notesList: List<No
                 titleTextView.text = note.title
                 bodyTextView.text = note.body
 
-                note.imageLocation?.let {
+                if (!note.imageLocation.isNullOrBlank()) {
                     Glide.with(context)
-                        .load(it)
+                        .load(note.imageLocation)
                         .into(imageView)
+                } else {
+                    // If there is no image, you may want to set a placeholder or handle it in some way
+                    imageView.setImageDrawable(null) // Set to null or provide a placeholder image
                 }
             }
 
         override fun onClick(v: View?) {
-            val note = notesList.get(position)
+            val note = notesList[adapterPosition]
+
+
 
             val intent = Intent(context, DetailsNotesFragment::class.java)
             intent.putExtra("fragment","notes")
