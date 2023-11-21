@@ -6,9 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.widget.Button
 
 class MainNotesFragment : Fragment() {
+    private lateinit var rvNotes: RecyclerView
+    private lateinit var adapter: NotesAdapter
+    private val notes = mutableListOf<Note>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -20,6 +25,11 @@ class MainNotesFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_main_notes, container, false)
         // do stuff here
+        rvNotes = view.findViewById<RecyclerView>(R.id.rvNotes)
+        rvNotes.layoutManager = LinearLayoutManager(view.context)
+        adapter = NotesAdapter(view.context, notes)
+        rvNotes.adapter = adapter
+
         view.findViewById<Button>(R.id.btnDetailsNotes).setOnClickListener {
             val i = Intent(view.context, DetailsActivity::class.java)
             i.putExtra("fragment", "notes")

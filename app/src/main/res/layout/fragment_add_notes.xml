@@ -1,25 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddNotesFragment"
-    android:background="@color/teal">
+    android:background="@color/white">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textViewNotesAdd"
+        <EditText
+            android:id="@+id/addTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="AddActivity - Notes"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="64dp"
+            android:ems="10"
+            android:hint="Title"
+            android:inputType="text"
+            android:textColor="@color/teal"
+            android:textColorHint="@color/teal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/addBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:hint="Notes"
+            android:inputType="text"
+            android:textColor="@color/teal"
+            android:textColorHint="@color/teal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addTitle" />
+
+        <Button
+            android:id="@+id/createNotesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="128dp"
+            android:background="@drawable/rounded_corners"
+            android:text="Add Note"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addBody" />
+
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
