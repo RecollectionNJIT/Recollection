@@ -56,5 +56,6 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.kizitonwose.calendar:view:2.4.0")
 }
 

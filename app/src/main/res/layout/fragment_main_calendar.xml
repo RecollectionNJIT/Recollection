@@ -11,42 +11,80 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textViewCalendar"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Hello World - Calendar!"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:textAlignment="center"
+                android:id="@+id/calendarMonth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="November"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:background="@color/dark_teal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <include
+                android:id="@+id/titlesContainer"
+                layout="@layout/calendar_day_titles_container" />
+
+            <com.kizitonwose.calendar.view.CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cv_dayViewResource="@layout/calendar_day_layout"
+                app:cv_monthHeaderResource="@layout/calendar_day_titles_container" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/calendarDay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/dark_teal"
+            android:text="November"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
 
         <Button
             android:id="@+id/btnAddCalendar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
             android:text="Add"
+            android:textColor="@color/teal"
+            android:theme="@style/White"
             app:layout_constraintBottom_toTopOf="@+id/btnDetailsCalendar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewCalendar"
-            android:textColor="@color/teal"
-            android:background="@drawable/rounded_corners"
-            android:theme="@style/White"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/btnDetailsCalendar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
             android:text="Details"
+            android:textColor="@color/teal"
+            android:theme="@style/White"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewCalendar"
-            android:textColor="@color/teal"
-            android:background="@drawable/rounded_corners"
-            android:theme="@style/White"/>
+            app:layout_constraintTop_toBottomOf="@+id/calendarDay" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
