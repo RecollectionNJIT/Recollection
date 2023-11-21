@@ -1,25 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddCalendarFragment"
     android:background="@color/teal">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textViewCalendarAdd"
+        <EditText
+            android:id="@+id/editTextText"
+            android:layout_width="294dp"
+            android:layout_height="48dp"
+            android:layout_margin="10dp"
+            android:layout_marginTop="50dp"
+            android:ems="10"
+            android:hint="Title"
+            android:inputType="text"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <EditText
+            android:id="@+id/editTextTextMultiLine2"
+            android:layout_width="295dp"
+            android:layout_height="164dp"
+            android:ems="10"
+            android:hint="Description"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/white"
+            android:inputType="textMultiLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+
+        <EditText
+            android:layout_marginBottom="20dp"
+            android:id="@+id/editTextTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="AddActivity - Calendar"
+            android:ems="10"
+            android:hint="time"
+            android:textColor="@color/white"
+            android:inputType="time"
+            app:layout_constraintBottom_toTopOf="@+id/editTextTime2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:layout_marginBottom="20dp"
+            android:id="@+id/editTextTime2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textColor="@color/white"
+            android:hint="time"
+            android:inputType="time"
+            app:layout_constraintBottom_toTopOf="@+id/checkBox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="34dp"
+            android:textSize="20sp"
+            android:text="From:"
+            android:layout_marginLeft="38dp"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/textView3"
+            app:layout_constraintEnd_toStartOf="@+id/editTextTime"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginBottom="36dp"
+            android:text="Until:"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/checkBox"
+            app:layout_constraintEnd_toStartOf="@+id/editTextTime2"
+            app:layout_constraintHorizontal_bias="0.26"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="#FFFFFF"
+            android:text="Add to reminder?"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine2" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/dark_teal"
+            android:text="Submit"
+            android:textSize="20sp"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
