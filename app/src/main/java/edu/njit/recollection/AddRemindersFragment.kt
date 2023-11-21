@@ -15,6 +15,7 @@ import java.util.Locale
 
 class AddRemindersFragment : Fragment() {
     lateinit var myCalendar: Calendar
+    lateinit var selectReminderTitle: EditText
     lateinit var selectReminderDescription: EditText
     lateinit var selectReminderDate: EditText
     lateinit var createReminderBtn: Button
@@ -31,6 +32,7 @@ class AddRemindersFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_add_reminders, container, false)
 
         // Retrieve Description and Date from User
+        selectReminderTitle = view.findViewById(R.id.selectReminderTitle)
         selectReminderDescription = view.findViewById(R.id.selectReminderDescription)
         selectReminderDate = view.findViewById(R.id.selectReminderDate)
         createReminderBtn = view.findViewById(R.id.createReminderBtn)

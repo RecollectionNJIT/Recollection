@@ -56,9 +56,16 @@ class MainRemindersFragment : Fragment() {
 
     fun updateRV() {
         items.clear()
-        // Add your reminders data to the items list
-        items.add(Reminder("Title", "Description", "Date", "0"))
-        items.add(Reminder("Trial", "trying to display reminder", "11/12/2023", "1"))
+        items.clear()
+        // Add pairs of reminders to the items list
+        items.add(Reminder("Title1", "Description1", "Date1", "0"))
+        items.add(Reminder("Title2", "Description2", "Date2", "1"))
+        items.add(Reminder("Title3", "Description3", "Date3", "2"))
+        items.add(Reminder("Title4", "Description4", "Date4", "3"))
+        items.add(Reminder("Title5", "Description5", "Date5", "4"))
+        items.add(Reminder("Title6", "Description6", "Date6", "5"))
+        items.add(Reminder("Title7", "Description7", "Date7", "6"))
+        items.add(Reminder("Title8", "Description8", "Date8", "7"))
         adapter.notifyDataSetChanged()
     }
 }

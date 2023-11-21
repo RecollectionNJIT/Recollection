@@ -24,6 +24,24 @@
             app:layout_constraintBottom_toTopOf="@+id/selectReminderDescription" />
 
         <!-- EditText for reminder description -->
+
+        <EditText
+            android:id="@+id/selectReminderTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Enter Reminder Title"
+            android:inputType="textMultiLine"
+            android:padding="5dp"
+            android:textColor="@color/teal"
+            android:textColorHint="@color/teal"
+            app:layout_constraintTop_toBottomOf="@+id/textViewRemindersAdd"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/selectReminderDescription" />
+
         <EditText
             android:id="@+id/selectReminderDescription"
             android:layout_width="0dp"
@@ -36,10 +54,10 @@
             android:padding="5dp"
             android:textColor="@color/teal"
             android:textColorHint="@color/teal"
-            app:layout_constraintTop_toBottomOf="@+id/textViewRemindersAdd"
+            app:layout_constraintTop_toBottomOf="@+id/selectReminderTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/createReminderBtn" />
+            app:layout_constraintBottom_toTopOf="@+id/selectReminderDate" />
 
         <EditText
             android:id="@+id/selectReminderDate"
