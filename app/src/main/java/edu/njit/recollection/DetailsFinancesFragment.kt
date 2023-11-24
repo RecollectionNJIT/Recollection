@@ -17,7 +17,9 @@ class DetailsFinancesFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_details_finances, container, false)
-        // do stuff here
+        val entry = activity?.intent?.extras?.getSerializable("entry") as FinanceEntry
+        val id = entry.id
+
         return view
     }
 

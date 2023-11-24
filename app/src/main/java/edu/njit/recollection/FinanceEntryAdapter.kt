@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-class FinanceSpreadsheetAdapter (private val context: Context, private val items: List<FinanceSpreadsheet>): RecyclerView.Adapter<FinanceSpreadsheetAdapter.ViewHolder>() {
+class FinanceEntryAdapter (private val context: Context, private val items: List<FinanceEntry>): RecyclerView.Adapter<FinanceEntryAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvFinanceRVDate: TextView = itemView.findViewById(R.id.tvFinanceRVDate)
     }
@@ -24,7 +24,7 @@ class FinanceSpreadsheetAdapter (private val context: Context, private val items
         holder.itemView.setOnClickListener {
             val i = Intent(context, DetailsActivity::class.java)
             i.putExtra("fragment", "finances")
-            i.putExtra("date", listItem)
+            i.putExtra("entry", listItem)
             context.startActivity(i)
         }
     }

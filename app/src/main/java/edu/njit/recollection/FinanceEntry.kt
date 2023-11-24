@@ -1,5 +1,5 @@
 package edu.njit.recollection
-data class FinanceSpreadsheet(
+data class FinanceEntry(
     val date: String?,
     val id: String?
 ) : java.io.Serializable

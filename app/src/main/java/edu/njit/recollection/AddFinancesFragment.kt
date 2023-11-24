@@ -3,18 +3,26 @@ package edu.njit.recollection
 import android.app.DatePickerDialog
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
+import com.google.api.services.sheets.v4.Sheets
 import java.util.Calendar
 import java.util.Locale
 
 class AddFinancesFragment : Fragment() {
     lateinit var myCalendar: Calendar
-    lateinit var selectMonthET: EditText
+    lateinit var selectDateET: EditText
+    lateinit var monthDate: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -25,8 +33,9 @@ class AddFinancesFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add_finances, container, false)
+
         // Retrieve Date from User
-        selectMonthET = view.findViewById(R.id.selectMonthET)
+        selectDateET = view.findViewById(R.id.selectDateET)
         myCalendar = Calendar.getInstance()
         val date =
             DatePickerDialog.OnDateSetListener { view, year, month, day ->
@@ -35,31 +44,76 @@ class AddFinancesFragment : Fragment() {
                 myCalendar.set(Calendar.DAY_OF_MONTH, day)
                 updateLabel()
             }
-        selectMonthET.setOnClickListener {
+        selectDateET.setOnClickListener {
             val dpd = DatePickerDialog(
                 view.context,
-                android.R.style.Theme_Holo_Light_Dialog,
                 date,
                 myCalendar.get(Calendar.YEAR),
                 myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)
             )
             dpd.datePicker.maxDate = System.currentTimeMillis() - 1000
-            dpd.datePicker.findViewById<View>(resources.getIdentifier("day","id","android")).visibility = View.GONE
             dpd.show()
         }
 
-        // Create the Spreadsheet entry
-        view.findViewById<Button>(R.id.createSpreadsheetBtn).setOnClickListener {
-//            activity?.finish()
-        }
+        // Retrieve selections from Spinners
+        var typeChoice = ""
+        var category = ""
+        val typeOptions = arrayOf("Income", "Expense")
+        val typeSpinnerAdapter = ArrayAdapter(view.context, R.layout.spinner_finance_item, typeOptions)
+        view.findViewById<Spinner>(R.id.typeSpinner).adapter = typeSpinnerAdapter
+        view.findViewById<Spinner>(R.id.typeSpinner).onItemSelectedListener =
+                object: AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                        typeChoice = typeOptions[p2]
 
+                        // Determine categories based on type
+                        var categoryOptions = emptyArray<String>()
+                        if (typeChoice == "Income") {
+                            categoryOptions = arrayOf("Work/Paycheck", "Other")
+                        }
+                        else if (typeChoice == "Expense") {
+                            categoryOptions = arrayOf("Rent", "Groceries", "Dining", "Bills", "Entertainment", "Other")
+                        }
+                        val categorySpinnerAdapter = ArrayAdapter(view.context, R.layout.spinner_finance_item, categoryOptions)
+                        view.findViewById<Spinner>(R.id.categorySpinner).adapter = categorySpinnerAdapter
+                        view.findViewById<Spinner>(R.id.categorySpinner).onItemSelectedListener =
+                            object: AdapterView.OnItemSelectedListener {
+                                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                                    category = categoryOptions[p2]
+                                }
+                                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                            }
+                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+                }
+
+        // This makes it so the input for price is locked to 2 places after the decimal.
+        view.findViewById<EditText>(R.id.itemPriceET).setFilters(
+            arrayOf<InputFilter>(
+                DigitsInputFilter(
+                    Integer.MAX_VALUE,
+                    2,
+                    Double.POSITIVE_INFINITY
+                )
+            )
+        )
+
+        // Create the Finance entry
+        view.findViewById<Button>(R.id.addEntryBtn).setOnClickListener {
+            // Need to take the date, create a FinanceSpreadsheet item, create a google sheet, duplicate the template, and then pass control to that.
+        }
         return view
     }
     private fun updateLabel() {
-        val myFormat = "MMMM yyyy"
-        val dateFormat = SimpleDateFormat(myFormat, Locale.US)
-        selectMonthET.setText(dateFormat.format(myCalendar.getTime()))
+        var myFormat = "MMMM yyyy"
+        var dateFormat = SimpleDateFormat(myFormat, Locale.US)
+        //Get the Month and Year from input, store it in a separate variable for object creation
+        monthDate = dateFormat.format(myCalendar.getTime())
+        //Display a different format to user.
+        myFormat = "MM/dd/yyyy"
+        dateFormat = SimpleDateFormat(myFormat, Locale.US)
+        selectDateET.setText(dateFormat.format(myCalendar.getTime()))
     }
     companion object {
         fun newInstance() : AddFinancesFragment {

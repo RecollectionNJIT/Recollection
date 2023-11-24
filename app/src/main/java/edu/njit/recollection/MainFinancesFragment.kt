@@ -6,14 +6,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.database
 
 class MainFinancesFragment : Fragment() {
     private lateinit var rvFinance: RecyclerView
-    private lateinit var adapter: FinanceSpreadsheetAdapter
-    private val items = mutableListOf<FinanceSpreadsheet>()
+    private lateinit var adapter: FinanceEntryAdapter
+    private val items = mutableListOf<FinanceEntry>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -25,12 +30,21 @@ class MainFinancesFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_main_finances, container, false)
 
+        // Set up Alltime Finances Button
+        view.findViewById<Button>(R.id.btnSeeAlltimeFinances).setOnClickListener {
+            val i = Intent(view.context, DetailsActivity::class.java)
+            i.putExtra("fragment", "finances")
+            i.putExtra("entry", FinanceEntry("January 2023", "1Bm0rRYIoD_jHncar78Z98Fi4HDiHCSp_xanuxYtVQdg"))
+            startActivity(i)
+        }
+
         // Initialize the RecyclerView
         rvFinance = view.findViewById<RecyclerView>(R.id.rvFinance)
         rvFinance.layoutManager = LinearLayoutManager(view.context)
-        adapter = FinanceSpreadsheetAdapter(view.context, items)
+        adapter = FinanceEntryAdapter(view.context, items)
         rvFinance.adapter = adapter
 
+        // Set up Add Button
         view.findViewById<ImageButton>(R.id.btnAddFinances).setOnClickListener {
             val i = Intent(view.context, AddActivity::class.java)
             i.putExtra("fragment", "finances")
@@ -52,12 +66,12 @@ class MainFinancesFragment : Fragment() {
 
     fun updateRV() {
         items.clear()
-        items.add(FinanceSpreadsheet("January 2023", "1Bm0rRYIoD_jHncar78Z98Fi4HDiHCSp_xanuxYtVQdg"))
-        items.add(FinanceSpreadsheet("February 2023", "1Bm0rRYIoD_jHncar78Z98Fi4HDiHCSp_xanuxYtVQdg"))
-        items.add(FinanceSpreadsheet("March 2023", "1Bm0rRYIoD_jHncar78Z98Fi4HDiHCSp_xanuxYtVQdg"))
-        items.add(FinanceSpreadsheet("April 2023", "1Bm0rRYIoD_jHncar78Z98Fi4HDiHCSp_xanuxYtVQdg"))
-        items.add(FinanceSpreadsheet("May 2023", "1Bm0rRYIoD_jHncar78Z98Fi4HDiHCSp_xanuxYtVQdg"))
-        items.add(FinanceSpreadsheet("June 2023", "1Bm0rRYIoD_jHncar78Z98Fi4HDiHCSp_xanuxYtVQdg"))
+        items.add(FinanceEntry("January 2023", "1Bm0rRYIoD_jHncar78Z98Fi4HDiHCSp_xanuxYtVQdg"))
+        items.add(FinanceEntry("February 2023", "1Bm0rRYIoD_jHncar78Z98Fi4HDiHCSp_xanuxYtVQdg"))
+        items.add(FinanceEntry("March 2023", "1Bm0rRYIoD_jHncar78Z98Fi4HDiHCSp_xanuxYtVQdg"))
+        items.add(FinanceEntry("April 2023", "1Bm0rRYIoD_jHncar78Z98Fi4HDiHCSp_xanuxYtVQdg"))
+        items.add(FinanceEntry("May 2023", "1Bm0rRYIoD_jHncar78Z98Fi4HDiHCSp_xanuxYtVQdg"))
+        items.add(FinanceEntry("June 2023", "1Bm0rRYIoD_jHncar78Z98Fi4HDiHCSp_xanuxYtVQdg"))
         adapter.notifyDataSetChanged()
     }
 }
