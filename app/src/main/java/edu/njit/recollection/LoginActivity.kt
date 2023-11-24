@@ -12,6 +12,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
@@ -34,6 +35,7 @@ class LoginActivity : AppCompatActivity() {
     fun loginWithGoogle() {
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("297948496797-2k0v9735s597utng4lmesiphue2vbusm.apps.googleusercontent.com")
+            .requestScopes(Scope("https://www.googleapis.com/auth/calendar"))
             .requestEmail()
             .build()
 
