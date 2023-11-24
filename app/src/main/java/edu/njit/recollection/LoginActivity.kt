@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
     fun loginWithGoogle() {
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("297948496797-2k0v9735s597utng4lmesiphue2vbusm.apps.googleusercontent.com")
-            .requestScopes(Scope("https://www.googleapis.com/auth/spreadsheets"))
+            .requestScopes(Scope("https://www.googleapis.com/auth/calendar"))
             .requestEmail()
             .build()
 
