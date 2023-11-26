@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.database
 
 
 
@@ -37,7 +40,11 @@ class AddNotesFragment : Fragment() {
             val body = bodyEditText.text.toString()
 
             val newNote = Note(title,body,null)
-                    }
+            val auth = FirebaseAuth.getInstance()
+            val newNoteEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("finances").push()
+            newNoteEntryRef.setValue(newNote)
+            activity?.finish()
+        }
 
         return view
     }

@@ -8,6 +8,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.database
+import com.google.firebase.Firebase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
 class DetailsNotesFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +26,7 @@ class DetailsNotesFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_details_notes, container, false)
+
         // do stuff here
         val titleTextView = view.findViewById<TextView>(R.id.detailsTitleTextView)
         val bodyTextView = view.findViewById<TextView>(R.id.detailsBodyTextView)

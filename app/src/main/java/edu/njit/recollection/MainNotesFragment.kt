@@ -2,6 +2,7 @@ package edu.njit.recollection
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.Button
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
+import com.google.firebase.database.getValue
 
 class MainNotesFragment : Fragment() {
     private lateinit var rvNotes: RecyclerView
@@ -44,6 +52,7 @@ class MainNotesFragment : Fragment() {
             val i = Intent(view.context, AddActivity::class.java)
             i.putExtra("fragment", "notes")
             startActivity(i)
+            adapter.notifyDataSetChanged()
         }
         return view
     }
@@ -63,11 +72,24 @@ class MainNotesFragment : Fragment() {
 
     fun updateRV() {
         notes.clear()
-        notes.add(Note("Hello","I'm bored",null))
-        notes.add(Note("It's me","I'm sick",null))
-        notes.add(Note("I don't remember","I'm tired",null))
-        notes.add(Note("The words to Adele's songs","I'm dying",null))
-        notes.add(Note("So goodnight","I'm ded",null))
-        adapter.notifyDataSetChanged()
+        val auth = FirebaseAuth.getInstance()
+        val databaseRef = Firebase.database.reference
+        databaseRef.child("users").child(auth.uid!!).child("finances").addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val note = mutableListOf<String>()
+                for (child in snapshot.children) {
+                    val title = child.child("title").getValue().toString()
+                    val body = child.child("body").getValue().toString()
+                    val imageLoc = child.child("imageLocation").getValue().toString()
+                    val newNote = Note(title, body, imageLoc)
+                    notes.add(newNote)
+                    adapter.notifyDataSetChanged()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("firebaseFinanceMain", "error", Throwable(error.toString()))
+            }
+        })
     }
 }
