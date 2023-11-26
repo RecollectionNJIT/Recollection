@@ -2,13 +2,14 @@ package edu.njit.recollection
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-class FinanceEntryAdapter (private val context: Context, private val items: List<FinanceEntry>): RecyclerView.Adapter<FinanceEntryAdapter.ViewHolder>() {
+class FinanceMonthAdapter (private val context: Context, private val items: List<FinanceMonth>): RecyclerView.Adapter<FinanceMonthAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvFinanceRVDate: TextView = itemView.findViewById(R.id.tvFinanceRVDate)
     }
@@ -19,12 +20,13 @@ class FinanceEntryAdapter (private val context: Context, private val items: List
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val listItem = items.get(position)
-        holder.tvFinanceRVDate.text = listItem.date
+        holder.tvFinanceRVDate.text = listItem.monthDate
+        Log.i("holderListItem", listItem.toString())
 
         holder.itemView.setOnClickListener {
             val i = Intent(context, DetailsActivity::class.java)
             i.putExtra("fragment", "finances")
-            i.putExtra("entry", listItem)
+            i.putExtra("type", listItem.monthDate)
             context.startActivity(i)
         }
     }

@@ -34,11 +34,11 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    packagingOptions {
-            exclude("META-INF/DEPENDENCIES")
-    }
     buildFeatures {
         viewBinding = true
+    }
+    packagingOptions {
+        exclude("META-INF/DEPENDENCIES")
     }
 }
 
@@ -61,10 +61,11 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.google.api-client:google-api-client:2.0.0")
     implementation("com.google.oauth-client:google-oauth-client-jetty:1.34.1")
-    implementation("com.google.apis:google-api-services-sheets:v4-rev20220927-2.0.0")
 
     // Add the dependency for the Realtime Database library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-database")
+
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
 

@@ -6,21 +6,77 @@
     tools:context=".DetailsFinancesFragment"
     android:background="@color/teal">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
+        android:id="@+id/financeEntryTableLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/textViewFinanceDetails"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="DetailsActivity - Finance"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content"
+        android:background="@color/teal">
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scrollbars="none"
+            android:layout_weight="1">
+            <HorizontalScrollView
+                android:id="@+id/horizontalView"
+                android:layout_height="wrap_content"
+                android:scrollbars="horizontal|vertical"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="5dip"
+                android:layout_gravity="center_horizontal">
+                <TableLayout
+                    android:id="@+id/financeEntryTable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:isScrollContainer="true"
+                    >
+                    <TableRow
+                        android:id="@+id/tableHeaders"
+                        android:background="@color/dark_teal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Date"
+                            android:textColor="@color/white"
+                            android:padding="10dp"
+                            android:textSize="18dp"
+                            android:layout_weight="4"
+                            android:gravity="center_horizontal"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Type"
+                            android:textColor="@color/white"
+                            android:padding="10dp"
+                            android:textSize="18dp"
+                            android:layout_weight="4"
+                            android:gravity="center_horizontal"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Category"
+                            android:textColor="@color/white"
+                            android:padding="10dp"
+                            android:textSize="18dp"
+                            android:layout_weight="4"
+                            android:gravity="center_horizontal"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Amount"
+                            android:textColor="@color/white"
+                            android:padding="10dp"
+                            android:textSize="18dp"
+                            android:layout_weight="4"
+                            android:gravity="center_horizontal"
+                            />
+                    </TableRow>
+                </TableLayout>
+            </HorizontalScrollView>
+        </ScrollView>
+    </LinearLayout>
 
 </FrameLayout>

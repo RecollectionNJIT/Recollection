@@ -13,9 +13,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
-import com.google.api.services.sheets.v4.Sheets
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.database
 import java.util.Calendar
 import java.util.Locale
 
@@ -89,7 +89,8 @@ class AddFinancesFragment : Fragment() {
                 }
 
         // This makes it so the input for price is locked to 2 places after the decimal.
-        view.findViewById<EditText>(R.id.itemPriceET).setFilters(
+        val itemPriceET = view.findViewById<EditText>(R.id.itemPriceET)
+        itemPriceET.setFilters(
             arrayOf<InputFilter>(
                 DigitsInputFilter(
                     Integer.MAX_VALUE,
@@ -99,9 +100,13 @@ class AddFinancesFragment : Fragment() {
             )
         )
 
-        // Create the Finance entry
+        // Create the Finance entry and send it to db on add button press
         view.findViewById<Button>(R.id.addEntryBtn).setOnClickListener {
-            // Need to take the date, create a FinanceSpreadsheet item, create a google sheet, duplicate the template, and then pass control to that.
+            val newFinanceEntry = FinanceEntry(selectDateET.text.toString(), monthDate, typeChoice, category, itemPriceET.text.toString().toDouble())
+            val auth = FirebaseAuth.getInstance()
+            val newFinancesEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("finances").push()
+            newFinancesEntryRef.setValue(newFinanceEntry)
+            activity?.finish()
         }
         return view
     }
