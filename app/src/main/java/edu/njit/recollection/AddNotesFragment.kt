@@ -41,7 +41,7 @@ class AddNotesFragment : Fragment() {
 
             val newNote = Note(title,body,null)
             val auth = FirebaseAuth.getInstance()
-            val newNoteEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("finances").push()
+            val newNoteEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").push()
             newNoteEntryRef.setValue(newNote)
             activity?.finish()
         }

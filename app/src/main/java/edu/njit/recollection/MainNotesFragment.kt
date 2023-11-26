@@ -74,7 +74,7 @@ class MainNotesFragment : Fragment() {
         notes.clear()
         val auth = FirebaseAuth.getInstance()
         val databaseRef = Firebase.database.reference
-        databaseRef.child("users").child(auth.uid!!).child("finances").addListenerForSingleValueEvent(object: ValueEventListener {
+        databaseRef.child("users").child(auth.uid!!).child("notes").addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val note = mutableListOf<String>()
                 for (child in snapshot.children) {
