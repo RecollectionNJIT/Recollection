@@ -86,5 +86,15 @@
             android:layout_below="@id/etEditTime"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"/>
+
+        <!-- Delete Button -->
+        <Button
+            android:id="@+id/btnDeleteReminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:layout_below="@id/btnUpdateReminder"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"/>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -65,20 +65,23 @@ class MainRemindersFragment : Fragment() {
         items.clear()
         val auth = FirebaseAuth.getInstance()
         val databaseRef = Firebase.database.reference
-        databaseRef.child("users").child(auth.uid!!).child("reminders").addListenerForSingleValueEvent(object:
-            ValueEventListener {
+        val remindersRef = databaseRef.child("users").child(auth.uid!!).child("reminders")
+
+        remindersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val reminder = mutableListOf<String>()
+                items.clear()
+
                 for (child in snapshot.children) {
                     val title = child.child("title").getValue().toString()
                     val description = child.child("description").getValue().toString()
                     val date = child.child("date").getValue().toString()
                     val time = child.child("time").getValue().toString()
                     val id = child.key // Get the ID from the database
-                    val newRem = Reminders(title, description,date,time, id)
+                    val newRem = Reminders(title, description, date, time, id)
                     items.add(newRem)
-                    adapter.notifyDataSetChanged()
                 }
+
+                adapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -86,4 +89,5 @@ class MainRemindersFragment : Fragment() {
             }
         })
     }
+
 }

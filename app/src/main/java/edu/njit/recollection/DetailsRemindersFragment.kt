@@ -12,11 +12,10 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import java.util.Calendar
 import java.util.Locale
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.database
 
 class DetailsRemindersFragment : Fragment() {
 
@@ -25,6 +24,7 @@ class DetailsRemindersFragment : Fragment() {
     private lateinit var etEditDate: EditText
     private lateinit var etEditTime: EditText
     private lateinit var btnUpdateReminder: Button
+    private lateinit var btnDeleteReminder: Button
     private var reminder: Reminders? = null
     private lateinit var myCalendar: Calendar
 
@@ -44,6 +44,7 @@ class DetailsRemindersFragment : Fragment() {
         etEditDate = view.findViewById(R.id.etEditDate)
         etEditTime = view.findViewById(R.id.etEditTime)
         btnUpdateReminder = view.findViewById(R.id.btnUpdateReminder)
+        btnDeleteReminder = view.findViewById(R.id.btnDeleteReminder)
 
         // Set up the Calendar instance
         myCalendar = Calendar.getInstance()
@@ -69,6 +70,11 @@ class DetailsRemindersFragment : Fragment() {
         // Set up click listener for the Update button
         btnUpdateReminder.setOnClickListener {
             updateReminder()
+        }
+
+        // Set up click listener for the Delete button
+        btnDeleteReminder.setOnClickListener {
+            deleteReminder()
         }
 
         return view
@@ -124,28 +130,6 @@ class DetailsRemindersFragment : Fragment() {
         etEditTime.setText(timeFormat.format(myCalendar.time))
     }
 
-/*    private fun updateReminder() {
-        // Get updated values from EditText fields
-        val updatedTitle = etEditTitle.text.toString()
-        val updatedDescription = etEditDescription.text.toString()
-        val updatedDate = etEditDate.text.toString()
-        val updatedTime = etEditTime.text.toString()
-
-        // Create a new instance of Reminders with updated values
-        reminder = reminder?.copy(
-            title = updatedTitle,
-            description = updatedDescription,
-            date = updatedDate,
-            time = updatedTime
-        )
-
-        // Update UI with the edited values
-        etEditTitle.setText(updatedTitle)
-        etEditDescription.setText(updatedDescription)
-        etEditDate.setText(updatedDate)
-        etEditTime.setText(updatedTime)
-    }*/
-
     private fun updateReminder() {
         // Get updated values from EditText fields
         val updatedTitle = etEditTitle.text.toString()
@@ -165,7 +149,7 @@ class DetailsRemindersFragment : Fragment() {
 
             // Update the specific reminder in the Firebase Realtime Database
             val auth = FirebaseAuth.getInstance()
-            val databaseRef = Firebase.database.reference
+            val databaseRef = FirebaseDatabase.getInstance().reference
             val reminderRef = databaseRef.child("users").child(auth.uid!!)
                 .child("reminders").child(reminder.id ?: "")
 
@@ -179,7 +163,25 @@ class DetailsRemindersFragment : Fragment() {
         }
     }
 
+    private fun deleteReminder() {
+        // Delete the reminder if it is not null
+        reminder?.let { reminder ->
+            // Delete the specific reminder from the Firebase Realtime Database
+            val auth = FirebaseAuth.getInstance()
+            val databaseRef = FirebaseDatabase.getInstance().reference
+            val reminderRef = databaseRef.child("users").child(auth.uid!!)
+                .child("reminders").child(reminder.id ?: "")
 
+            reminderRef.removeValue()
+                .addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Reminder deleted successfully", Toast.LENGTH_SHORT).show()
+                    // You can finish the activity or navigate back after deleting
+                }
+                .addOnFailureListener {
+                    Toast.makeText(requireContext(), "Failed to delete reminder", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
 
     companion object {
         fun newInstance(): DetailsRemindersFragment {
