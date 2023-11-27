@@ -9,50 +9,58 @@
     app:cardMaxElevation="10dp"
     android:layout_margin="16dp">
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <!-- Title TextView -->
-    <TextView
-        android:id="@+id/tvReminderTitleDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="Reminder Title"
-        android:textColor="@color/teal"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:padding="15dp" />
+        <!-- Editable Title EditText -->
+        <EditText
+            android:id="@+id/etEditTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:hint="Enter Reminder Title"
+            android:textColor="@color/teal"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="15dp" />
 
-    <!-- Description TextView -->
-    <TextView
-        android:id="@+id/tvReminderDescriptionDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvReminderTitleDetails"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
-        android:text="Reminder description goes here."
-        android:textColor="@color/teal"
-        android:textSize="16sp"
-        android:padding="8dp" />
+        <!-- Editable Description EditText -->
+        <EditText
+            android:id="@+id/etEditDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etEditTitle"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:hint="Enter Reminder Description"
+            android:textColor="@color/teal"
+            android:textSize="16sp"
+            android:padding="8dp" />
 
-    <!-- Date TextView -->
-    <TextView
-        android:id="@+id/tvReminderDateDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvReminderDescriptionDetails"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
-        android:text="January 2023"
-        android:textColor="@color/teal"
-        android:textSize="16sp"
-        android:padding="8dp" />
+        <!-- Editable Date EditText -->
+        <EditText
+            android:id="@+id/etEditDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etEditDescription"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:hint="Enter Reminder Date"
+            android:textColor="@color/teal"
+            android:textSize="16sp"
+            android:padding="8dp" />
 
-
-
-</RelativeLayout>
+        <!-- Update Button -->
+        <Button
+            android:id="@+id/btnUpdateReminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Update"
+            android:layout_below="@id/etEditDate"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"/>
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>
