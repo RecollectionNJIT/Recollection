@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -88,12 +89,24 @@ class AddRemindersFragment : Fragment() {
             val description = selectReminderDescription.text.toString()
             val date = selectReminderDate.text.toString()
             val time = selectReminderTime.text.toString()
+
             // Add your logic to create a reminder with the entered details
-            val newRem = Reminders(title,description,date,time)
+            val newRem = Reminders(title, description, date, time, null) // Pass null for ID
+
             val auth = FirebaseAuth.getInstance()
-            val newReminderEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("reminders").push()
-            newReminderEntryRef.setValue(newRem)
-            activity?.finish()
+            val newReminderEntryRef = Firebase.database.reference
+                .child("users")
+                .child(auth.uid!!)
+                .child("reminders")
+                .push() // Generate a unique key for the new reminder
+
+            newReminderEntryRef.setValue(newRem.copy(id = newReminderEntryRef.key))
+                .addOnSuccessListener {
+                    activity?.finish()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(requireContext(), "Failed to create reminder", Toast.LENGTH_SHORT).show()
+                }
         }
 
         return view

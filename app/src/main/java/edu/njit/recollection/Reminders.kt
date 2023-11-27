@@ -5,5 +5,5 @@ data class Reminders(
     val description: String?,
     val date: String?,
     val time: String?,  // New property for time
-    val id: String? = null
+    val id: String?
 ) : java.io.Serializable

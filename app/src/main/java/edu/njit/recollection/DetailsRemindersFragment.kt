@@ -10,9 +10,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import java.util.Calendar
 import java.util.Locale
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.database
 
 class DetailsRemindersFragment : Fragment() {
 
@@ -120,7 +124,7 @@ class DetailsRemindersFragment : Fragment() {
         etEditTime.setText(timeFormat.format(myCalendar.time))
     }
 
-    private fun updateReminder() {
+/*    private fun updateReminder() {
         // Get updated values from EditText fields
         val updatedTitle = etEditTitle.text.toString()
         val updatedDescription = etEditDescription.text.toString()
@@ -140,7 +144,42 @@ class DetailsRemindersFragment : Fragment() {
         etEditDescription.setText(updatedDescription)
         etEditDate.setText(updatedDate)
         etEditTime.setText(updatedTime)
+    }*/
+
+    private fun updateReminder() {
+        // Get updated values from EditText fields
+        val updatedTitle = etEditTitle.text.toString()
+        val updatedDescription = etEditDescription.text.toString()
+        val updatedDate = etEditDate.text.toString()
+        val updatedTime = etEditTime.text.toString()
+
+        // Update the reminder if it is not null
+        reminder?.let { reminder ->
+            // Create a map with updated values
+            val updatedValues = mapOf(
+                "title" to updatedTitle,
+                "description" to updatedDescription,
+                "date" to updatedDate,
+                "time" to updatedTime
+            )
+
+            // Update the specific reminder in the Firebase Realtime Database
+            val auth = FirebaseAuth.getInstance()
+            val databaseRef = Firebase.database.reference
+            val reminderRef = databaseRef.child("users").child(auth.uid!!)
+                .child("reminders").child(reminder.id ?: "")
+
+            reminderRef.updateChildren(updatedValues)
+                .addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Reminder updated successfully", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(requireContext(), "Failed to update reminder", Toast.LENGTH_SHORT).show()
+                }
+        }
     }
+
+
 
     companion object {
         fun newInstance(): DetailsRemindersFragment {
