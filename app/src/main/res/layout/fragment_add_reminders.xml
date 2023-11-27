@@ -1,25 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddRemindersFragment"
     android:background="@color/teal">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- TextView for the title -->
         <TextView
             android:id="@+id/textViewRemindersAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="AddActivity - Reminders"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/selectReminderDescription" />
+
+        <!-- EditText for reminder description -->
+
+        <EditText
+            android:id="@+id/selectReminderTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Enter Reminder Title"
+            android:inputType="textMultiLine"
+            android:padding="5dp"
+            android:textColor="@color/teal"
+            android:textColorHint="@color/teal"
+            app:layout_constraintTop_toBottomOf="@+id/textViewRemindersAdd"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/selectReminderDescription" />
+
+        <EditText
+            android:id="@+id/selectReminderDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Enter Reminder Description"
+            android:inputType="textMultiLine"
+            android:padding="5dp"
+            android:textColor="@color/teal"
+            android:textColorHint="@color/teal"
+            app:layout_constraintTop_toBottomOf="@+id/selectReminderTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/selectReminderDate" />
+
+        <EditText
+            android:id="@+id/selectReminderDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Enter Reminder Date"
+            android:inputType="textMultiLine"
+            android:padding="5dp"
+            android:textColor="@color/teal"
+            android:textColorHint="@color/teal"
+            app:layout_constraintTop_toBottomOf="@+id/selectReminderDescription"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/createReminderBtn" />
+
+        <!-- Button to create the reminder -->
+        <Button
+            android:id="@+id/createReminderBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Reminder"
+            android:background="@drawable/rounded_corners"
+            android:textColor="@color/teal"
+            android:theme="@style/White"
+            app:layout_constraintTop_toBottomOf="@+id/selectReminderDescription"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
