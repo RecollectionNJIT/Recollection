@@ -11,6 +11,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/tvAddFinanceEntryHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Adding New Entry"
+            android:textSize="43sp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textColor="@color/white"
+            android:layout_marginTop="100dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:transitionName="header"/>
+
         <EditText
             android:id="@+id/selectDateET"
             android:layout_width="wrap_content"

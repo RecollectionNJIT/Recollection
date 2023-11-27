@@ -5,4 +5,24 @@
     <color name="teal">#34A0A4</color>
     <color name="dark_teal">#18656A</color>
     <color name="ash_gray">#BDBEA9</color>
+    <color name="pokemon_yellow">#FFDE00</color>
+    <color name="pokemon_yellow2">#B3A125</color>
+    <color name="pokemon_border">#3B4CCA</color>
+    <color name="charmander_background">#246B6D</color>
+    <color name="bulbasaur_background">#79C5A0</color>
+    <color name="squirtle_background">#85C4D8</color>
+    <color name="burgandy">#800020</color>
+    <color name="fire_engine_red">#C1292E</color>
+    <color name="onyx">#393E41</color>
+    <color name="outer_space">#4C5760</color>
+    <color name="verdigris">#28AFB0</color>
+    <color name="vanilla">#EAE2B7</color>
+    <color name="linen">#FFEDE1</color>
+    <color name="dark_linen">#d6c7bf</color>
+    <color name="magenta_haze">#8E5572</color>
+    <color name="dark_olive_green">#47514C</color>
+    <color name="gold">#FFD700</color>
+    <color name="metallic_gold">#D4AF37</color>
+    <color name="lime">#00FF00</color>
+    <color name="fuchsia">#FF00FF</color>
 </resources>
