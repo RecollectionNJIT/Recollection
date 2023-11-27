@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetailsNotesFragment"
     android:background="@color/teal">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -14,9 +15,14 @@
             android:id="@+id/detailsTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:layout_marginTop="150dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="top|center"
+            android:textStyle="bold"
+            android:text="Title"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/detailsBodyTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -25,12 +31,15 @@
             android:id="@+id/detailsBodyTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:layout_marginBottom="16dp"
+            android:gravity="center_horizontal"
+            android:text="Body"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/detailsImageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/detailsTitleTextView" />
 
         <ImageView
             android:id="@+id/detailsImageView"
