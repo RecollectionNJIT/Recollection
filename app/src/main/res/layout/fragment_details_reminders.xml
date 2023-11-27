@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -47,8 +48,31 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/etEditDescription"
             android:layout_centerHorizontal="true"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="date"
             android:layout_marginTop="8dp"
             android:hint="Enter Reminder Date"
+            android:textColor="@color/teal"
+            android:textSize="16sp"
+            android:padding="8dp" />
+
+        <!-- Editable Time EditText -->
+        <EditText
+            android:id="@+id/etEditTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etEditDate"
+            android:layout_centerHorizontal="true"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="time"
+            android:layout_marginTop="8dp"
+            android:hint="Enter Reminder Time"
             android:textColor="@color/teal"
             android:textSize="16sp"
             android:padding="8dp" />
@@ -59,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Update"
-            android:layout_below="@id/etEditDate"
+            android:layout_below="@id/etEditTime"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"/>
     </RelativeLayout>

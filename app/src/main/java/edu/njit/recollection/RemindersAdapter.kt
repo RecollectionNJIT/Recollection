@@ -13,6 +13,7 @@ class RemindersAdapter(private val context: Context, private val items: List<Rem
         val tvReminderTitle: TextView = itemView.findViewById(R.id.tvReminderTitle)
         val tvReminderDescription: TextView = itemView.findViewById(R.id.tvReminderDescription)
         val tvReminderDate: TextView = itemView.findViewById(R.id.tvReminderDate)
+        val tvReminderTime: TextView = itemView.findViewById(R.id.tvReminderTime)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,6 +27,8 @@ class RemindersAdapter(private val context: Context, private val items: List<Rem
         holder.tvReminderTitle.text = listItem.title
         holder.tvReminderDescription.text = listItem.description
         holder.tvReminderDate.text = listItem.date
+        holder.tvReminderTime.text = listItem.time
+
 
         holder.itemView.setOnClickListener {
             // Handle item click, e.g., show details

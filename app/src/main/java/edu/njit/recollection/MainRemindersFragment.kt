@@ -58,14 +58,14 @@ class MainRemindersFragment : Fragment() {
         items.clear()
         items.clear()
         // Add pairs of reminders to the items list
-        items.add(Reminders("Title1", "Description1", "Date1", "0"))
-        items.add(Reminders("Title2", "Description2", "Date2", "1"))
-        items.add(Reminders("Title3", "Description3", "Date3", "2"))
-        items.add(Reminders("Title4", "Description4", "Date4", "3"))
-        items.add(Reminders("Title5", "Description5", "Date5", "4"))
-        items.add(Reminders("Title6", "Description6", "Date6", "5"))
-        items.add(Reminders("Title7", "Description7", "Date7", "6"))
-        items.add(Reminders("Title8", "Description8", "Date8", "7"))
+        items.add(Reminders("Title1", "Description1", "Date1", "12:00","0"))
+        items.add(Reminders("Title2", "Description2", "Date2", "12:01", "1"))
+        items.add(Reminders("Title3", "Description3", "Date3", "12:02", "2"))
+        items.add(Reminders("Title4", "Description4", "Date4", "12:03", "3"))
+        items.add(Reminders("Title5", "Description5", "Date5", "12:04", "4"))
+        items.add(Reminders("Title6", "Description6", "Date6", "12:05", "5"))
+        items.add(Reminders("Title7", "Description7", "Date7", "12:06", "6"))
+        items.add(Reminders("Title8", "Description8", "Date8", "12:07", "7"))
         adapter.notifyDataSetChanged()
     }
 }

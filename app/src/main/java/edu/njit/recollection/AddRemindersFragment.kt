@@ -1,6 +1,7 @@
 package edu.njit.recollection
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,11 +19,8 @@ class AddRemindersFragment : Fragment() {
     lateinit var selectReminderTitle: EditText
     lateinit var selectReminderDescription: EditText
     lateinit var selectReminderDate: EditText
+    lateinit var selectReminderTime: EditText
     lateinit var createReminderBtn: Button
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,24 +29,28 @@ class AddRemindersFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add_reminders, container, false)
 
-        // Retrieve Description and Date from User
+        // Retrieve Title, Description, Date, and Time from User
         selectReminderTitle = view.findViewById(R.id.selectReminderTitle)
         selectReminderDescription = view.findViewById(R.id.selectReminderDescription)
         selectReminderDate = view.findViewById(R.id.selectReminderDate)
+        selectReminderTime = view.findViewById(R.id.selectReminderTime)
         createReminderBtn = view.findViewById(R.id.createReminderBtn)
 
         myCalendar = Calendar.getInstance()
-        val date =
-            DatePickerDialog.OnDateSetListener { view, year, month, day ->
+
+        // Date Picker
+        val dateListener =
+            DatePickerDialog.OnDateSetListener { _, year, month, day ->
                 myCalendar.set(Calendar.YEAR, year)
                 myCalendar.set(Calendar.MONTH, month)
                 myCalendar.set(Calendar.DAY_OF_MONTH, day)
                 updateLabel()
             }
+
         selectReminderDate.setOnClickListener {
             val dpd = DatePickerDialog(
                 view.context,
-                date,
+                dateListener,
                 myCalendar.get(Calendar.YEAR),
                 myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)
@@ -57,12 +59,33 @@ class AddRemindersFragment : Fragment() {
             dpd.show()
         }
 
+        // Time Picker
+        val timeListener =
+            TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+                myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                myCalendar.set(Calendar.MINUTE, minute)
+                updateTimeLabel()
+            }
+
+        selectReminderTime.setOnClickListener {
+            val tpd = TimePickerDialog(
+                view.context,
+                timeListener,
+                myCalendar.get(Calendar.HOUR_OF_DAY),
+                myCalendar.get(Calendar.MINUTE),
+                false
+            )
+            tpd.show()
+        }
+
         // Create the Reminder entry
         createReminderBtn.setOnClickListener {
             // Handle the creation of the reminder here
+            val title = selectReminderTitle.text.toString()
             val description = selectReminderDescription.text.toString()
             val date = selectReminderDate.text.toString()
-            // Add your logic to create a reminder with the entered description and date
+            val time = selectReminderTime.text.toString()
+            // Add your logic to create a reminder with the entered details
         }
 
         return view
@@ -72,6 +95,12 @@ class AddRemindersFragment : Fragment() {
         val myFormat = "MMMM dd, yyyy"
         val dateFormat = SimpleDateFormat(myFormat, Locale.US)
         selectReminderDate.setText(dateFormat.format(myCalendar.time))
+    }
+
+    private fun updateTimeLabel() {
+        val myFormat = "hh:mm a"
+        val timeFormat = SimpleDateFormat(myFormat, Locale.US)
+        selectReminderTime.setText(timeFormat.format(myCalendar.time))
     }
 
     companion object {
