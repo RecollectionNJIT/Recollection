@@ -8,13 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainRemindersFragment : Fragment() {
     private lateinit var rvReminders: RecyclerView
     private lateinit var adapter: RemindersAdapter
-    private val items = mutableListOf<Reminder>()
+    private val items = mutableListOf<Reminders>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,14 +58,14 @@ class MainRemindersFragment : Fragment() {
         items.clear()
         items.clear()
         // Add pairs of reminders to the items list
-        items.add(Reminder("Title1", "Description1", "Date1", "0"))
-        items.add(Reminder("Title2", "Description2", "Date2", "1"))
-        items.add(Reminder("Title3", "Description3", "Date3", "2"))
-        items.add(Reminder("Title4", "Description4", "Date4", "3"))
-        items.add(Reminder("Title5", "Description5", "Date5", "4"))
-        items.add(Reminder("Title6", "Description6", "Date6", "5"))
-        items.add(Reminder("Title7", "Description7", "Date7", "6"))
-        items.add(Reminder("Title8", "Description8", "Date8", "7"))
+        items.add(Reminders("Title1", "Description1", "Date1", "0"))
+        items.add(Reminders("Title2", "Description2", "Date2", "1"))
+        items.add(Reminders("Title3", "Description3", "Date3", "2"))
+        items.add(Reminders("Title4", "Description4", "Date4", "3"))
+        items.add(Reminders("Title5", "Description5", "Date5", "4"))
+        items.add(Reminders("Title6", "Description6", "Date6", "5"))
+        items.add(Reminders("Title7", "Description7", "Date7", "6"))
+        items.add(Reminders("Title8", "Description8", "Date8", "7"))
         adapter.notifyDataSetChanged()
     }
 }
