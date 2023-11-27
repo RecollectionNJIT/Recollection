@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -23,7 +24,7 @@ class MainRemindersFragment : Fragment() {
 
         // Initialize the RecyclerView
         rvReminders = view.findViewById(R.id.rvReminders)
-        rvReminders.layoutManager = LinearLayoutManager(view.context)
+        rvReminders.layoutManager = GridLayoutManager(view.context, 2)
         adapter = RemindersAdapter(view.context, items)
         rvReminders.adapter = adapter
 
