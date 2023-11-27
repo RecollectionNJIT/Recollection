@@ -1,25 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddFinancesFragment"
     android:background="@color/teal">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textViewFinancesAdd"
+            android:id="@+id/tvAddFinanceEntryHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="AddActivity - Finances"
+            android:text="Adding New Entry"
+            android:textSize="43sp"
+            android:fontFamily="sans-serif-smallcaps"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="100dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:transitionName="header"/>
+
+        <EditText
+            android:id="@+id/selectDateET"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="11"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center"
+            android:hint="Select Date"
+            android:inputType="date"
+            android:longClickable="false"
+            android:padding="10dp"
+            android:textColor="@color/teal"
+            android:textColorHint="@color/teal"
+            android:layout_marginTop="250dp"
+            app:layout_constraintBottom_toTopOf="@id/typeSpinnerLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <RelativeLayout
+            android:id="@+id/typeSpinnerLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
+            android:theme="@style/mySpinnerItemStyle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/selectDateET">
+            <Spinner
+                android:id="@+id/typeSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                android:backgroundTint="@color/teal"
+                tools:listitem="@layout/spinner_finance_item" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/categorySpinnerLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
+            android:theme="@style/mySpinnerItemStyle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/typeSpinnerLayout">
+            <Spinner
+                android:id="@+id/categorySpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                android:backgroundTint="@color/teal"
+                tools:listitem="@layout/spinner_finance_item"/>
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/itemPriceET"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:ems="11"
+            android:background="@drawable/rounded_corners"
+            android:theme="@style/mySpinnerItemStyle"
+            android:hint="Enter Amount"
+            android:inputType="numberDecimal"
+            android:textSize="18sp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/teal"
+            android:textColorHint="@color/teal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/categorySpinnerLayout" />
+
+        <Button
+            android:id="@+id/addEntryBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Entry"
+            android:transitionName="button"
+            android:background="@drawable/rounded_corners"
+            android:textColor="@color/teal"
+            android:theme="@style/White"
+            android:layout_marginBottom="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
