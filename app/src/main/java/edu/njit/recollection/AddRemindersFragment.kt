@@ -39,7 +39,7 @@ class AddRemindersFragment : Fragment() {
 
         myCalendar = Calendar.getInstance()
         val date =
-            DatePickerDialog.OnDateSetListener { _, year, month, day ->
+            DatePickerDialog.OnDateSetListener { view, year, month, day ->
                 myCalendar.set(Calendar.YEAR, year)
                 myCalendar.set(Calendar.MONTH, month)
                 myCalendar.set(Calendar.DAY_OF_MONTH, day)
@@ -48,15 +48,12 @@ class AddRemindersFragment : Fragment() {
         selectReminderDate.setOnClickListener {
             val dpd = DatePickerDialog(
                 view.context,
-                android.R.style.Theme_Holo_Light_Dialog,
                 date,
                 myCalendar.get(Calendar.YEAR),
                 myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)
             )
             dpd.datePicker.maxDate = System.currentTimeMillis() - 1000
-            dpd.datePicker.findViewById<View>(resources.getIdentifier("day", "id", "android")).visibility =
-                View.GONE
             dpd.show()
         }
 

@@ -1,6 +1,6 @@
 package edu.njit.recollection
 
-data class Reminder(
+data class Reminders(
     val title: String?,
     val description: String?,
     val date: String?,
