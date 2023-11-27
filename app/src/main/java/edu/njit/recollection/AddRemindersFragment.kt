@@ -11,6 +11,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.database
 import java.util.Calendar
 import java.util.Locale
 
@@ -86,6 +89,11 @@ class AddRemindersFragment : Fragment() {
             val date = selectReminderDate.text.toString()
             val time = selectReminderTime.text.toString()
             // Add your logic to create a reminder with the entered details
+            val newRem = Reminders(title,description,date,time)
+            val auth = FirebaseAuth.getInstance()
+            val newReminderEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("reminders").push()
+            newReminderEntryRef.setValue(newRem)
+            activity?.finish()
         }
 
         return view
