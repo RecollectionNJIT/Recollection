@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-class RemindersAdapter(private val context: Context, private val items: List<Reminder>) : RecyclerView.Adapter<RemindersAdapter.ViewHolder>() {
+class RemindersAdapter(private val context: Context, private val items: List<Reminders>) : RecyclerView.Adapter<RemindersAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvReminderTitle: TextView = itemView.findViewById(R.id.tvReminderTitle)
         val tvReminderDescription: TextView = itemView.findViewById(R.id.tvReminderDescription)
@@ -29,10 +29,13 @@ class RemindersAdapter(private val context: Context, private val items: List<Rem
 
         holder.itemView.setOnClickListener {
             // Handle item click, e.g., show details
-            val i = Intent(context, DetailsActivity::class.java)
-            i.putExtra("fragment", "reminders")
-            i.putExtra("reminder", listItem)
-            context.startActivity(i)
+            //val i = Intent(context, DetailsActivity::class.java)
+            //i.putExtra("fragment", "reminders")
+            //i.putExtra("reminder", listItem)
+            //context.startActivity(i)
+            val intent = Intent(context, DetailsActivity::class.java)
+            intent.putExtra("reminder", listItem)
+            context.startActivity(intent)
         }
     }
 
