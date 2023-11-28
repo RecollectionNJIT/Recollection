@@ -145,7 +145,7 @@ GIF created with [ShareX](https://getsharex.com/).
 - Persist Notes Data
 - Create Add/Detail Fragment Template
 - Create Settings Activity
-[Add giphy that shows current build progress for Milestone 2. Note: We will be looking for progression of work between Milestone 2 and 3. Make sure your giphys are not duplicated and clearly show the change from Sprint 1 to 2.]
+<img src="BuildProgressUnit9.gif" title='Build Progress Thus Far' width='' alt='Build Progress Thus Far'>
 
 <br>
 
