@@ -23,7 +23,8 @@ class DetailsNotesFragment : Fragment() {
 
     private lateinit var titleTextView: EditText
     private lateinit var bodyTextView: EditText
-    private var isTextChanged = false
+    private lateinit var detailNote: Note
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -41,41 +42,9 @@ class DetailsNotesFragment : Fragment() {
         bodyTextView = view.findViewById<EditText>(R.id.detailsBodyTextView)
         val imageView = view.findViewById<ImageView>(R.id.detailsImageView)
 
-
-
         // Set data to TextViews and ImageView
         titleTextView.setText(detailNote.title)
         bodyTextView.setText(detailNote.body)
-
-        titleTextView.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
-                // Not needed for your case
-            }
-
-            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
-                // Set the flag to true when text is changed
-                isTextChanged = true
-            }
-
-            override fun afterTextChanged(editable: Editable?) {
-                // Not needed for your case
-            }
-        })
-
-        bodyTextView.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
-                // Not needed for your case
-            }
-
-            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
-                // Set the flag to true when text is changed
-                isTextChanged = true
-            }
-
-            override fun afterTextChanged(editable: Editable?) {
-                // Not needed for your case
-            }
-        })
 
 
         if (!detailNote.imageLocation.isNullOrBlank()) {
@@ -101,7 +70,7 @@ class DetailsNotesFragment : Fragment() {
             val auth = FirebaseAuth.getInstance()
             val updateNoteRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(detailNote.key!!)
             updateNoteRef.updateChildren(postValues)
-
+            activity?.finish()
         }
 
 
@@ -110,6 +79,7 @@ class DetailsNotesFragment : Fragment() {
 
         return view
     }
+
 
 
     companion object {
