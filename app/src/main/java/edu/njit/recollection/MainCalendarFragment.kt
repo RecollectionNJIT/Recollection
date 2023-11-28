@@ -11,6 +11,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.children
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
@@ -28,6 +36,12 @@ import java.time.format.TextStyle
 import java.util.Locale
 import java.util.Objects
 
+
+private lateinit var calendarRecycler: RecyclerView
+private lateinit var adapter: CalendarAdapter
+private val days = mutableListOf<CalendarEntry>()
+private val allDays = mutableMapOf<LocalDate, CalendarEntry>()
+
 private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyyy")
 private val selectionFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
 private val today = LocalDate.now()
@@ -39,7 +53,6 @@ class MonthViewContainer(view: View) : ViewContainer(view) {
 }
 class DayViewContainer(view: View) : ViewContainer(view) {
     val textView = view.findViewById<TextView>(R.id.calendarDayText)
-
 }
 
 class MainCalendarFragment : Fragment() {
@@ -54,6 +67,10 @@ class MainCalendarFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_main_calendar, container, false)
         // do stuff here
+        calendarRecycler = view.findViewById<RecyclerView>(R.id.calendarRecyclerView)
+        adapter = CalendarAdapter(view.context, days)
+        calendarRecycler.adapter = adapter
+
         val monthView = view.findViewById<TextView>(R.id.calendarMonth)
         val calendarText = view.findViewById<TextView>(R.id.calendarDay)
         calendarText.text = selectionFormatter.format(today)
@@ -62,7 +79,6 @@ class MainCalendarFragment : Fragment() {
         calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
             // Called only when a new container is needed.
             override fun create(view: View) = DayViewContainer(view)
-
             // Called every time we need to reuse a container.
             override fun bind(container: DayViewContainer, data: CalendarDay) {
                 container.textView.text = data.date.dayOfMonth.toString()
@@ -79,20 +95,38 @@ class MainCalendarFragment : Fragment() {
                     }
                     container.textView.setTextColor(Color.WHITE)
                     container.textView.setOnClickListener(){
-                        if( prevContainer.textView.background != null ){
-                        if(Objects.equals( prevContainer.textView.background.constantState, resources.getDrawable( R.drawable.today_bg).constantState )){
-                            container.textView.setBackgroundResource(R.drawable.selected_bg)
+                        if( prevContainer.textView.background != null  && data.date.month == today.month ){
+                            if( container.textView.text.toString() == today.dayOfMonth.toString()){
+                                Log.v("Month",""+ DayPosition.MonthDate)
+                                container.textView.setBackgroundResource(R.drawable.today_bg)
+                                prevContainer.textView.background=null
+                            }
+                            else{
+                                Log.v("Not Equal Today","" +data.date.month )
+                                Log.v("Today","" + today.month)
+                                if(prevContainer.textView.text.toString() != today.dayOfMonth.toString()  ){
+                                    prevContainer.textView.background = null
+                                }
+                                container.textView.setBackgroundResource(R.drawable.selected_bg)
+                            }
+                        }
+                        else if (prevContainer.textView.background != null){
+                                prevContainer.textView.background = null
+                                container.textView.setBackgroundResource(R.drawable.selected_bg)
                         }
                         else{
-                            prevContainer.textView.background = null
-                            container.textView.setBackgroundResource(R.drawable.selected_bg)
-                        }}
-                        else{
-                            container.textView.setBackgroundResource(R.drawable.selected_bg)
+                            if(data.date.month == today.month && container.textView.text.toString() == today.dayOfMonth.toString() ) {
+                                container.textView.setBackgroundResource(R.drawable.today_bg)
+                            }
+                            else {
+                                container.textView.setBackgroundResource(R.drawable.selected_bg)
+                            }
+
                         }
 
                         prevContainer = container
                         selectDate(data.date, calendarText)
+                        updateRV()
                     }
                 } else {
                     container.view.visibility=View.INVISIBLE
@@ -144,7 +178,7 @@ class MainCalendarFragment : Fragment() {
             i.putExtra("fragment", "calendar")
             startActivity(i)
         }
-        view.findViewById<Button>(R.id.btnAddCalendar).setOnClickListener {
+        view.findViewById<FloatingActionButton>(R.id.btnAddCalendar).setOnClickListener {
             val i = Intent(view.context, AddActivity::class.java)
             i.putExtra("fragment", "calendar")
             startActivity(i)
@@ -170,5 +204,31 @@ class MainCalendarFragment : Fragment() {
             //binding.exThreeCalendar.notifyDateChanged(date)
             //updateAdapterForDate(date)
         }
+    }
+
+
+    fun updateRV() {
+        days.clear()
+        val auth = FirebaseAuth.getInstance()
+        val databaseRef = Firebase.database.reference
+        databaseRef.child("users").child(auth.uid!!).child("calendar").addListenerForSingleValueEvent(object:
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (child in snapshot.children) {
+                    val date = child.child("date").getValue().toString()
+                    val title = child.child("title").getValue().toString()
+                    val description = child.child("description").getValue().toString()
+                    val start = child.child("timeStart").getValue().toString()
+                    val end = child.child("timeEnd").getValue().toString()
+                    val event = CalendarEntry(date, title, description, start, end)
+                    days.add(event)
+                    adapter.notifyDataSetChanged()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("firebaseCalendarMain", "error", Throwable(error.toString()))
+            }
+        })
     }
 }

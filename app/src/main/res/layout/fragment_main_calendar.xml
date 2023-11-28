@@ -59,18 +59,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/calendarRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="72dp"
+            app:layoutManager="LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/calendarDay"
+            tools:listitem="@layout/calendar_day_list" />
 
-        <Button
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnAddCalendar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corners"
-            android:text="Add"
-            android:textColor="@color/teal"
-            android:theme="@style/White"
-            app:layout_constraintBottom_toTopOf="@+id/btnDetailsCalendar"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="20dp"
+            app:backgroundTint="@color/dark_teal"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:tint="@color/white"
+            android:src="@drawable/baseline_add_24"
+            />
 
         <Button
             android:id="@+id/btnDetailsCalendar"
@@ -80,11 +93,11 @@
             android:text="Details"
             android:textColor="@color/teal"
             android:theme="@style/White"
-
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/calendarDay" />
+            app:layout_constraintTop_toBottomOf="@+id/btnAddCalendar" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
