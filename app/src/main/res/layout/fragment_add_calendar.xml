@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <EditText
-            android:id="@+id/editTextText"
+            android:id="@+id/addCalendarTitle"
             android:layout_width="294dp"
             android:layout_height="48dp"
             android:layout_margin="10dp"
@@ -25,7 +25,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         <EditText
-            android:id="@+id/editTextTextMultiLine2"
+            android:id="@+id/addCalendarDescription"
             android:layout_width="295dp"
             android:layout_height="164dp"
             android:ems="10"
@@ -35,24 +35,24 @@
             android:inputType="textMultiLine"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+            app:layout_constraintTop_toBottomOf="@+id/addCalendarTitle" />
 
         <EditText
             android:layout_marginBottom="20dp"
-            android:id="@+id/editTextTime"
+            android:id="@+id/addStartTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="time"
             android:textColor="@color/white"
             android:inputType="time"
-            app:layout_constraintBottom_toTopOf="@+id/editTextTime2"
+            app:layout_constraintBottom_toTopOf="@+id/addEndTime"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:layout_marginBottom="20dp"
-            android:id="@+id/editTextTime2"
+            android:id="@+id/addEndTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -73,7 +73,7 @@
             android:layout_marginLeft="38dp"
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/textView3"
-            app:layout_constraintEnd_toStartOf="@+id/editTextTime"
+            app:layout_constraintEnd_toStartOf="@+id/addStartTime"
             app:layout_constraintStart_toStartOf="parent" />
 
 
@@ -87,7 +87,7 @@
             android:textSize="20sp"
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/checkBox"
-            app:layout_constraintEnd_toStartOf="@+id/editTextTime2"
+            app:layout_constraintEnd_toStartOf="@+id/addEndTime"
             app:layout_constraintHorizontal_bias="0.26"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -102,10 +102,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine2" />
+            app:layout_constraintTop_toBottomOf="@+id/addCalendarDescription" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/calendarSaveBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/dark_teal"
