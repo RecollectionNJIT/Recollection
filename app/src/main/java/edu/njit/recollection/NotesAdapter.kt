@@ -9,8 +9,15 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
+import com.google.firebase.database.getValue
 
-class NotesAdapter (private val context: Context, private val notesList: List<Note>): RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
+class NotesAdapter (private val context: Context, private val notesList: MutableList<Note>): RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView = itemView.findViewById<TextView>(R.id.noteRVTitle)
         val bodyTextView = itemView.findViewById<TextView>(R.id.noteRVBody)
@@ -22,7 +29,7 @@ class NotesAdapter (private val context: Context, private val notesList: List<No
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val note = notesList.get(position)
+        val note = notesList[position]
         holder.titleTextView.text = note.title
         holder.bodyTextView.text = note.body
         if (!note.imageLocation.isNullOrBlank()) {
@@ -39,14 +46,18 @@ class NotesAdapter (private val context: Context, private val notesList: List<No
             i.putExtra("note",note)
             context.startActivity(i)
         }
+        holder.itemView.setOnLongClickListener(object : View.OnLongClickListener {
+            override fun onLongClick(v: View?): Boolean {
+                val auth = FirebaseAuth.getInstance()
+                Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(note.key!!).removeValue()
+                notesList.removeAt(position)
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, itemCount)
+                return true
+            }
+        })
     }
 
     override fun getItemCount() = notesList.size
-
-
-
-
-
-
 
 }

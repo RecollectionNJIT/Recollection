@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -43,12 +44,8 @@ class MainNotesFragment : Fragment() {
         adapter = NotesAdapter(view.context, notes)
         rvNotes.adapter = adapter
 
-        view.findViewById<Button>(R.id.btnDetailsNotes).setOnClickListener {
-            val i = Intent(view.context, DetailsActivity::class.java)
-            i.putExtra("fragment", "notes")
-            startActivity(i)
-        }
-        view.findViewById<Button>(R.id.btnAddNotes).setOnClickListener {
+
+        view.findViewById<ImageButton>(R.id.btnAddNotes).setOnClickListener {
             val i = Intent(view.context, AddActivity::class.java)
             i.putExtra("fragment", "notes")
             startActivity(i)
@@ -83,7 +80,8 @@ class MainNotesFragment : Fragment() {
                     val title = child.child("title").getValue().toString()
                     val body = child.child("body").getValue().toString()
                     val imageLoc = child.child("imageLocation").getValue().toString()
-                    val newNote = Note(title, body, imageLoc)
+                    val key = child.key
+                    val newNote = Note(title, body, imageLoc, key)
                     notes.add(newNote)
                     adapter.notifyDataSetChanged()
                 }
