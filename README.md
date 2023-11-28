@@ -114,19 +114,38 @@ GIF created with [ShareX](https://getsharex.com/).
 
 ## GitHub Project board
 
-[Add screenshot of your Project Board with three milestones visible in
-this section]
-<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+<img src="MilestonesUnit9.png" title='Milestones' width='' alt='Milestones'>
+<img src="ProjectBoardUnit9.png" title='Overall Project Board' width='' alt='Overall Project Board'>
 
 ## Issue cards
 
-- [Add screenshot of your Project Board with the issues that you've been working on for this unit's milestone] <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
-- [Add screenshot of your Project Board with the issues that you're working on in the **NEXT sprint**. It should include issues for next unit with assigned owners.] <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+<img src="ProjectBoardFinishedUnit9.gif" title='Finished Issues' width='' alt='Finished Issues'>
+<img src="ProjectBoardInProgUnit9.png" title='In Progress Issues' width='' alt='In Progress Issues'>
 
 ## Issues worked on this sprint
 
-- List the issues you completed this sprint
-- [Add giphy that shows current build progress for Milestone 2. Note: We will be looking for progression of work between Milestone 2 and 3. Make sure your giphys are not duplicated and clearly show the change from Sprint 1 to 2.]
+- Set up Login with Google Account
+- Create Navbar
+- Create a basic home screen for when the user logs in
+- Create fragment for each element in the nav bar
+- Create Calendar UI
+- Create reminder UI
+- Create Finance UI
+- Create Notes UI
+- Create calendar detail view
+- Create add/edit Calendar screen UI
+- Create reminder detail view UI
+- Create reminder edit/add UI
+- Create note detail view
+- Create notes edit/add view UI
+- Create Finance detail view
+- Create add/edit finance UI
+- Persist Calendar Data
+- Persist Reminder Data
+- Persist Notes Data
+- Create Add/Detail Fragment Template
+- Create Settings Activity
+<img src="BuildProgressUnit9.gif" title='Build Progress Thus Far' width='' alt='Build Progress Thus Far'>
 
 <br>
 
