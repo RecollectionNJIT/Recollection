@@ -6,16 +6,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 
-class CalendarAdapter (private val context: Context, private val calendarList: MutableList<CalendarEntry>): RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
+class CalendarAdapter(
+    private val context: Context,
+    private val calendarList: MutableList<CalendarEntry>
+) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView = itemView.findViewById<TextView>(R.id.calendarTitle)
         val bodyTextView = itemView.findViewById<TextView>(R.id.calendarDescription)
@@ -50,17 +51,20 @@ class CalendarAdapter (private val context: Context, private val calendarList: M
         }
 
         holder.itemView.setOnLongClickListener(object : View.OnLongClickListener {
-                override fun onLongClick(v: View?): Boolean {
-                    val auth = FirebaseAuth.getInstance()
-                    Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(day.key!!).removeValue()
-                    Log.v("removed item and checking list", ""+calendarList)
-                    Toast.makeText(holder.itemView.context, "Entry Deleted!", Toast.LENGTH_SHORT).show()
-                    calendarList.removeAt(position)
-                    notifyItemRemoved(position)
-                    //notifyItemRangeChanged(position, itemCount)
-                    Log.v("removed item and checking list before return", ""+calendarList)
-                    return true
-                }
+            override fun onLongClick(v: View?): Boolean {
+                val auth = FirebaseAuth.getInstance()
+                Firebase.database.reference.child("users").child(auth.uid!!).child("calendar")
+                    .child(day.key!!).removeValue()
+//                Log.v("removed item and checking list", "" + calendarList)
+//                Toast.makeText(holder.itemView.context, "Entry Deleted!", Toast.LENGTH_SHORT).show()
+//                calendarList.removeAt(holder.absoluteAdapterPosition)
+//                notifyItemRemoved(holder.absoluteAdapterPosition)
+//                notifyItemRangeChanged(holder.absoluteAdapterPosition, itemCount)
+//                Log.e("CUSTOM---->", calendarList.toString() + "_")
+//                Log.e("CUSTOM---->", calendarList.size.toString() + " ___")
+//                notifyDataSetChanged()
+                return true
+            }
         })
     }
 

@@ -230,6 +230,8 @@ class MainCalendarFragment : Fragment() {
         databaseRef.child("users").child(auth.uid!!).child("calendar").orderByChild("date").equalTo(selected.toString()).addValueEventListener(object:
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+
+                days.clear()
                 for (child in snapshot.children) {
                     val date = child.child("date").getValue().toString()
                     val title = child.child("title").getValue().toString()
@@ -239,9 +241,9 @@ class MainCalendarFragment : Fragment() {
                     val key = child.key
                     val event = CalendarEntry(date, title, description, start, end, key)
                     days.add(event)
-                    adapter.notifyDataSetChanged()
                 }
                 Log.v("days", ""+days.toString())
+                adapter.notifyDataSetChanged()
 
             }
 
