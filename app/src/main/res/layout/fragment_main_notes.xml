@@ -21,31 +21,22 @@
             app:spanCount="2"
             tools:listitem="@layout/rv_note_item" />
 
-        <Button
+
+
+        <ImageButton
             android:id="@+id/btnAddNotes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/rounded_corners"
+            android:layout_marginBottom="16dp"
+            android:background="@null"
             android:text="Add"
-            android:textColor="@color/teal"
-            android:theme="@style/White"
-            app:layout_constraintBottom_toTopOf="@+id/btnDetailsNotes"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/btnDetailsNotes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corners"
-            android:text="Details"
+            android:contentDescription="Add Button"
             android:textColor="@color/teal"
             android:theme="@style/White"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:srcCompat="@drawable/add" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
