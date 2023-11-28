@@ -2,13 +2,21 @@ package edu.njit.recollection
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
 
 class MainRemindersFragment : Fragment() {
     private lateinit var rvReminders: RecyclerView
@@ -33,7 +41,7 @@ class MainRemindersFragment : Fragment() {
             startActivity(i)
         }
 
-        view.findViewById<Button>(R.id.btnAddReminders).setOnClickListener {
+        view.findViewById<ImageButton>(R.id.btnAddReminders).setOnClickListener {
             val i = Intent(view.context, AddActivity::class.java)
             i.putExtra("fragment", "reminders")
             startActivity(i)
@@ -56,16 +64,31 @@ class MainRemindersFragment : Fragment() {
 
     fun updateRV() {
         items.clear()
-        items.clear()
-        // Add pairs of reminders to the items list
-        items.add(Reminders("Title1", "Description1", "Date1", "0"))
-        items.add(Reminders("Title2", "Description2", "Date2", "1"))
-        items.add(Reminders("Title3", "Description3", "Date3", "2"))
-        items.add(Reminders("Title4", "Description4", "Date4", "3"))
-        items.add(Reminders("Title5", "Description5", "Date5", "4"))
-        items.add(Reminders("Title6", "Description6", "Date6", "5"))
-        items.add(Reminders("Title7", "Description7", "Date7", "6"))
-        items.add(Reminders("Title8", "Description8", "Date8", "7"))
-        adapter.notifyDataSetChanged()
+        val auth = FirebaseAuth.getInstance()
+        val databaseRef = Firebase.database.reference
+        val remindersRef = databaseRef.child("users").child(auth.uid!!).child("reminders")
+
+        remindersRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                items.clear()
+
+                for (child in snapshot.children) {
+                    val title = child.child("title").getValue().toString()
+                    val description = child.child("description").getValue().toString()
+                    val date = child.child("date").getValue().toString()
+                    val time = child.child("time").getValue().toString()
+                    val id = child.key // Get the ID from the database
+                    val newRem = Reminders(title, description, date, time, id)
+                    items.add(newRem)
+                }
+
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("firebaseFinanceMain", "error", Throwable(error.toString()))
+            }
+        })
     }
+
 }

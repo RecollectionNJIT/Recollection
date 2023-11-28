@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -54,7 +55,19 @@
             android:textSize="16sp"
             android:padding="8dp" />
 
-        <!-- Add any other TextViews or UI components for reminders as needed -->
+        <!-- Time TextView -->
+        <TextView
+            android:id="@+id/tvReminderTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvReminderDate"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:text="12:00 PM"
+            android:textColor="@color/teal"
+            android:textSize="16sp"
+            android:padding="8dp" />
+
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

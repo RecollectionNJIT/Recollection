@@ -1,97 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddRemindersFragment"
     android:background="@color/teal">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:padding="16dp">
 
         <!-- TextView for the title -->
         <TextView
             android:id="@+id/textViewRemindersAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="AddActivity - Reminders"
+            android:text="Add Reminder"
             android:textColor="@color/white"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/selectReminderDescription" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- EditText for reminder description -->
-
+        <!-- EditText for reminder title -->
         <EditText
             android:id="@+id/selectReminderTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:background="@drawable/rounded_corners"
             android:ems="10"
             android:gravity="center"
-            android:hint="Enter Reminder Title"
+            android:hint="Enter Title"
             android:inputType="textMultiLine"
-            android:padding="5dp"
+            android:padding="12dp"
             android:textColor="@color/teal"
             android:textColorHint="@color/teal"
-            app:layout_constraintTop_toBottomOf="@+id/textViewRemindersAdd"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/selectReminderDescription" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewRemindersAdd" />
 
+        <!-- EditText for reminder description -->
         <EditText
             android:id="@+id/selectReminderDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:background="@drawable/rounded_corners"
             android:ems="10"
             android:gravity="center"
-            android:hint="Enter Reminder Description"
+            android:hint="Enter Description"
             android:inputType="textMultiLine"
-            android:padding="5dp"
+            android:padding="12dp"
             android:textColor="@color/teal"
             android:textColorHint="@color/teal"
-            app:layout_constraintTop_toBottomOf="@+id/selectReminderTitle"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/selectReminderDate" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/selectReminderTitle" />
 
+        <!-- EditText for reminder date -->
         <EditText
             android:id="@+id/selectReminderDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:background="@drawable/rounded_corners"
+            android:clickable="false"
+            android:cursorVisible="false"
             android:ems="10"
             android:gravity="center"
-            android:hint="Enter Reminder Date"
-            android:inputType="textMultiLine"
-            android:padding="5dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:longClickable="false"
+            android:hint="Select Date"
+            android:inputType="date"
+            android:padding="12dp"
             android:textColor="@color/teal"
             android:textColorHint="@color/teal"
-            app:layout_constraintTop_toBottomOf="@+id/selectReminderDescription"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/createReminderBtn" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/selectReminderDescription" />
+
+        <!-- EditText for reminder time -->
+        <EditText
+            android:id="@+id/selectReminderTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_corners"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="10"
+            android:gravity="center"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:longClickable="false"
+            android:hint="Select Time"
+            android:inputType="time"
+            android:padding="12dp"
+            android:textColor="@color/teal"
+            android:textColorHint="@color/teal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/selectReminderDate" />
 
         <!-- Button to create the reminder -->
         <Button
             android:id="@+id/createReminderBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Create Reminder"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="32dp"
             android:background="@drawable/rounded_corners"
+            android:text="Create Reminder"
             android:textColor="@color/teal"
             android:theme="@style/White"
-            app:layout_constraintTop_toBottomOf="@+id/selectReminderDescription"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/selectReminderTime" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</FrameLayout>
+</RelativeLayout>
