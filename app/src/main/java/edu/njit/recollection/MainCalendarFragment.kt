@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
@@ -39,8 +40,9 @@ import java.util.Objects
 
 private lateinit var calendarRecycler: RecyclerView
 private lateinit var adapter: CalendarAdapter
-private val days = mutableListOf<CalendarEntry>()
-private val allDays = mutableMapOf<LocalDate, CalendarEntry>()
+private var days = mutableListOf<CalendarEntry>()
+
+private var initialCon = true
 
 private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyyy")
 private val selectionFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
@@ -58,6 +60,16 @@ class DayViewContainer(view: View) : ViewContainer(view) {
 class MainCalendarFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        days.clear()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        days.clear()
+        if(!initialCon) {
+            updateRV(selectedDate)
+            adapter.notifyDataSetChanged()
+        }
     }
 
     override fun onCreateView(
@@ -68,6 +80,7 @@ class MainCalendarFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_main_calendar, container, false)
         // do stuff here
         calendarRecycler = view.findViewById<RecyclerView>(R.id.calendarRecyclerView)
+        days.clear()
         adapter = CalendarAdapter(view.context, days)
         calendarRecycler.adapter = adapter
 
@@ -98,8 +111,8 @@ class MainCalendarFragment : Fragment() {
                         if( prevContainer.textView.background != null  && data.date.month == today.month ){
                             if( container.textView.text.toString() == today.dayOfMonth.toString()){
                                 Log.v("Month",""+ DayPosition.MonthDate)
-                                container.textView.setBackgroundResource(R.drawable.today_bg)
                                 prevContainer.textView.background=null
+                                container.textView.setBackgroundResource(R.drawable.today_bg)
                             }
                             else{
                                 Log.v("Not Equal Today","" +data.date.month )
@@ -126,7 +139,8 @@ class MainCalendarFragment : Fragment() {
 
                         prevContainer = container
                         selectDate(data.date, calendarText)
-                        updateRV()
+                        updateRV(selectedDate)
+                        adapter.notifyDataSetChanged()
                     }
                 } else {
                     container.view.visibility=View.INVISIBLE
@@ -154,7 +168,6 @@ class MainCalendarFragment : Fragment() {
                             val title = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
                             textView.text = title
                             //textView related to week
-
                         }
                 }
             }
@@ -164,24 +177,27 @@ class MainCalendarFragment : Fragment() {
             monthView.text = titleFormatter.format(it.yearMonth)
             if(it.yearMonth == today.yearMonth){
                 selectDate(today, calendarText)
-
+                //this one
+                if(initialCon) {
+                    initialCon = false
+                }
+                    updateRV(selectedDate)
             }else{
                 selectDate(it.yearMonth.atDay(1), calendarText)
+                updateRV(selectedDate)
 
             }
         }
         calendarView.setup(startMonth, endMonth, daysOfWeek.first())
         calendarView.scrollToMonth(currentMonth)
 
-        view.findViewById<Button>(R.id.btnDetailsCalendar).setOnClickListener {
-            val i = Intent(view.context, DetailsActivity::class.java)
-            i.putExtra("fragment", "calendar")
-            startActivity(i)
-        }
-        view.findViewById<FloatingActionButton>(R.id.btnAddCalendar).setOnClickListener {
+        view.findViewById<ImageButton>(R.id.btnAddCalendar).setOnClickListener {
             val i = Intent(view.context, AddActivity::class.java)
             i.putExtra("fragment", "calendar")
+            i.putExtra("date",""+ selectedDate.toString() )
             startActivity(i)
+            //updateRV(selectedDate)
+            adapter.notifyDataSetChanged()
         }
         return view
     }
@@ -207,11 +223,11 @@ class MainCalendarFragment : Fragment() {
     }
 
 
-    fun updateRV() {
+    fun updateRV(selected:LocalDate = LocalDate.now()) {
         days.clear()
         val auth = FirebaseAuth.getInstance()
         val databaseRef = Firebase.database.reference
-        databaseRef.child("users").child(auth.uid!!).child("calendar").addListenerForSingleValueEvent(object:
+        databaseRef.child("users").child(auth.uid!!).child("calendar").orderByChild("date").equalTo(selected.toString()).addValueEventListener(object:
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (child in snapshot.children) {
@@ -220,10 +236,13 @@ class MainCalendarFragment : Fragment() {
                     val description = child.child("description").getValue().toString()
                     val start = child.child("timeStart").getValue().toString()
                     val end = child.child("timeEnd").getValue().toString()
-                    val event = CalendarEntry(date, title, description, start, end)
+                    val key = child.key
+                    val event = CalendarEntry(date, title, description, start, end, key)
                     days.add(event)
                     adapter.notifyDataSetChanged()
                 }
+                Log.v("days", ""+days.toString())
+
             }
 
             override fun onCancelled(error: DatabaseError) {

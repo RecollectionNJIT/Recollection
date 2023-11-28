@@ -4,5 +4,6 @@ data class CalendarEntry(
     val title: String?,
     val description: String?,
     val timeStart: String?,
-    val timeEnd: String?
+    val timeEnd: String?,
+    val key: String? = ""
 ) : java.io.Serializable
