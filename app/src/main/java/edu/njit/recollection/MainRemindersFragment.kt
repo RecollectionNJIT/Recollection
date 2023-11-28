@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
@@ -40,7 +41,7 @@ class MainRemindersFragment : Fragment() {
             startActivity(i)
         }
 
-        view.findViewById<Button>(R.id.btnAddReminders).setOnClickListener {
+        view.findViewById<ImageButton>(R.id.btnAddReminders).setOnClickListener {
             val i = Intent(view.context, AddActivity::class.java)
             i.putExtra("fragment", "reminders")
             startActivity(i)

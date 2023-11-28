@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="10dp"
     app:cardElevation="8dp"
@@ -22,7 +22,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
-            android:hint="Enter Reminder Title"
+            android:hint="Enter Title"
             android:textColor="@color/teal"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -35,11 +35,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/etEditTitle"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
-            android:hint="Enter Reminder Description"
+            android:layout_marginTop="15dp"
+            android:hint="Enter Description"
             android:textColor="@color/teal"
-            android:textSize="16sp"
-            android:padding="8dp" />
+            android:textSize="20sp"
+            android:padding="15dp" />
 
         <!-- Editable Date EditText -->
         <EditText
@@ -53,11 +53,11 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:inputType="date"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="15dp"
             android:hint="Enter Reminder Date"
             android:textColor="@color/teal"
-            android:textSize="16sp"
-            android:padding="8dp" />
+            android:textSize="20sp"
+            android:padding="15dp" />
 
         <!-- Editable Time EditText -->
         <EditText
@@ -71,11 +71,11 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:inputType="time"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="15dp"
             android:hint="Enter Reminder Time"
             android:textColor="@color/teal"
-            android:textSize="16sp"
-            android:padding="8dp" />
+            android:textSize="20sp"
+            android:padding="15dp" />
 
         <!-- Update Button -->
         <Button
@@ -85,7 +85,7 @@
             android:text="Update"
             android:layout_below="@id/etEditTime"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="50dp"/>
 
         <!-- Delete Button -->
         <Button
@@ -95,6 +95,6 @@
             android:text="Delete"
             android:layout_below="@id/btnUpdateReminder"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="10dp"/>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
