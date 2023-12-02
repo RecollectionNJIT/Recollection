@@ -12,15 +12,124 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textViewHomepage"
+            android:id="@+id/tvHomepageHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello World - Homepage!"
+            android:text="Homepage"
+            android:textSize="35sp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="sans-serif-smallcaps"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:transitionName="header"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvHomepageCalendar"
+            android:layout_width="match_parent"
+            android:layout_height="146dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:cardMaxElevation="10dp"
+            app:layout_constraintTop_toBottomOf="@id/tvHomepageHeader">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tvCalendarCV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:padding="15dp"
+                    android:text="Calendar CardView"
+                    android:textColor="@color/teal"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvHomepageFinance"
+            android:layout_width="match_parent"
+            android:layout_height="146dp"
+            android:layout_margin="5dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:cardMaxElevation="10dp"
+            app:layout_constraintTop_toBottomOf="@id/cvHomepageCalendar">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+                <TextView
+                    android:id="@+id/tvFinanceCV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Finance CardView"
+                    android:textColor="@color/teal"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:padding="15dp"/>
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvHomepageReminders"
+            android:layout_width="match_parent"
+            android:layout_height="146dp"
+            android:layout_margin="5dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:cardMaxElevation="10dp"
+            app:layout_constraintTop_toBottomOf="@id/cvHomepageFinance">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+                <TextView
+                    android:id="@+id/tvRemindersCV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Reminders CardView"
+                    android:textColor="@color/teal"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:padding="15dp"/>
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvHomepageWeather"
+            android:layout_width="match_parent"
+            android:layout_height="146dp"
+            android:layout_margin="5dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:cardMaxElevation="10dp"
+            app:layout_constraintTop_toBottomOf="@id/cvHomepageReminders">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+                <TextView
+                    android:id="@+id/tvWeatherCV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Weather CardView"
+                    android:textColor="@color/teal"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:padding="15dp"/>
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
 
         <ImageButton
             android:id="@+id/btnSettings"

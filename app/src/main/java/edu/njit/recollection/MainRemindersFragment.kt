@@ -35,11 +35,11 @@ class MainRemindersFragment : Fragment() {
         adapter = RemindersAdapter(view.context, items)
         rvReminders.adapter = adapter
 
-        view.findViewById<Button>(R.id.btnDetailsReminders).setOnClickListener {
-            val i = Intent(view.context, DetailsActivity::class.java)
-            i.putExtra("fragment", "reminders")
-            startActivity(i)
-        }
+//        view.findViewById<Button>(R.id.btnDetailsReminders).setOnClickListener {
+//            val i = Intent(view.context, DetailsActivity::class.java)
+//            i.putExtra("fragment", "reminders")
+//            startActivity(i)
+//        }
 
         view.findViewById<ImageButton>(R.id.btnAddReminders).setOnClickListener {
             val i = Intent(view.context, AddActivity::class.java)
