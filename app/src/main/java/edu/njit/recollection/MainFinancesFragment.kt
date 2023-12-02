@@ -201,7 +201,7 @@ class MainFinancesFragment : Fragment() {
         data.setValueTypeface(Typeface.DEFAULT_BOLD)
         data.setValueTextColor(ContextCompat.getColor(view.context, R.color.white))
         val formatter: ValueFormatter = object : ValueFormatter() {
-            val mFormat = DecimalFormat("###,###,##0.00");
+            val mFormat = DecimalFormat("###,###,##0.00")
             override fun getFormattedValue(value:Float, entry: Entry, dataSetIndex:Int, viewPortHandler: ViewPortHandler): String {
                 return if (value == 0f) {
                     ""
