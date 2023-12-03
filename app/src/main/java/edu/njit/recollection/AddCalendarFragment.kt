@@ -2,17 +2,23 @@ package edu.njit.recollection
 
 import android.app.TimePickerDialog
 import android.icu.text.SimpleDateFormat
+import android.opengl.Visibility
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAccessor
 import java.util.Calendar
 import java.util.Locale
 
@@ -24,6 +30,7 @@ class AddCalendarFragment : Fragment() {
     private lateinit var startTime: EditText
     private lateinit var endTime: EditText
     private lateinit var saveButton: Button
+    private lateinit var sendToReminder : CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +58,7 @@ class AddCalendarFragment : Fragment() {
         startTime = view.findViewById(R.id.addStartTime)
         endTime = view.findViewById(R.id.addEndTime)
         saveButton = view.findViewById(R.id.calendarSaveBtn)
+        sendToReminder = view.findViewById(R.id.addToReminder)
 
         // Inflate the layout for this fragment
         myCalendar = Calendar.getInstance()
@@ -91,6 +99,7 @@ class AddCalendarFragment : Fragment() {
 
         // do stuff here
         if(edit == true) {
+
             var title = activity?.intent?.extras?.getString("title")
             var description = activity?.intent?.extras?.getString("description")
             val date = activity?.intent?.extras?.getString("date")
@@ -98,7 +107,8 @@ class AddCalendarFragment : Fragment() {
             var end =activity?.intent?.extras?.getString("timeEnd")
             val key = activity?.intent?.extras?.getString("key")
 
-            activityTitle.setText("edit Calendar")
+            sendToReminder.visibility=View.INVISIBLE
+            activityTitle.setText("Edit Calendar Event")
             titleEditText.setText( activity?.intent?.extras?.getString("title"))
             descriptionEditText.setText(activity?.intent?.extras?.getString("description"))
             startTime.setText(activity?.intent?.extras?.getString("timeStart"))
@@ -125,12 +135,24 @@ class AddCalendarFragment : Fragment() {
                 val date = activity?.intent?.extras?.getString("date")
                 val start = startTime.text.toString()
                 val end = endTime.text.toString()
+                val reminder = sendToReminder.isChecked
                 val event = CalendarEntry(date, title, description, start, end)
                 val auth = FirebaseAuth.getInstance()
+
+
                 val newCalEntryRef =
                     Firebase.database.reference.child("users").child(auth.uid!!).child("calendar")
                         .push()
                 newCalEntryRef.setValue(event)
+
+                if(reminder){
+                    val reminderDate =  activity?.intent?.extras?.getString("remDate")
+                    //Log.v("Reminder Date", ""+reminderDate)
+                    val reminderEnt = Reminders(title, description, reminderDate, start, "")
+                    val newReminderEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("reminders").push()
+                    newReminderEntryRef.setValue(reminderEnt)
+                }
+
                 activity?.finish()
             }
         }

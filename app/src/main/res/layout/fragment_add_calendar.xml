@@ -18,7 +18,7 @@
             android:id="@+id/textViewCalendarAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Calendar"
+            android:text="Add Calendar Event"
             android:textColor="@color/white"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -109,7 +109,7 @@
             app:layout_constraintTop_toBottomOf="@+id/addStartTime" />
 
         <CheckBox
-            android:id="@+id/checkBox"
+            android:id="@+id/addToReminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:buttonTint="#FFFFFF"
@@ -132,7 +132,7 @@
             android:theme="@style/White"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+            app:layout_constraintTop_toBottomOf="@+id/addToReminder" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

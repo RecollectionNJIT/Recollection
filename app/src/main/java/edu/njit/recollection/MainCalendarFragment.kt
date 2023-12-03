@@ -46,9 +46,11 @@ private var initialCon = true
 
 private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyyy")
 private val selectionFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
+private val reminderFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy")
 private val today = LocalDate.now()
 private var selectedDate = LocalDate.now()
 private lateinit var prevContainer :  DayViewContainer
+
 class MonthViewContainer(view: View) : ViewContainer(view) {
     // Alternatively, you can add an ID to the container layout and use findViewById()
     val titlesContainer = view as ViewGroup
@@ -79,7 +81,7 @@ class MainCalendarFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_main_calendar, container, false)
         // do stuff here
-        calendarRecycler = view.findViewById<RecyclerView>(R.id.calendarRecyclerView)
+        calendarRecycler = view.findViewById(R.id.calendarRecyclerView)
         days.clear()
         adapter = CalendarAdapter(view.context, days)
         calendarRecycler.adapter = adapter
@@ -185,7 +187,7 @@ class MainCalendarFragment : Fragment() {
             }else{
                 selectDate(it.yearMonth.atDay(1), calendarText)
                 updateRV(selectedDate)
-
+                prevContainer.textView.background=null
             }
         }
         calendarView.setup(startMonth, endMonth, daysOfWeek.first())
@@ -195,6 +197,7 @@ class MainCalendarFragment : Fragment() {
             val i = Intent(view.context, AddActivity::class.java)
             i.putExtra("fragment", "calendar")
             i.putExtra("date",""+ selectedDate.toString() )
+            i.putExtra("remDate", reminderFormatter.format(selectedDate).toString())
             startActivity(i)
             //updateRV(selectedDate)
             adapter.notifyDataSetChanged()
