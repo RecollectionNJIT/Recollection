@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-
+public lateinit var bottomNavigationView: BottomNavigationView
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         val mainRemindersFragment: Fragment = MainRemindersFragment()
 
         // Declare nav bar
-        val bottomNavigationView: BottomNavigationView = findViewById(R.id.main_bottom_navigation)
+        bottomNavigationView = findViewById(R.id.main_bottom_navigation)
 
         // Assign fragments to each nav menu choice
         bottomNavigationView.setOnItemSelectedListener { item ->
