@@ -1,10 +1,8 @@
 package edu.njit.recollection
 
 import android.content.Intent
-import android.icu.lang.UProperty.INT_START
 
 import android.os.Bundle
-import android.text.SpannableStringBuilder
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.HorizontalBarChart
 import com.github.mikephil.charting.components.AxisBase
@@ -29,6 +28,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import java.text.DecimalFormat
+import java.time.LocalDate
 
 class MainHomeFragment : Fragment() {
     lateinit var calendarCV: CardView
@@ -59,7 +59,7 @@ class MainHomeFragment : Fragment() {
         remindersCV = view.findViewById(R.id.cvHomepageReminders)
         weatherCV = view.findViewById(R.id.cvHomepageWeather)
 
-        createCalendarCV()
+        createCalendarCV(view)
         createFinanceCV(view)
         createRemindersCV()
         createWeatherCV()
@@ -67,7 +67,43 @@ class MainHomeFragment : Fragment() {
         return view
     }
 
-    fun createCalendarCV() {
+    fun createCalendarCV(view: View) {
+        val recycler = calendarCV.findViewById<RecyclerView>(R.id.homeCalendarRecyclerView)
+        // do stuff here
+        var days = mutableListOf<CalendarEntry>()
+        days.clear()
+        val adapter = HomeCalendarAdapter(view.context, days)
+        recycler.adapter = adapter
+
+        val auth = FirebaseAuth.getInstance()
+        val databaseRef = Firebase.database.reference
+
+        Log.v("Homepage Calendar","" + LocalDate.now().toString());
+        databaseRef.child("users").child(auth.uid!!).child("calendar").orderByChild("date").equalTo(LocalDate.now().toString()).addValueEventListener(object:
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                days.clear()
+                for (child in snapshot.children) {
+                    val date = child.child("date").getValue().toString()
+                    val title = child.child("title").getValue().toString()
+                    val description = child.child("description").getValue().toString()
+                    val start = child.child("timeStart").getValue().toString()
+                    val end = child.child("timeEnd").getValue().toString()
+                    val key = child.key
+                    val event = CalendarEntry(date, title, description, start, end, key)
+                    days.add(event)
+                }
+                Log.v("days", ""+days.toString())
+                adapter.notifyDataSetChanged()
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("firebaseCalendarMain", "error", Throwable(error.toString()))
+            }
+        })
+
     }
     fun createFinanceCV(view: View) {
         financeEntries.clear()
