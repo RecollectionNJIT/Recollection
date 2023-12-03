@@ -84,7 +84,6 @@ class MainHomeFragment : Fragment() {
         databaseRef.child("users").child(auth.uid!!).child("calendar").orderByChild("date").equalTo(LocalDate.now().toString()).addValueEventListener(object:
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-
                 days.clear()
                 for (child in snapshot.children) {
                     val date = child.child("date").getValue().toString()
@@ -94,6 +93,9 @@ class MainHomeFragment : Fragment() {
                     val end = child.child("timeEnd").getValue().toString()
                     val key = child.key
                     val event = CalendarEntry(date, title, description, start, end, key)
+                    event.addToReminders = child.child("addToReminders").getValue().toString().toBoolean()
+                    event.addToNotes = child.child("addToNotes").getValue().toString().toBoolean()
+                    event.addToFinances = child.child("addToFinances").getValue().toString().toBoolean()
                     days.add(event)
                 }
                 Log.v("days", ""+days.toString())

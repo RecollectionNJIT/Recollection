@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 
 class CalendarAdapter(
@@ -30,6 +32,7 @@ class CalendarAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val auth = FirebaseAuth.getInstance()
         val day = calendarList.get(position)
         //Log.v("On bind view",  calendarList.toString())
         holder.titleTextView.text = day.title
@@ -46,13 +49,15 @@ class CalendarAdapter(
             i.putExtra("timeStart", day.timeStart)
             i.putExtra("timeEnd", day.timeEnd)
             i.putExtra("key", day.key)
+            i.putExtra("addToReminders", day.addToReminders)
+            i.putExtra("addToNotes", day.addToNotes)
+            i.putExtra("addToFinances", day.addToFinances)
             i.putExtra("edit", true)
             context.startActivity(i)
         }
 
         holder.itemView.setOnLongClickListener(object : View.OnLongClickListener {
             override fun onLongClick(v: View?): Boolean {
-                val auth = FirebaseAuth.getInstance()
                 Firebase.database.reference.child("users").child(auth.uid!!).child("calendar")
                     .child(day.key!!).removeValue()
 //                Log.v("removed item and checking list", "" + calendarList)
