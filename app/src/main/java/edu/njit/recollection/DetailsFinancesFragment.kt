@@ -161,7 +161,8 @@ class DetailsFinancesFragment : Fragment() {
 
         pieChart.setUsePercentValues(false)
         pieChart.getDescription().setEnabled(false)
-        pieChart.setExtraOffsets(5f, 10f, 5f, 5f)
+        pieChart.setExtraOffsets(0f, 20f, 0f, 20f)
+        pieChart.setMinAngleForSlices(20f)
         pieChart.setDragDecelerationFrictionCoef(0.95f)
 
         pieChart.setDrawHoleEnabled(true)
@@ -203,29 +204,50 @@ class DetailsFinancesFragment : Fragment() {
                 otherTotal += entry.amount!!
         }
         val pieEntries: ArrayList<PieEntry> = ArrayList()
-        pieEntries.add(PieEntry(rentTotal.toFloat()))
-        pieEntries.add(PieEntry(groceriesTotal.toFloat()))
-        pieEntries.add(PieEntry(diningTotal.toFloat()))
-        pieEntries.add(PieEntry(billsTotal.toFloat()))
-        pieEntries.add(PieEntry(entertainmentTotal.toFloat()))
-        pieEntries.add(PieEntry(otherTotal.toFloat()))
+        val colors: ArrayList<Int> = ArrayList()
+        if (rentTotal != 0.0) {
+            pieEntries.add(PieEntry(rentTotal.toFloat()))
+            colors.add(ContextCompat.getColor(view.context, R.color.space_cadet))
+        }
+        if (groceriesTotal != 0.0) {
+            pieEntries.add(PieEntry(groceriesTotal.toFloat()))
+            colors.add(ContextCompat.getColor(view.context, R.color.mantis))
+        }
+        if (diningTotal != 0.0) {
+            pieEntries.add(PieEntry(diningTotal.toFloat()))
+            colors.add(ContextCompat.getColor(view.context, R.color.metallic_gold))
+        }
+        if (billsTotal != 0.0) {
+            pieEntries.add(PieEntry(billsTotal.toFloat()))
+            colors.add(ContextCompat.getColor(view.context, R.color.magenta_haze))
+        }
+        if (entertainmentTotal != 0.0) {
+            pieEntries.add(PieEntry(entertainmentTotal.toFloat()))
+            colors.add(ContextCompat.getColor(view.context, R.color.cerise))
+        }
+        if (otherTotal != 0.0) {
+            pieEntries.add(PieEntry(otherTotal.toFloat()))
+            colors.add(ContextCompat.getColor(view.context, R.color.apricot))
+        }
 
         val dataSet = PieDataSet(pieEntries, "Expenses")
-
         dataSet.setDrawIcons(false)
-
         dataSet.sliceSpace = 3f
         dataSet.iconsOffset = MPPointF(0f, 40f)
         dataSet.selectionShift = 5f
-
-        val colors: ArrayList<Int> = ArrayList()
-        colors.add(ContextCompat.getColor(view.context, R.color.burgandy))
-        colors.add(ContextCompat.getColor(view.context, R.color.lime))
-        colors.add(ContextCompat.getColor(view.context, R.color.metallic_gold))
-        colors.add(ContextCompat.getColor(view.context, R.color.magenta_haze))
-        colors.add(ContextCompat.getColor(view.context, R.color.fuchsia))
-        colors.add(ContextCompat.getColor(view.context, R.color.dark_olive_green))
         dataSet.colors = colors
+
+        // Value lines
+        dataSet.valueLinePart1Length = 0.6f
+        dataSet.valueLinePart2Length = 0.3f
+        dataSet.valueLineWidth = 2f
+        dataSet.valueLinePart1OffsetPercentage = 10f  // Line starts outside of chart
+        dataSet.isUsingSliceColorAsValueLineColor = true
+
+        // Value text appearance
+        dataSet.yValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
+        dataSet.valueTextSize = 16f
+        dataSet.valueTypeface = Typeface.DEFAULT_BOLD
 
         val data = PieData(dataSet)
         data.setValueFormatter(PercentFormatter())
@@ -233,7 +255,7 @@ class DetailsFinancesFragment : Fragment() {
         data.setValueTypeface(Typeface.DEFAULT_BOLD)
         data.setValueTextColor(ContextCompat.getColor(view.context, R.color.white))
         val formatter: ValueFormatter = object : ValueFormatter() {
-            val mFormat = DecimalFormat("###,###,##0.00");
+            val mFormat = DecimalFormat("###,###,##0.00")
             override fun getFormattedValue(value:Float, entry: Entry, dataSetIndex:Int, viewPortHandler: ViewPortHandler): String {
                 return if (value == 0f) {
                     ""

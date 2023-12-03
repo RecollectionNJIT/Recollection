@@ -27,4 +27,8 @@
     <color name="lime">#00FF00</color>
     <color name="fuchsia">#FF00FF</color>
     <color name="forest_green">#228B22</color>
+    <color name="space_cadet">#222E50</color>
+    <color name="cerise">#E63462</color>
+    <color name="apricot">#FFCAB1</color>
+    <color name="mantis">#7BC950</color>
 </resources>
