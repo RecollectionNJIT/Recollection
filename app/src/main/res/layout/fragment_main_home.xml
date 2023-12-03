@@ -88,8 +88,7 @@
                     android:layout_height="140dp"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="3dp"
-                    android:layout_marginRight="3dp"
-                    android:layout_centerInParent="true" />
+                    android:layout_marginRight="3dp" />
                 <TextView
                     android:id="@+id/tvFinanceChartDesc"
                     android:layout_width="wrap_content"

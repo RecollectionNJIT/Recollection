@@ -243,6 +243,9 @@ class MainCalendarFragment : Fragment() {
                     val end = child.child("timeEnd").getValue().toString()
                     val key = child.key
                     val event = CalendarEntry(date, title, description, start, end, key)
+                    event.addToFinances = child.child("addToFinances").getValue().toString().toBoolean()
+                    event.addToReminders = child.child("addToReminders").getValue().toString().toBoolean()
+                    event.addToNotes = child.child("addToNotes").getValue().toString().toBoolean()
                     days.add(event)
                 }
                 Log.v("days", ""+days.toString())

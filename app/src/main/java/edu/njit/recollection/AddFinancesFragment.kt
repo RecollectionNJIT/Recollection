@@ -5,6 +5,7 @@ import android.icu.text.DecimalFormat
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.text.InputFilter
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -130,10 +131,23 @@ class AddFinancesFragment : Fragment() {
                 )
             )
         )
+        val auth = FirebaseAuth.getInstance()
+        var timeStart = ""
+        var timeEnd = ""
+        if (editBool == true) {
+            val editEntry = activity?.intent?.extras?.getSerializable("editEntry") as FinanceEntry
+            Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(editEntry.key!!).child("timeStart").get().addOnSuccessListener {
+                timeStart = it.value.toString()
+                Log.i("timeStart", it.value.toString())
+            }
+            Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(editEntry.key!!).child("timeEnd").get().addOnSuccessListener {
+                timeEnd = it.value.toString()
+                Log.i("timeEnd", it.value.toString())
+            }
+        }
 
         // Create the Finance entry and send it to db on add button press
         view.findViewById<Button>(R.id.addEntryBtn).setOnClickListener {
-            val auth = FirebaseAuth.getInstance()
             // Check if it is an edit or an add and work accordingly
             if (editBool == false) {
                 val newFinanceEntry = FinanceEntry(selectDateET.text.toString(), monthDate, typeChoice, category, itemPriceET.text.toString().toDouble(),"", checkbox.isChecked)
@@ -146,7 +160,8 @@ class AddFinancesFragment : Fragment() {
                     val newCalendarEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(newFinanceEntry.key!!)
                     val calendarDate = calendarDate(selectDateET.text.toString())
                     val newCalendarEntry = CalendarEntry(calendarDate,"Payday",
-                        "Amount: $" + DecimalFormat("###,###,##0.00").format(itemPriceET.text.toString().toDouble()),"","", newFinanceEntry.key!!)
+                        "Amount: $" + DecimalFormat("###,###,##0.00").format(itemPriceET.text.toString().toDouble()),"N/A","N/A", newFinanceEntry.key!!)
+                    newCalendarEntry.addToFinances = true
                     newCalendarEntryRef.setValue(newCalendarEntry)
                 }
             }
@@ -160,7 +175,9 @@ class AddFinancesFragment : Fragment() {
                     val newCalendarEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(editEntry.key!!)
                     val calendarDate = calendarDate(selectDateET.text.toString())
                     val newCalendarEntry = CalendarEntry(calendarDate,"Payday",
-                        "Amount: $" + DecimalFormat("###,###,##0.00").format(itemPriceET.text.toString().toDouble()),"","", editEntry.key)
+                        "Amount: $" + DecimalFormat("###,###,##0.00").format(itemPriceET.text.toString().toDouble()),timeStart,timeEnd, editEntry.key)
+
+                    newCalendarEntry.addToFinances = true
                     newCalendarEntryRef.setValue(newCalendarEntry)
                 }
             }

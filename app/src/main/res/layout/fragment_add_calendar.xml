@@ -113,26 +113,68 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:buttonTint="#FFFFFF"
-            android:text="Add to reminder?"
+            android:layout_marginTop="10dp"
+            android:text="Add to Reminders?"
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addEndTime" />
+        <CheckBox
+            android:id="@+id/addToNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="#FFFFFF"
+            android:text="Add to Notes?"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addToReminder" />
+        <CheckBox
+            android:id="@+id/addToFinances"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="#FFFFFF"
+            android:text="If Payday, add to Finances?"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addToNotes" />
+        <EditText
+            android:id="@+id/itemPriceET"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:ems="11"
+            android:background="@drawable/rounded_corners"
+            android:theme="@style/mySpinnerItemStyle"
+            android:visibility="invisible"
+            android:hint="Enter Amount"
+            android:inputType="numberDecimal"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/teal"
+            android:textColorHint="@color/teal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addToFinances" />
 
         <!-- Button to create the reminder -->
         <Button
             android:id="@+id/calendarSaveBtn"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="100dp"
             android:background="@drawable/rounded_corners"
             android:text="Save"
             android:textColor="@color/teal"
             android:theme="@style/White"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addToReminder" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

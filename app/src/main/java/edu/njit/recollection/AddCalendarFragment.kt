@@ -1,9 +1,11 @@
 package edu.njit.recollection
 
 import android.app.TimePickerDialog
+import android.icu.text.DecimalFormat
 import android.icu.text.SimpleDateFormat
 import android.opengl.Visibility
 import android.os.Bundle
+import android.text.InputFilter
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -59,6 +61,7 @@ class AddCalendarFragment : Fragment() {
         endTime = view.findViewById(R.id.addEndTime)
         saveButton = view.findViewById(R.id.calendarSaveBtn)
         sendToReminder = view.findViewById(R.id.addToReminder)
+        val itemPriceET = view.findViewById<EditText>(R.id.itemPriceET)
 
         // Inflate the layout for this fragment
         myCalendar = Calendar.getInstance()
@@ -97,8 +100,30 @@ class AddCalendarFragment : Fragment() {
             tpd.show()
         }
 
+        val sendToFinances = view.findViewById<CheckBox>(R.id.addToFinances)
+        sendToFinances.setOnCheckedChangeListener{ _, isChecked ->
+            if (isChecked)
+                itemPriceET.visibility = View.VISIBLE
+            else
+                itemPriceET.visibility = View.INVISIBLE
+        }
+
+        val sendToNotes = view.findViewById<CheckBox>(R.id.addToNotes)
+
+        // This makes it so the input for price is locked to 2 places after the decimal.
+        itemPriceET.setFilters(
+            arrayOf<InputFilter>(
+                DigitsInputFilter(
+                    Integer.MAX_VALUE,
+                    2,
+                    Double.POSITIVE_INFINITY
+                )
+            )
+        )
+
         // do stuff here
         if(edit == true) {
+            val auth = FirebaseAuth.getInstance()
 
             var title = activity?.intent?.extras?.getString("title")
             var description = activity?.intent?.extras?.getString("description")
@@ -106,8 +131,13 @@ class AddCalendarFragment : Fragment() {
             var start = activity?.intent?.extras?.getString("timeStart")
             var end =activity?.intent?.extras?.getString("timeEnd")
             val key = activity?.intent?.extras?.getString("key")
+            val addToRemindersBool = activity?.intent?.extras?.getBoolean("addToReminders")
+            val addToNotesBool = activity?.intent?.extras?.getBoolean("addToNotes")
+            val addToFinancesBool = activity?.intent?.extras?.getBoolean("addToFinances")
 
-            sendToReminder.visibility=View.INVISIBLE
+            sendToReminder.isChecked = addToRemindersBool!!
+            sendToNotes.isChecked = addToNotesBool!!
+
             activityTitle.setText("Edit Calendar Event")
             titleEditText.setText( activity?.intent?.extras?.getString("title"))
             descriptionEditText.setText(activity?.intent?.extras?.getString("description"))
@@ -115,16 +145,34 @@ class AddCalendarFragment : Fragment() {
             endTime.setText( activity?.intent?.extras?.getString("timeEnd"))
             val original = CalendarEntry(date, title, description, start, end)
 
+            sendToFinances.isChecked = addToFinancesBool!!
+            if (sendToFinances.isChecked) {
+                Firebase.database.reference.child("users").child(auth.uid!!).child("finances").child(key!!).child("amount").get().addOnSuccessListener {
+                    itemPriceET.setText((String.format("%.2f", it.value.toString().toDouble())))
+                }
+            }
+
             saveButton.setOnClickListener {
                 title = titleEditText.text.toString()
                 description = descriptionEditText.text.toString()
                 start = startTime.text.toString()
                 end = endTime.text.toString()
 
-                val auth = FirebaseAuth.getInstance()
+
                 val editedCalEntry = CalendarEntry(date, title, description, start, end,key)
                 val editCalEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(key!!)
+                editedCalEntry.addToFinances = sendToFinances.isChecked
+                editedCalEntry.addToReminders = sendToReminder.isChecked
+                editedCalEntry.addToNotes = sendToNotes.isChecked
                 editCalEntryRef.setValue(editedCalEntry)
+
+                if (sendToFinances.isChecked) {
+                    val newFinanceEntry = FinanceEntry(financeDate(date!!), financeMonthDate(date),
+                        "Income", "Work/Paycheck", itemPriceET.text.toString().toDouble(), key!!, true)
+                    val newFinanceEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("finances").child(key!!)
+                    newFinanceEntryRef.setValue(newFinanceEntry)
+                }
+
                 activity?.finish()
             }
         }
@@ -143,20 +191,40 @@ class AddCalendarFragment : Fragment() {
                 val newCalEntryRef =
                     Firebase.database.reference.child("users").child(auth.uid!!).child("calendar")
                         .push()
+                event.key = newCalEntryRef.key
+                event.addToReminders = sendToReminder.isChecked
+                event.addToFinances = sendToFinances.isChecked
+                event.addToNotes = sendToNotes.isChecked
                 newCalEntryRef.setValue(event)
 
                 if(reminder){
                     val reminderDate =  activity?.intent?.extras?.getString("remDate")
                     //Log.v("Reminder Date", ""+reminderDate)
                     val reminderEnt = Reminders(title, description, reminderDate, start, "")
-                    val newReminderEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("reminders").push()
+                    val newReminderEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("reminders").child(event.key!!)
                     newReminderEntryRef.setValue(reminderEnt)
                 }
 
+                if (sendToFinances.isChecked) {
+                    val newFinanceEntry = FinanceEntry(financeDate(event.date!!), financeMonthDate(event.date!!),
+                        "Income", "Work/Paycheck", itemPriceET.text.toString().toDouble(), event.key!!, true)
+                    val newFinanceEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("finances").child(event.key!!)
+                    newFinanceEntryRef.setValue(newFinanceEntry)
+                }
                 activity?.finish()
             }
         }
         return view
+    }
+    private fun financeDate(oldDate: String) : String {
+        val newFormat = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+        val oldFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        return newFormat.format(oldFormat.parse(oldDate))
+    }
+    private fun financeMonthDate(oldDate: String) : String {
+        val newFormat = SimpleDateFormat("MMMM yyyy", Locale.US)
+        val oldFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        return newFormat.format(oldFormat.parse(oldDate))
     }
 
     companion object {
