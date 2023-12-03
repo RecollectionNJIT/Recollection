@@ -1,15 +1,18 @@
 package edu.njit.recollection
 
 import android.app.DatePickerDialog
+import android.icu.text.DecimalFormat
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.text.InputFilter
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
@@ -41,6 +44,7 @@ class AddFinancesFragment : Fragment() {
         val categorySpinner = view.findViewById<Spinner>(R.id.categorySpinner)
         val itemPriceET = view.findViewById<EditText>(R.id.itemPriceET)
         val editBool = activity?.intent?.extras?.getBoolean("edit", false)
+        val checkbox = view.findViewById<CheckBox>(R.id.paydayToCalendarCheckBox)
 
         // If editing, change UI text to match
         if (editBool == true) {
@@ -72,12 +76,17 @@ class AddFinancesFragment : Fragment() {
                         object: AdapterView.OnItemSelectedListener {
                             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                                 category = categoryOptions[p2]
+                                if (category != "Work/Paycheck")
+                                    checkbox.visibility = View.INVISIBLE
+                                else
+                                    checkbox.visibility = View.VISIBLE
                             }
                             override fun onNothingSelected(parent: AdapterView<*>?) {}
                         }
                     if (editBool == true) {
                         val editEntry = activity?.intent?.extras?.getSerializable("editEntry") as FinanceEntry
                         categorySpinner.setSelection((categorySpinner.adapter as ArrayAdapter<String>).getPosition(editEntry.category),true)
+                        checkbox.isChecked = editEntry.addToCalendar!!
                     }
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -122,24 +131,57 @@ class AddFinancesFragment : Fragment() {
                 )
             )
         )
+        val auth = FirebaseAuth.getInstance()
+        var timeStart = ""
+        var timeEnd = ""
+        if (editBool == true) {
+            val editEntry = activity?.intent?.extras?.getSerializable("editEntry") as FinanceEntry
+            Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(editEntry.key!!).child("timeStart").get().addOnSuccessListener {
+                timeStart = it.value.toString()
+                Log.i("timeStart", it.value.toString())
+            }
+            Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(editEntry.key!!).child("timeEnd").get().addOnSuccessListener {
+                timeEnd = it.value.toString()
+                Log.i("timeEnd", it.value.toString())
+            }
+        }
 
         // Create the Finance entry and send it to db on add button press
         view.findViewById<Button>(R.id.addEntryBtn).setOnClickListener {
-            val auth = FirebaseAuth.getInstance()
+            // Check if it is an edit or an add and work accordingly
             if (editBool == false) {
-                val newFinanceEntry = FinanceEntry(selectDateET.text.toString(), monthDate, typeChoice, category, itemPriceET.text.toString().toDouble())
+                val newFinanceEntry = FinanceEntry(selectDateET.text.toString(), monthDate, typeChoice, category, itemPriceET.text.toString().toDouble(),"", checkbox.isChecked)
                 val auth = FirebaseAuth.getInstance()
                 val newFinancesEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("finances").push()
+                newFinanceEntry.key = newFinancesEntryRef.key
                 newFinancesEntryRef.setValue(newFinanceEntry)
-                activity?.finish()
+
+                if (checkbox.isChecked) {
+                    val newCalendarEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(newFinanceEntry.key!!)
+                    val calendarDate = calendarDate(selectDateET.text.toString())
+                    val newCalendarEntry = CalendarEntry(calendarDate,"Payday",
+                        "Amount: $" + DecimalFormat("###,###,##0.00").format(itemPriceET.text.toString().toDouble()),"N/A","N/A", newFinanceEntry.key!!)
+                    newCalendarEntry.addToFinances = true
+                    newCalendarEntryRef.setValue(newCalendarEntry)
+                }
             }
             else {
                 val editEntry = activity?.intent?.extras?.getSerializable("editEntry") as FinanceEntry
-                val editedFinanceEntry = FinanceEntry(selectDateET.text.toString(), monthDate, typeChoice, category, itemPriceET.text.toString().toDouble())
+                val editedFinanceEntry = FinanceEntry(selectDateET.text.toString(), editEntry.monthDate, typeChoice, category, itemPriceET.text.toString().toDouble(), editEntry.key, checkbox.isChecked)
                 val editFinancesEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("finances").child(editEntry.key!!)
                 editFinancesEntryRef.setValue(editedFinanceEntry)
-                activity?.finish()
+
+                if (checkbox.isChecked) {
+                    val newCalendarEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(editEntry.key!!)
+                    val calendarDate = calendarDate(selectDateET.text.toString())
+                    val newCalendarEntry = CalendarEntry(calendarDate,"Payday",
+                        "Amount: $" + DecimalFormat("###,###,##0.00").format(itemPriceET.text.toString().toDouble()),timeStart,timeEnd, editEntry.key)
+
+                    newCalendarEntry.addToFinances = true
+                    newCalendarEntryRef.setValue(newCalendarEntry)
+                }
             }
+            activity?.finish()
         }
         return view
     }
@@ -152,6 +194,11 @@ class AddFinancesFragment : Fragment() {
         myFormat = "MM/dd/yyyy"
         dateFormat = SimpleDateFormat(myFormat, Locale.US)
         selectDateET.setText(dateFormat.format(myCalendar.getTime()))
+    }
+    private fun calendarDate(oldDate: String) : String {
+        val oldFormat = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+        val newFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        return newFormat.format(oldFormat.parse(oldDate))
     }
     companion object {
         fun newInstance() : AddFinancesFragment {

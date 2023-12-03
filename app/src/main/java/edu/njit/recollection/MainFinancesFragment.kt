@@ -130,7 +130,7 @@ class MainFinancesFragment : Fragment() {
         pieChart.setUsePercentValues(false)
         pieChart.getDescription().setEnabled(false)
         pieChart.setExtraOffsets(0f, 20f, 0f, 20f)
-        pieChart.setMinAngleForSlices(20f)
+        pieChart.setMinAngleForSlices(15f)
         pieChart.setDragDecelerationFrictionCoef(0.95f)
 
         pieChart.setDrawHoleEnabled(true)

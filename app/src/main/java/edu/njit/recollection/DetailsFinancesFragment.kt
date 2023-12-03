@@ -78,7 +78,8 @@ class DetailsFinancesFragment : Fragment() {
                                 child.child("type").getValue().toString(),
                                 child.child("category").getValue().toString(),
                                 child.child("amount").getValue().toString().toDouble(),
-                                child.key
+                                child.key,
+                                child.child("addToCalendar").getValue().toString().toBoolean()
                             )
                             entries.add(entry)
                             // Create row for entry in table
@@ -162,7 +163,7 @@ class DetailsFinancesFragment : Fragment() {
         pieChart.setUsePercentValues(false)
         pieChart.getDescription().setEnabled(false)
         pieChart.setExtraOffsets(0f, 20f, 0f, 20f)
-        pieChart.setMinAngleForSlices(20f)
+        pieChart.setMinAngleForSlices(15f)
         pieChart.setDragDecelerationFrictionCoef(0.95f)
 
         pieChart.setDrawHoleEnabled(true)

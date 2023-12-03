@@ -105,6 +105,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/categorySpinnerLayout" />
+        <CheckBox
+            android:id="@+id/paydayToCalendarCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:layout_marginTop="10dp"
+            android:visibility="invisible"
+            android:text="Add payday to calendar?"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/itemPriceET" />
 
         <Button
             android:id="@+id/addEntryBtn"
