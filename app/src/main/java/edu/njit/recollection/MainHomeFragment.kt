@@ -11,6 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.animation.Easing
@@ -107,23 +109,26 @@ class MainHomeFragment : Fragment() {
                     Log.e("firebaseFinanceHomepage1", "error", Throwable(error.toString()))
                 }
             })
-
+        financeCV.setOnClickListener{
+            replaceFragment(MainFinancesFragment())
+            bottomNavigationView.selectedItemId = R.id.nav_finances
+        }
     }
     fun createBarChart(view: View, filterMonth: String) {
         val barChart = view.findViewById<HorizontalBarChart>(R.id.homepageBarChart)
 
         val description = Description()
-        description.text = filterMonth
-        description.setPosition(720f, 65f)
-        description.textSize = 20f
-        description.text
-        description.textColor = ContextCompat.getColor(view.context, R.color.teal)
+        description.text = ""
         barChart.description = description
+
+        view.findViewById<TextView>(R.id.tvFinanceChartHeader).text = filterMonth
+
 
         barChart.legend.isEnabled = false
         barChart.setPinchZoom(false)
         barChart.setScaleEnabled(false)
         barChart.setDrawValueAboveBar(false)
+        barChart.setTouchEnabled(false)
 
         barChart.xAxis.setDrawGridLines(false)
         barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -161,6 +166,11 @@ class MainHomeFragment : Fragment() {
             else
                 incomeTotal += entry.amount!!
         }
+        if (expenseTotal > incomeTotal)
+            view.findViewById<TextView>(R.id.tvFinanceChartDesc).text = "Oh no! Your expenses are higher than your income this month!"
+        else if (expenseTotal == incomeTotal)
+            view.findViewById<TextView>(R.id.tvFinanceChartDesc).text = "Your income was exactly enough for your expenses this month, nice!"
+
         val barEntries: ArrayList<BarEntry> = ArrayList()
         barEntries.add(BarEntry(0f, expenseTotal.toFloat()))
         barEntries.add(BarEntry(.5f, incomeTotal.toFloat()))
@@ -197,6 +207,12 @@ class MainHomeFragment : Fragment() {
     fun createWeatherCV() {
     }
 
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = activity?.supportFragmentManager
+        val fragmentTransaction = fragmentManager?.beginTransaction()
+        fragmentTransaction?.replace(R.id.main_frame_layout, fragment)
+        fragmentTransaction?.commit()
+    }
     companion object {
         fun newInstance() : MainHomeFragment {
             return MainHomeFragment()
