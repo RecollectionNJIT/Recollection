@@ -78,7 +78,8 @@ class DetailsFinancesFragment : Fragment() {
                                 child.child("type").getValue().toString(),
                                 child.child("category").getValue().toString(),
                                 child.child("amount").getValue().toString().toDouble(),
-                                child.key
+                                child.key,
+                                child.child("addToCalendar").getValue().toString().toBoolean()
                             )
                             entries.add(entry)
                             // Create row for entry in table

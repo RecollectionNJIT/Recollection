@@ -5,5 +5,6 @@ data class FinanceEntry(
     val type: String?,
     val category: String?,
     val amount: Double?,
-    val key: String? = ""
+    var key: String? = "",
+    var addToCalendar: Boolean? = false
 ) : java.io.Serializable
