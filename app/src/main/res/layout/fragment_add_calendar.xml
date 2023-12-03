@@ -19,8 +19,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Calendar Event"
+            android:textSize="36sp"
+            android:fontFamily="sans-serif-smallcaps"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +32,7 @@
             android:id="@+id/addCalendarTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="100dp"
             android:background="@drawable/rounded_corners"
             android:ems="10"
             android:gravity="center"
@@ -39,9 +41,10 @@
             android:padding="12dp"
             android:textColor="@color/teal"
             android:textColorHint="@color/teal"
+            app:layout_constraintBottom_toTopOf="@id/addCalendarDescription"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewCalendarAdd" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- EditText for reminder description -->
         <EditText
