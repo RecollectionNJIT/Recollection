@@ -1,12 +1,9 @@
 package edu.njit.recollection
 
 import android.app.TimePickerDialog
-import android.icu.text.DecimalFormat
 import android.icu.text.SimpleDateFormat
-import android.opengl.Visibility
 import android.os.Bundle
 import android.text.InputFilter
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,9 +15,6 @@ import android.widget.TextView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.temporal.TemporalAccessor
 import java.util.Calendar
 import java.util.Locale
 
@@ -100,12 +94,17 @@ class AddCalendarFragment : Fragment() {
             tpd.show()
         }
 
+        // This handles the visibility of the time box as well as making the time N/A if it's a payday
         val sendToFinances = view.findViewById<CheckBox>(R.id.addToFinances)
         sendToFinances.setOnCheckedChangeListener{ _, isChecked ->
-            if (isChecked)
+            if (isChecked) {
                 itemPriceET.visibility = View.VISIBLE
-            else
+                startTime.setText("N/A")
+                endTime.setText("N/A")
+            }
+            else {
                 itemPriceET.visibility = View.INVISIBLE
+            }
         }
 
         val sendToNotes = view.findViewById<CheckBox>(R.id.addToNotes)
