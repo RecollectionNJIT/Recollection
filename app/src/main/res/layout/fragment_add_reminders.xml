@@ -109,6 +109,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/selectReminderDate" />
 
+        <CheckBox
+            android:id="@+id/checkboxAddToCalendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add to Calendar"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/selectReminderTime"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"/>
+
+        <!-- Checkbox for "Add to Notes" -->
+        <CheckBox
+            android:id="@+id/checkboxAddToNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add to Notes"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/selectReminderTime"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="8dp"/>
+
         <!-- Button to create the reminder -->
         <Button
             android:id="@+id/createReminderBtn"
