@@ -106,7 +106,9 @@
             android:id="@+id/cvHomepageReminders"
             android:layout_width="match_parent"
             android:layout_height="146dp"
-            android:layout_margin="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="10dp"
             app:cardElevation="8dp"
@@ -114,17 +116,15 @@
             app:layout_constraintTop_toBottomOf="@id/cvHomepageFinance">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-                <TextView
-                    android:id="@+id/tvRemindersCV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                android:layout_height="match_parent" >
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/homeRemindersRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_centerInParent="true"
-                    android:text="Reminders CardView"
-                    android:textColor="@color/teal"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:padding="15dp"/>
+                    app:layoutManager="LinearLayoutManager"
+                    tools:listitem="@layout/rv_reminder_item" />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 

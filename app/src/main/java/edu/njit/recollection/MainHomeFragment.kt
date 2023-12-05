@@ -80,7 +80,8 @@ class MainHomeFragment : Fragment() {
 
         createCalendarCV(view)
         createFinanceCV(view)
-        createRemindersCV()
+
+        createRemindersCV(view)
         createWeatherCV(view)
 
         return view
@@ -257,7 +258,38 @@ class MainHomeFragment : Fragment() {
 
         barChart.invalidate()
     }
-    fun createRemindersCV() {
+
+    fun createRemindersCV(view: View) {
+        val recycler = remindersCV.findViewById<RecyclerView>(R.id.homeRemindersRecyclerView)
+        val reminders = mutableListOf<Reminders>()
+        reminders.clear()
+
+        val adapter = RemindersAdapter(view.context, reminders)
+        recycler.adapter = adapter
+
+        val auth = FirebaseAuth.getInstance()
+        val databaseRef = Firebase.database.reference
+
+        databaseRef.child("users").child(auth.uid!!).child("reminders").addValueEventListener(object :
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                reminders.clear()
+                for (child in snapshot.children) {
+                    val title = child.child("title").getValue().toString()
+                    val description = child.child("description").getValue().toString()
+                    val date = child.child("date").getValue().toString()
+                    val time = child.child("time").getValue().toString()
+                    val id = child.key
+                    val reminder = Reminders(title, description, date, time, id)
+                    reminders.add(reminder)
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("firebaseRemindersMain", "error", Throwable(error.toString()))
+            }
+        })
     }
     @SuppressLint("MissingPermission")
     // permission is explicity asked for before it uses location info
