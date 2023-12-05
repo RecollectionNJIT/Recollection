@@ -153,7 +153,7 @@ class DetailsRemindersFragment : Fragment() {
             val auth = FirebaseAuth.getInstance()
             val databaseRef = FirebaseDatabase.getInstance().reference
             val reminderRef = databaseRef.child("users").child(auth.uid!!)
-                .child("reminders").child(reminder.id ?: "")
+                .child("reminders").child(reminder.key ?: "")
 
             reminderRef.updateChildren(updatedValues)
                 .addOnSuccessListener {
@@ -172,7 +172,7 @@ class DetailsRemindersFragment : Fragment() {
             val auth = FirebaseAuth.getInstance()
             val databaseRef = FirebaseDatabase.getInstance().reference
             val reminderRef = databaseRef.child("users").child(auth.uid!!)
-                .child("reminders").child(reminder.id ?: "")
+                .child("reminders").child(reminder.key ?: "")
 
             reminderRef.removeValue()
                 .addOnSuccessListener {

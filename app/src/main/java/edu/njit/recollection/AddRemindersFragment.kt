@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -25,6 +26,9 @@ class AddRemindersFragment : Fragment() {
     lateinit var selectReminderDate: EditText
     lateinit var selectReminderTime: EditText
     lateinit var createReminderBtn: Button
+    lateinit var sendToCal : CheckBox
+    lateinit var sendToNotes : CheckBox
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +43,9 @@ class AddRemindersFragment : Fragment() {
         selectReminderDate = view.findViewById(R.id.selectReminderDate)
         selectReminderTime = view.findViewById(R.id.selectReminderTime)
         createReminderBtn = view.findViewById(R.id.createReminderBtn)
+
+        sendToCal = view.findViewById(R.id.checkboxAddToCalendar)
+        sendToNotes = view.findViewById(R.id.checkboxAddToNotes)
 
         myCalendar = Calendar.getInstance()
 
@@ -92,8 +99,12 @@ class AddRemindersFragment : Fragment() {
             val date = selectReminderDate.text.toString()
             val time = selectReminderTime.text.toString()
 
+            val calDate = calendarDate(date)
+
+            val calendar = sendToCal.isChecked
+            val notes = sendToNotes.isChecked
             // Add your logic to create a reminder with the entered details
-            val newRem = Reminders(title, description, date, time, null) // Pass null for ID
+            val newRem = Reminders(title, description, date, time) // Pass null for ID
 
             val auth = FirebaseAuth.getInstance()
             val newReminderEntryRef = Firebase.database.reference
@@ -102,13 +113,23 @@ class AddRemindersFragment : Fragment() {
                 .child("reminders")
                 .push() // Generate a unique key for the new reminder
 
-            newReminderEntryRef.setValue(newRem.copy(id = newReminderEntryRef.key))
-                .addOnSuccessListener {
-                    activity?.finish()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(requireContext(), "Failed to create reminder", Toast.LENGTH_SHORT).show()
-                }
+            newRem.key = newReminderEntryRef.key
+            newRem.addToCal = sendToCal.isChecked
+            newRem.addToNotes = sendToNotes.isChecked
+            newReminderEntryRef.setValue(newRem)
+
+            if(calendar){
+                val calendarEnt = CalendarEntry(calDate, title, description, time,"N/A",newRem.key)
+                val newCalendarEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(newRem.key!!)
+                newCalendarEntryRef.setValue(calendarEnt)
+            }
+
+            if(notes){
+                val notesEnt = Note(title, description,"N/A", newRem.key)
+                val newNotesEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(newRem.key!!)
+                newNotesEntryRef.setValue(notesEnt)
+            }
+            activity?.finish()
         }
 
         return view
@@ -124,6 +145,12 @@ class AddRemindersFragment : Fragment() {
         val myFormat = "hh:mm a"
         val timeFormat = SimpleDateFormat(myFormat, Locale.US)
         selectReminderTime.setText(timeFormat.format(myCalendar.time))
+    }
+
+    private fun calendarDate(oldDate: String) : String {
+        val oldFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
+        val newFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        return newFormat.format(oldFormat.parse(oldDate))
     }
 
     companion object {
