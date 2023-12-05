@@ -8,12 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.database
 import java.util.Calendar
 import java.util.Locale
 
@@ -27,6 +30,8 @@ class DetailsRemindersFragment : Fragment() {
     private lateinit var btnDeleteReminder: Button
     private var reminder: Reminders? = null
     private lateinit var myCalendar: Calendar
+    lateinit var sendToCal : CheckBox
+    lateinit var sendToNotes : CheckBox
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +50,9 @@ class DetailsRemindersFragment : Fragment() {
         etEditTime = view.findViewById(R.id.etEditTime)
         btnUpdateReminder = view.findViewById(R.id.btnUpdateReminder)
         btnDeleteReminder = view.findViewById(R.id.btnDeleteReminder)
+
+        sendToCal = view.findViewById(R.id.checkboxAddToCalendar)
+        sendToNotes = view.findViewById(R.id.checkboxAddToNotes)
 
         // Set up the Calendar instance
         myCalendar = Calendar.getInstance()
@@ -139,6 +147,9 @@ class DetailsRemindersFragment : Fragment() {
         val updatedDate = etEditDate.text.toString()
         val updatedTime = etEditTime.text.toString()
 
+        val calendar = sendToCal.isChecked
+        val notes = sendToNotes.isChecked
+
         // Update the reminder if it is not null
         reminder?.let { reminder ->
             // Create a map with updated values
@@ -154,6 +165,21 @@ class DetailsRemindersFragment : Fragment() {
             val databaseRef = FirebaseDatabase.getInstance().reference
             val reminderRef = databaseRef.child("users").child(auth.uid!!)
                 .child("reminders").child(reminder.key ?: "")
+
+            val newKey = reminder.key
+            val calDate = calendarDate(updatedDate)
+
+            if(calendar){
+                val calendarEnt = CalendarEntry(calDate, updatedTitle, updatedDescription, updatedTime,"N/A",newKey)
+                val newCalendarEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(newKey!!)
+                newCalendarEntryRef.setValue(calendarEnt)
+            }
+
+            if(notes){
+                val notesEnt = Note(updatedTitle, updatedDescription,"N/A", newKey)
+                val newNotesEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(newKey!!)
+                newNotesEntryRef.setValue(notesEnt)
+            }
 
             reminderRef.updateChildren(updatedValues)
                 .addOnSuccessListener {
@@ -183,6 +209,12 @@ class DetailsRemindersFragment : Fragment() {
                     Toast.makeText(requireContext(), "Failed to delete reminder", Toast.LENGTH_SHORT).show()
                 }
         }
+    }
+
+    private fun calendarDate(oldDate: String) : String {
+        val oldFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
+        val newFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        return newFormat.format(oldFormat.parse(oldDate))
     }
 
     companion object {
