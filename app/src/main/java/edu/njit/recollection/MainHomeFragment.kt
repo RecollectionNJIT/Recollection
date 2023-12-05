@@ -1,19 +1,26 @@
 package edu.njit.recollection
 
+import WeatherValue
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
-
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.codepath.asynchttpclient.AsyncHttpClient
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.HorizontalBarChart
 import com.github.mikephil.charting.components.AxisBase
@@ -29,14 +36,23 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import okhttp3.Headers
+import org.json.JSONException
+import org.json.JSONObject
 import java.text.DecimalFormat
 import java.time.LocalDate
+
 
 class MainHomeFragment : Fragment() {
     lateinit var calendarCV: CardView
     lateinit var financeCV: CardView
     lateinit var remindersCV: CardView
     lateinit var weatherCV: CardView
+
+    private lateinit var locationManager: LocationManager
+    private lateinit var rvWeather: RecyclerView
+    private lateinit var weatherAdapter: WeatherAdapter
+    private val weatherVals = mutableListOf<WeatherValue>()
 
     private val financeEntries = mutableListOf<FinanceEntry>()
 
@@ -56,6 +72,7 @@ class MainHomeFragment : Fragment() {
             startActivity(i)
         }
 
+
         calendarCV = view.findViewById(R.id.cvHomepageCalendar)
         financeCV = view.findViewById(R.id.cvHomepageFinance)
         remindersCV = view.findViewById(R.id.cvHomepageReminders)
@@ -63,8 +80,9 @@ class MainHomeFragment : Fragment() {
 
         createCalendarCV(view)
         createFinanceCV(view)
+
         createRemindersCV(view)
-        createWeatherCV()
+        createWeatherCV(view)
 
         return view
     }
@@ -273,8 +291,155 @@ class MainHomeFragment : Fragment() {
             }
         })
     }
-    fun createWeatherCV() {
+    @SuppressLint("MissingPermission")
+    // permission is explicity asked for before it uses location info
+    private fun createWeatherCV(view: View) {
+        locationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        if (hasLocationPermission()) {
+            // Request location updates only once
+            locationManager.requestSingleUpdate(
+                LocationManager.GPS_PROVIDER,
+                locationListener,
+                null
+            )
+        } else {
+            requestLocationPermission()
+        }
     }
+
+    private fun hasLocationPermission(): Boolean {
+        return (ContextCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) == android.content.pm.PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == android.content.pm.PackageManager.PERMISSION_GRANTED)
+    }
+
+    private fun requestLocationPermission() {
+        requestPermissions(
+            arrayOf(
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ),
+            1
+        )
+    }
+
+
+    private val locationListener: LocationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            // Get latitude and longitude
+            val latitude = String.format("%.4f", location.latitude)
+            val longitude = String.format("%.4f", location.longitude)
+
+            // Do something with the latitude and longitude
+            Log.d("LocationInfo", "Latitude: $latitude, Longitude: $longitude")
+            getWeather(latitude, longitude)
+
+            // Remove location updates after obtaining the initial location
+            locationManager.removeUpdates(this)
+        }
+
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+    }
+
+    private fun getWeather(lat: String, long: String) {
+        val firstAPIcall = "https://api.weather.gov/points/$lat,$long"
+        val client = AsyncHttpClient()
+
+        client.get(firstAPIcall, object : JsonHttpResponseHandler() {
+            override fun onSuccess(
+                statusCode: Int,
+                headers: Headers,
+                json: JsonHttpResponseHandler.JSON
+            ) {
+                try {
+                    val properties = json.jsonObject.getJSONObject("properties")
+                    val secondAPIcall = properties.getString("forecast")
+                    makeSecondAPICall(secondAPIcall)
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(
+                statusCode: Int,
+                headers: Headers,
+                response: String,
+                throwable: Throwable
+            ) {
+                Log.e("APIError", "Failed to retrieve data from the first API call")
+            }
+        })
+    }
+
+    private fun makeSecondAPICall(secondAPIcall: String) {
+        val client = AsyncHttpClient()
+
+        client.get(secondAPIcall, object : JsonHttpResponseHandler() {
+            override fun onSuccess(
+                statusCode: Int,
+                headers: Headers,
+                json: JsonHttpResponseHandler.JSON
+            ) {
+                try {
+                    val weatherList = parseWeatherResponse(json.jsonObject)
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(
+                statusCode: Int,
+                headers: Headers,
+                response: String,
+                throwable: Throwable
+            ) {
+                Log.e("SecondAPIError", "Failed to retrieve data from the second API call")
+            }
+        })
+    }
+
+    private fun parseWeatherResponse(json: JSONObject): List<WeatherValue> {
+        val periodsArray = json.getJSONObject("properties").getJSONArray("periods")
+        weatherVals.clear()
+
+        for (i in 0 until minOf(periodsArray.length(), 7)) {
+            val periodObject = periodsArray.getJSONObject(i)
+
+            val number = periodObject.getInt("number")
+            val name = periodObject.getString("name")
+            val isDaytime = periodObject.getBoolean("isDaytime")
+            val temperature = periodObject.getInt("temperature")
+            val shortForecast = periodObject.getString("shortForecast")
+
+            val weatherValue = WeatherValue(number, name, isDaytime, temperature, shortForecast)
+            weatherVals.add(weatherValue)
+        }
+        updateWeatherRecyclerView()
+
+        return weatherVals
+    }
+
+    private fun updateWeatherRecyclerView() {
+        rvWeather = view?.findViewById(R.id.homeWeatherRecyclerView)!!
+        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        rvWeather.layoutManager = layoutManager
+        weatherAdapter = WeatherAdapter(requireView().context, weatherVals)
+        rvWeather.adapter = weatherAdapter
+        weatherAdapter.notifyDataSetChanged()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        locationManager.removeUpdates(locationListener)
+    }
+
+
 
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = activity?.supportFragmentManager

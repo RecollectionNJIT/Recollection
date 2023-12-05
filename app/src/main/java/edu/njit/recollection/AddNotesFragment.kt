@@ -81,6 +81,7 @@ class AddNotesFragment : Fragment() {
         btnChoosePhoto.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, Companion.PICK_PHOTO_REQUEST)
+            //onActivityResult(PICK_PHOTO_REQUEST,intent)
         }
         btnTakePhoto.setOnClickListener {
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -95,7 +96,7 @@ class AddNotesFragment : Fragment() {
         fun loadImage(imageUri: Uri?) {
             if (imageUri != null) {
                 // Display the selected image in the ImageView using Glide
-                imagePreview.visibility = View.VISIBLE
+
                 Glide.with(this)
                     .load(imageUri)
                     .into(imagePreview)
@@ -156,7 +157,7 @@ class AddNotesFragment : Fragment() {
         }
 
 
-
+        // fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
             super.onActivityResult(requestCode, resultCode, data)
 
