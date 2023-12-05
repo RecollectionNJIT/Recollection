@@ -128,6 +128,7 @@
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
+
         <androidx.cardview.widget.CardView
             android:id="@+id/cvHomepageWeather"
             android:layout_width="match_parent"
@@ -141,18 +142,34 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:id="@+id/relativeLayoutInsideWeatherCard">
+
                 <TextView
                     android:id="@+id/tvWeatherCV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
                     android:text="Weather CardView"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
                     android:textColor="@color/teal"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:padding="15dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/homeWeatherRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="0dp"
+                    app:layoutManager="LinearLayoutManager"
+                    android:orientation="horizontal"
+                    tools:listitem="@layout/rv_weather_item" />
             </RelativeLayout>
+
+
         </androidx.cardview.widget.CardView>
 
         <ImageButton
