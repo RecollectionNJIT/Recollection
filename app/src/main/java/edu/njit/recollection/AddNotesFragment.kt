@@ -24,6 +24,10 @@ import com.google.firebase.database.database
 import android.Manifest
 import android.content.ContentResolver
 import android.content.ContentValues
+import android.graphics.BitmapFactory
+import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import java.io.IOException
 import java.io.OutputStream
@@ -37,11 +41,62 @@ class AddNotesFragment : Fragment() {
     private lateinit var imagePreview: ImageView
     private lateinit var btnTakePhoto: Button
     private val CAMERA_PERMISSION_REQUEST = 1001
+    private var imagePathForNote: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
+    fun savePhotoAndGetUri(bitmap: Bitmap?): Uri? {
+        if (bitmap == null) {
+            return null
+        }
+
+        // Get the content resolver
+        val contentResolver: ContentResolver = requireActivity().contentResolver
+
+        val timestamp = System.currentTimeMillis()
+
+        val imageName = "Image_$timestamp.jpg"
+
+        // Define the image details
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, imageName) // Display name of the image
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(MediaStore.Images.Media.WIDTH, bitmap.width)
+            put(MediaStore.Images.Media.HEIGHT, bitmap.height)
+        }
+
+        // Define the external content URI to save the image to the Pictures directory
+        val imageCollection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+
+        // Insert the image details into the MediaStore
+        val imageUri = contentResolver.insert(imageCollection, contentValues)
+        imagePathForNote = imageUri?.path.toString()
+
+        // Log the URI
+        Log.d("MyApp", "Image URI: $imageUri")
+
+        // Open an output stream to the content URI
+        imageUri?.let { uri ->
+            try {
+                val outputStream: OutputStream? = contentResolver.openOutputStream(uri)
+                outputStream?.use { os ->
+                    // Compress and write the bitmap to the output stream
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+
+
+        return imageUri
+    }
+
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +104,49 @@ class AddNotesFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add_notes, container, false)
+
+
+        fun loadImage(imageUri: Uri?) {
+            Log.d("MyApp", "Loading image from URI: $imageUri")
+
+            if (imageUri != null) {
+                // Display the selected image in the ImageView using Glide
+
+                imagePreview.visibility = View.VISIBLE
+
+                // Clear any previous resources
+                Glide.with(this)
+                    .clear(imagePreview)
+
+
+                Glide.with(this)
+                    .load(imageUri)
+                    .into(imagePreview)
+            }
+        }
+
+        fun handleCameraResult(data: Intent?) {
+            val photo: Bitmap? = data?.getParcelableExtra("data")
+            val photoUri = savePhotoAndGetUri(photo)
+            loadImage(photoUri)
+        }
+
+        fun handleGalleryResult(data: Intent?) {
+            val selectedImageUri: Uri? = data?.data
+            imagePathForNote = selectedImageUri?.path.toString()
+            loadImage(selectedImageUri)
+        }
+
+        val takePhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                when {
+                    data?.hasExtra("data") == true -> handleCameraResult(data)
+                    data?.data != null -> handleGalleryResult(data)
+                    else -> Log.e("MyApp", "No image data found in the result")
+                }
+            }
+        }
 
         titleEditText = view.findViewById(R.id.addTitle)
         bodyEditText = view.findViewById(R.id.addBody)
@@ -58,127 +156,32 @@ class AddNotesFragment : Fragment() {
         btnTakePhoto = view.findViewById(R.id.btnTakePhoto)
 
 
-        fun startCamera() {
+        fun startCamera(takePhotoLauncher: ActivityResultLauncher<Intent>) {
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(cameraIntent, TAKE_PHOTO_REQUEST)
+            takePhotoLauncher.launch(cameraIntent)
         }
 
-        fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-            when (requestCode) {
-                CAMERA_PERMISSION_REQUEST -> {
-                    if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        // Camera permission granted, proceed with camera-related operations
-                        startCamera()
-                    } else {
-                        // Camera permission denied, handle accordingly (show a message, disable camera functionality, etc.)
-                        Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                // Add other permission request cases if needed
-            }
-        }
+
+
+
 
         btnChoosePhoto.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, Companion.PICK_PHOTO_REQUEST)
-            //onActivityResult(PICK_PHOTO_REQUEST,intent)
+            val pickPhotoIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            takePhotoLauncher.launch(pickPhotoIntent)
         }
+
+
         btnTakePhoto.setOnClickListener {
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 // Permission is not granted, request it
                 ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST)
             } else {
                 // Permission is already granted, proceed with camera-related operations
-                startCamera()
+                startCamera(takePhotoLauncher)
+
             }
         }
 
-        fun loadImage(imageUri: Uri?) {
-            if (imageUri != null) {
-                // Display the selected image in the ImageView using Glide
-
-                Glide.with(this)
-                    .load(imageUri)
-                    .into(imagePreview)
-            }
-        }
-
-        /* alt load image also doesn't work
-        fun loadImage(imageUri: Uri?) {
-            if (imageUri != null) {
-                // Display the selected image in the ImageView
-                imagePreview.visibility = View.VISIBLE
-
-                // Use setImageURI to set the image without Glide
-                imagePreview.setImageURI(imageUri)
-            }
-        }
-
-
-
-         */
-
-        fun savePhotoAndGetUri(bitmap: Bitmap?): Uri? {
-            if (bitmap == null) {
-                return null
-            }
-
-            // Get the content resolver
-            val contentResolver: ContentResolver = requireActivity().contentResolver
-
-            // Define the image details
-            val contentValues = ContentValues().apply {
-                put(MediaStore.Images.Media.DISPLAY_NAME, "MyImage") // Display name of the image
-                put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-                put(MediaStore.Images.Media.WIDTH, bitmap.width)
-                put(MediaStore.Images.Media.HEIGHT, bitmap.height)
-            }
-
-            // Define the external content URI to save the image to the Pictures directory
-            val imageCollection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-
-            // Insert the image details into the MediaStore
-            val imageUri = contentResolver.insert(imageCollection, contentValues)
-
-            // Open an output stream to the content URI
-            imageUri?.let { uri ->
-                try {
-                    val outputStream: OutputStream? = contentResolver.openOutputStream(uri)
-                    outputStream?.use { os ->
-                        // Compress and write the bitmap to the output stream
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
-                    }
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-
-            return imageUri
-        }
-
-
-        // fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            super.onActivityResult(requestCode, resultCode, data)
-
-            when (requestCode) {
-                PICK_PHOTO_REQUEST -> {
-                    if (resultCode == Activity.RESULT_OK && data != null) {
-                        val selectedImageUri: Uri? = data.data
-                        loadImage(selectedImageUri)
-                    }
-                }
-                TAKE_PHOTO_REQUEST -> {
-                    if (resultCode == Activity.RESULT_OK && data != null) {
-                        val photo: Bitmap? = data.extras?.get("data") as? Bitmap
-                        // For taking photos, you might want to save the photo to a file and get its URI
-                        // then load the image using Glide
-                        val photoUri = savePhotoAndGetUri(photo)
-                        loadImage(photoUri)
-                    }
-                }
-            }
-        }
 
         // do stuff here
         // this would be where we store the data to the database
@@ -186,7 +189,7 @@ class AddNotesFragment : Fragment() {
             val title = titleEditText.text.toString()
             val body = bodyEditText.text.toString()
 
-            val newNote = Note(title,body,null)
+            val newNote = Note(title,body,imagePathForNote)
             val auth = FirebaseAuth.getInstance()
             val newNoteEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").push()
             newNoteEntryRef.setValue(newNote)
@@ -201,7 +204,7 @@ class AddNotesFragment : Fragment() {
             return AddNotesFragment()
         }
 
-        const val TAKE_PHOTO_REQUEST = 2
-        const val PICK_PHOTO_REQUEST = 1
     }
+
+
 }
