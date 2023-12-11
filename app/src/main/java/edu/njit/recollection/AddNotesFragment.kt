@@ -91,6 +91,7 @@ class AddNotesFragment : Fragment() {
             }
         }
 
+
         return imageUri
     }
 
@@ -104,16 +105,19 @@ class AddNotesFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add_notes, container, false)
 
+
         fun loadImage(imageUri: Uri?) {
             Log.d("MyApp", "Loading image from URI: $imageUri")
 
             if (imageUri != null) {
                 // Display the selected image in the ImageView using Glide
+
                 imagePreview.visibility = View.VISIBLE
 
                 // Clear any previous resources
                 Glide.with(this)
                     .clear(imagePreview)
+
 
                 Glide.with(this)
                     .load(imageUri)
@@ -166,6 +170,7 @@ class AddNotesFragment : Fragment() {
             takePhotoLauncher.launch(pickPhotoIntent)
         }
 
+
         btnTakePhoto.setOnClickListener {
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 // Permission is not granted, request it
@@ -173,6 +178,7 @@ class AddNotesFragment : Fragment() {
             } else {
                 // Permission is already granted, proceed with camera-related operations
                 startCamera(takePhotoLauncher)
+
             }
         }
 
