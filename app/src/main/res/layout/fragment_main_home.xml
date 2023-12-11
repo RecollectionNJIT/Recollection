@@ -48,7 +48,19 @@
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     app:layoutManager="LinearLayoutManager"
-                    tools:listitem="@layout/calendar_simple_day_list" />
+                    tools:listitem="@layout/calendar_simple_day_list"
+                    android:scrollbars="vertical"/>
+
+                <TextView
+                    android:id="@+id/homeCalendarNoEvent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="You have no events for today!"
+                    android:textColor="@color/teal"
+                    android:textSize="20sp" />
+
             </RelativeLayout>
 
 
@@ -86,7 +98,6 @@
                     android:id="@+id/homepageBarChart"
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
-                    android:layout_centerInParent="true"
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp" />
                 <TextView

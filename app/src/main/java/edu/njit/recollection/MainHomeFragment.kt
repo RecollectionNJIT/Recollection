@@ -9,14 +9,15 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codepath.asynchttpclient.AsyncHttpClient
@@ -89,6 +90,8 @@ class MainHomeFragment : Fragment() {
 
     fun createCalendarCV(view: View) {
         val recycler = calendarCV.findViewById<RecyclerView>(R.id.homeCalendarRecyclerView)
+        val text = calendarCV.findViewById<TextView>(R.id.homeCalendarNoEvent)
+        text.visibility=View.INVISIBLE
         // do stuff here
         var days = mutableListOf<CalendarEntry>()
         days.clear()
@@ -102,6 +105,7 @@ class MainHomeFragment : Fragment() {
         databaseRef.child("users").child(auth.uid!!).child("calendar").orderByChild("date").equalTo(LocalDate.now().toString()).addValueEventListener(object:
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                text.visibility=View.INVISIBLE
                 days.clear()
                 for (child in snapshot.children) {
                     val date = child.child("date").getValue().toString()
@@ -118,7 +122,10 @@ class MainHomeFragment : Fragment() {
                 }
                 Log.v("days", ""+days.toString())
                 adapter.notifyDataSetChanged()
-
+                if(days.size == 0){
+                    recycler.visibility=View.INVISIBLE
+                    text.visibility=View.VISIBLE
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {

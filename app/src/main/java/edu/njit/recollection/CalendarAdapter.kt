@@ -61,7 +61,7 @@ class CalendarAdapter(
                 Firebase.database.reference.child("users").child(auth.uid!!).child("calendar")
                     .child(day.key!!).removeValue()
 //                Log.v("removed item and checking list", "" + calendarList)
-//                Toast.makeText(holder.itemView.context, "Entry Deleted!", Toast.LENGTH_SHORT).show()
+                  Toast.makeText(holder.itemView.context, "Event Deleted!", Toast.LENGTH_SHORT).show()
 //                calendarList.removeAt(holder.absoluteAdapterPosition)
 //                notifyItemRemoved(holder.absoluteAdapterPosition)
 //                notifyItemRangeChanged(holder.absoluteAdapterPosition, itemCount)
