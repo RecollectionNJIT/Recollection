@@ -95,7 +95,7 @@ class MainHomeFragment : Fragment() {
         // do stuff here
         var days = mutableListOf<CalendarEntry>()
         days.clear()
-        val adapter = HomeCalendarAdapter(view.context, days)
+        val adapter = HomeCalendarAdapter(view.context, days, activity)
         recycler.adapter = adapter
 
         val auth = FirebaseAuth.getInstance()
@@ -133,6 +133,10 @@ class MainHomeFragment : Fragment() {
             }
         })
 
+        recycler.setOnClickListener{
+            replaceFragment(MainCalendarFragment())
+            bottomNavigationView.selectedItemId = R.id.nav_calendar
+        }
     }
     fun createFinanceCV(view: View) {
         financeEntries.clear()
