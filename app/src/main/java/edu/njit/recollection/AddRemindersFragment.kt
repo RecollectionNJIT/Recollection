@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
+import com.google.firebase.messaging.FirebaseMessaging
 import java.util.Calendar
 import java.util.Locale
 
@@ -36,6 +37,7 @@ class AddRemindersFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add_reminders, container, false)
+
 
         // Retrieve Title, Description, Date, and Time from User
         selectReminderTitle = view.findViewById(R.id.selectReminderTitle)
@@ -106,6 +108,11 @@ class AddRemindersFragment : Fragment() {
             // Add your logic to create a reminder with the entered details
             val newRem = Reminders(title, description, date, time) // Pass null for ID
 
+            //checks if remiders is happening in the next 10 min
+            if (isReminderInNext10Minutes(newRem)) {
+                scheduleNotification(newRem)
+            }
+
             val auth = FirebaseAuth.getInstance()
             val newReminderEntryRef = Firebase.database.reference
                 .child("users")
@@ -117,6 +124,8 @@ class AddRemindersFragment : Fragment() {
             newRem.addToCal = sendToCal.isChecked
             newRem.addToNotes = sendToNotes.isChecked
             newReminderEntryRef.setValue(newRem)
+
+
 
             if(calendar){
                 val calendarEnt = CalendarEntry(calDate, title, description, time,"N/A",newRem.key)
@@ -133,6 +142,34 @@ class AddRemindersFragment : Fragment() {
         }
 
         return view
+    }
+
+    private fun isReminderInNext10Minutes(reminder: Reminders): Boolean {
+        val calendar = Calendar.getInstance()
+        val reminderCalendar = Calendar.getInstance()
+
+        // Set reminder time
+        val timeTokens = reminder.time?.split(" ")
+        timeTokens?.let {
+            val timeFormat = SimpleDateFormat("hh:mm a", Locale.US)
+            val formattedTime = timeFormat.parse("${it[0]} ${it[1]}")
+            formattedTime?.let {
+                reminderCalendar.time = it
+            }
+        }
+
+        // Check if the reminder is within the next 10 minutes
+        return (reminderCalendar.timeInMillis - calendar.timeInMillis) <= 10 * 60 * 1000
+    }
+
+
+    private fun scheduleNotification(reminder: Reminders) {
+        // Subscribe to the FCM topic for reminders
+        FirebaseMessaging.getInstance().subscribeToTopic("reminders")
+
+        // You can send FCM messages to the "reminders" topic
+        // The notification will be received by MyFirebaseMessagingService
+        // which will show the notification to the user
     }
 
     private fun updateLabel() {

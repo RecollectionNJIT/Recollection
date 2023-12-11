@@ -74,5 +74,7 @@ dependencies {
     annotationProcessor("com.github.bumptech.glide:compiler:4.13.2")
 
     implementation("com.kizitonwose.calendar:view:2.4.0")
+    implementation ("com.google.firebase:firebase-messaging:23.0.0")
+
 }
 
