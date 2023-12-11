@@ -24,6 +24,7 @@ class CalendarAdapter(
         val bodyTextView = itemView.findViewById<TextView>(R.id.calendarDescription)
         val timeStartView = itemView.findViewById<TextView>(R.id.calendarTimeStart)
         val timeEndView = itemView.findViewById<TextView>(R.id.calendarTimeEnd)
+        val removeEnd = itemView.findViewById<TextView>(R.id.calendarEnd)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarAdapter.ViewHolder {
@@ -39,6 +40,15 @@ class CalendarAdapter(
         holder.bodyTextView.text = day.description
         holder.timeStartView.text = day.timeStart
         holder.timeEndView.text = day.timeEnd
+
+        if(holder.timeEndView.text.toString() == ""){
+            holder.removeEnd.visibility = View.INVISIBLE
+            Log.v("Is empty", ""+day.timeEnd)
+        }
+        else{
+            holder.removeEnd.visibility = View.VISIBLE
+        }
+
 
         holder.itemView.setOnClickListener {
             val i = Intent(context, AddActivity::class.java)
