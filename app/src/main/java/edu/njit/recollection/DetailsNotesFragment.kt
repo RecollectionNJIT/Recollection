@@ -3,6 +3,7 @@ package edu.njit.recollection
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -46,27 +47,56 @@ class DetailsNotesFragment : Fragment() {
         titleTextView.setText(detailNote.title)
         bodyTextView.setText(detailNote.body)
 
+        fun normalizeImageUri(uri: String?): String? {
+            if (uri?.startsWith("/external_primary/images") == true) {
+                // Handle the relative path case, construct a content URI if possible
+                // Example: content://media/external/images/media/1000000047
+                return "content://media$uri"
+            }
+            if (uri?.startsWith("content://media/external/images/media/") == true) {
+                return uri
+            }
+            val normalizedUri = uri?.substringAfter("/external/images/media/")
+            return "content://media/external/images/media/$normalizedUri"
+        }
 
-        if (!detailNote.imageLocation.isNullOrBlank()) {
+        val normalizedUri = normalizeImageUri(detailNote.imageLocation)
+        if (!normalizedUri.isNullOrBlank()) {
+            Log.d("MyApp", "Loading image from URI: $normalizedUri")
             Glide.with(requireContext())
-                .load(detailNote.imageLocation)
+                .load(normalizedUri)
                 .into(imageView)
         } else {
+            Log.d("MyApp", "No image location provided.")
             // If there is no image, you may want to set a placeholder or handle it in some way
             imageView.setImageDrawable(null) // Set to null or provide a placeholder image
         }
 
+
+        /*if (!detailNote.imageLocation.isNullOrBlank()) {
+            Log.d("MyApp", "Loading image from URI: ${detailNote.imageLocation}")
+            Glide.with(requireContext())
+                .load(detailNote.imageLocation)
+                .into(imageView)
+        } else {
+            Log.d("MyApp", "No image location provided.")
+            // If there is no image, you may want to set a placeholder or handle it in some way
+            imageView.setImageDrawable(null) // Set to null or provide a placeholder image
+        }*/
+
         val updateButton = view.findViewById<Button>(R.id.btnUpdateDB)
 
-        updateButton.setOnClickListener{
+        updateButton.setOnClickListener {
             val newTitle = titleTextView.text.toString()
             val newBody = bodyTextView.text.toString()
+
             val postValues = mapOf(
                 "title" to newTitle,
                 "body" to newBody,
-                "imageLocation" to null,
+                "imageLocation" to detailNote.imageLocation, // Keep the existing image location
                 "key" to detailNote.key
             )
+
             val auth = FirebaseAuth.getInstance()
             val updateNoteRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(detailNote.key!!)
             updateNoteRef.updateChildren(postValues)

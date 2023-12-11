@@ -24,6 +24,9 @@ import com.google.firebase.database.database
 import android.Manifest
 import android.content.ContentResolver
 import android.content.ContentValues
+import android.graphics.BitmapFactory
+import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import java.io.IOException
@@ -38,13 +41,14 @@ class AddNotesFragment : Fragment() {
     private lateinit var imagePreview: ImageView
     private lateinit var btnTakePhoto: Button
     private val CAMERA_PERMISSION_REQUEST = 1001
+    private var imagePathForNote: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    private fun savePhotoAndGetUri(bitmap: Bitmap?): Uri? {
+    fun savePhotoAndGetUri(bitmap: Bitmap?): Uri? {
         if (bitmap == null) {
             return null
         }
@@ -52,9 +56,13 @@ class AddNotesFragment : Fragment() {
         // Get the content resolver
         val contentResolver: ContentResolver = requireActivity().contentResolver
 
+        val timestamp = System.currentTimeMillis()
+
+        val imageName = "Image_$timestamp.jpg"
+
         // Define the image details
         val contentValues = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, "MyImage") // Display name of the image
+            put(MediaStore.Images.Media.DISPLAY_NAME, imageName) // Display name of the image
             put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
             put(MediaStore.Images.Media.WIDTH, bitmap.width)
             put(MediaStore.Images.Media.HEIGHT, bitmap.height)
@@ -65,6 +73,10 @@ class AddNotesFragment : Fragment() {
 
         // Insert the image details into the MediaStore
         val imageUri = contentResolver.insert(imageCollection, contentValues)
+        imagePathForNote = imageUri?.path.toString()
+
+        // Log the URI
+        Log.d("MyApp", "Image URI: $imageUri")
 
         // Open an output stream to the content URI
         imageUri?.let { uri ->
@@ -84,6 +96,7 @@ class AddNotesFragment : Fragment() {
 
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -92,28 +105,41 @@ class AddNotesFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_add_notes, container, false)
 
         fun loadImage(imageUri: Uri?) {
+            Log.d("MyApp", "Loading image from URI: $imageUri")
+
             if (imageUri != null) {
                 // Display the selected image in the ImageView using Glide
                 imagePreview.visibility = View.VISIBLE
+
+                // Clear any previous resources
+                Glide.with(this)
+                    .clear(imagePreview)
+
                 Glide.with(this)
                     .load(imageUri)
                     .into(imagePreview)
             }
         }
 
+        fun handleCameraResult(data: Intent?) {
+            val photo: Bitmap? = data?.getParcelableExtra("data")
+            val photoUri = savePhotoAndGetUri(photo)
+            loadImage(photoUri)
+        }
+
+        fun handleGalleryResult(data: Intent?) {
+            val selectedImageUri: Uri? = data?.data
+            imagePathForNote = selectedImageUri?.path.toString()
+            loadImage(selectedImageUri)
+        }
+
         val takePhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
-
-                if (data != null) {
-                    // StartActivityForResult case (TakePicture)
-                    val photo: Bitmap? = data?.getExtras()?.get("data") as? Bitmap
-                    val photoUri = savePhotoAndGetUri(photo)
-                    loadImage(photoUri)
-                } else {
-                    // GetContent case
-                    val selectedImageUri: Uri? = data?.data
-                    loadImage(selectedImageUri)
+                when {
+                    data?.hasExtra("data") == true -> handleCameraResult(data)
+                    data?.data != null -> handleGalleryResult(data)
+                    else -> Log.e("MyApp", "No image data found in the result")
                 }
             }
         }
@@ -126,7 +152,7 @@ class AddNotesFragment : Fragment() {
         btnTakePhoto = view.findViewById(R.id.btnTakePhoto)
 
 
-        fun startCamera() {
+        fun startCamera(takePhotoLauncher: ActivityResultLauncher<Intent>) {
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             takePhotoLauncher.launch(cameraIntent)
         }
@@ -134,9 +160,10 @@ class AddNotesFragment : Fragment() {
 
 
 
+
         btnChoosePhoto.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            takePhotoLauncher.launch(intent)
+            val pickPhotoIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            takePhotoLauncher.launch(pickPhotoIntent)
         }
 
         btnTakePhoto.setOnClickListener {
@@ -145,7 +172,7 @@ class AddNotesFragment : Fragment() {
                 ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST)
             } else {
                 // Permission is already granted, proceed with camera-related operations
-                startCamera()
+                startCamera(takePhotoLauncher)
             }
         }
 
@@ -156,7 +183,7 @@ class AddNotesFragment : Fragment() {
             val title = titleEditText.text.toString()
             val body = bodyEditText.text.toString()
 
-            val newNote = Note(title,body,null)
+            val newNote = Note(title,body,imagePathForNote)
             val auth = FirebaseAuth.getInstance()
             val newNoteEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").push()
             newNoteEntryRef.setValue(newNote)
