@@ -26,6 +26,7 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.graphics.BitmapFactory
 import android.util.Log
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
@@ -40,6 +41,7 @@ class AddNotesFragment : Fragment() {
     private lateinit var btnChoosePhoto: Button
     private lateinit var imagePreview: ImageView
     private lateinit var btnTakePhoto: Button
+    private lateinit var pageTitle: TextView
     private val CAMERA_PERMISSION_REQUEST = 1001
     private var imagePathForNote: String? = null
 
@@ -90,13 +92,8 @@ class AddNotesFragment : Fragment() {
                 e.printStackTrace()
             }
         }
-
-
         return imageUri
     }
-
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -154,16 +151,48 @@ class AddNotesFragment : Fragment() {
         btnChoosePhoto = view.findViewById(R.id.btnChoosePhoto)
         imagePreview = view.findViewById(R.id.imagePreview)
         btnTakePhoto = view.findViewById(R.id.btnTakePhoto)
+        pageTitle = view.findViewById(R.id.tvAddNoteHeader)
+        val editBool = activity?.intent?.extras?.getBoolean("edit",false)
+
+        if (editBool == true) {
+
+            val editNote = activity?.intent?.extras?.getSerializable("editEntry") as Note
+            pageTitle.setText("Editing Note")
+            createButton.setText("Submit Save Edits")
+            titleEditText.setText(editNote.title)
+            bodyEditText.setText(editNote.body)
+            fun normalizeImageUri(uri: String?): String? {
+                if (uri?.startsWith("/external_primary/images") == true) {
+                    // Handle the relative path case, construct a content URI if possible
+                    // Example: content://media/external/images/media/1000000047
+                    return "content://media$uri"
+                }
+                if (uri?.startsWith("content://media/external/images/media/") == true) {
+                    return uri
+                }
+                val normalizedUri = uri?.substringAfter("/external/images/media/")
+                return "content://media/external/images/media/$normalizedUri"
+            }
+
+            val normalizedUri = normalizeImageUri(editNote.imageLocation)
+            if (!normalizedUri.isNullOrBlank()) {
+                Log.d("MyApp", "Loading image from URI: $normalizedUri")
+                Glide.with(requireContext())
+                    .load(normalizedUri)
+                    .into(imagePreview)
+            } else {
+                Log.d("MyApp", "No image location provided.")
+                // If there is no image, you may want to set a placeholder or handle it in some way
+                imagePreview.setImageDrawable(null) // Set to null or provide a placeholder image
+            }
+
+        }
 
 
         fun startCamera(takePhotoLauncher: ActivityResultLauncher<Intent>) {
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             takePhotoLauncher.launch(cameraIntent)
         }
-
-
-
-
 
         btnChoosePhoto.setOnClickListener {
             val pickPhotoIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
