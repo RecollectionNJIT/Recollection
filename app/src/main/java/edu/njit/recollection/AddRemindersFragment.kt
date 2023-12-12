@@ -1,9 +1,14 @@
 package edu.njit.recollection
 
+import android.app.AlarmManager
 import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +18,13 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.common.primitives.Longs.max
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 import java.util.Calendar
 import java.util.Locale
+import java.util.Date
 
 class AddRemindersFragment : Fragment() {
     lateinit var myCalendar: Calendar
@@ -118,6 +125,38 @@ class AddRemindersFragment : Fragment() {
             newRem.addToNotes = sendToNotes.isChecked
             newReminderEntryRef.setValue(newRem)
 
+            // Inside createReminderBtn.setOnClickListener
+            val alarmManager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+            // Get the current time in milliseconds
+            val currentTime = System.currentTimeMillis()
+
+            // Get the time difference between the current time and the reminder time
+            val timeDifference = myCalendar.timeInMillis - currentTime
+
+            // Schedule an alarm 10 minutes before the reminder time
+            val tenMinutesInMillis = 10 * 60 * 1000
+            val alarmTime = timeDifference - tenMinutesInMillis
+
+            // Ensure alarmTime is at least 0 to avoid negative values
+            val adjustedAlarmTime = max(alarmTime, 0)
+
+            val intent = Intent(view.context, ReminderBroadcastReceiver::class.java)
+            intent.putExtra("title", title)  // pass necessary data to the receiver
+
+            // Use a unique request code for each notification (e.g., reminder ID)
+            val requestCode = newRem.key.hashCode()  // assuming newRem.key is unique
+
+            // Add FLAG_IMMUTABLE to the PendingIntent creation
+            val pendingIntent = PendingIntent.getBroadcast(
+                view.context, requestCode, intent, PendingIntent.FLAG_IMMUTABLE
+            )
+
+            Log.d("AlarmSetup", "Setting up alarm for $title at ${myCalendar.time}")
+            Log.d("AlarmSetup", "Setting up alarm for $title at ${currentTime + adjustedAlarmTime}")
+
+            alarmManager.set(AlarmManager.RTC_WAKEUP, currentTime + adjustedAlarmTime, pendingIntent)
+
             if(calendar){
                 val calendarEnt = CalendarEntry(calDate, title, description, time,"N/A",newRem.key)
                 val newCalendarEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(newRem.key!!)
@@ -134,7 +173,6 @@ class AddRemindersFragment : Fragment() {
 
         return view
     }
-
     private fun updateLabel() {
         val myFormat = "MMMM dd, yyyy"
         val dateFormat = SimpleDateFormat(myFormat, Locale.US)

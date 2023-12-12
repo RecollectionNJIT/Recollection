@@ -294,6 +294,13 @@ class MainHomeFragment : Fragment() {
                     val reminder = Reminders(title, description, date, time, id)
                     reminders.add(reminder)
                 }
+                // Check if reminders list is empty
+                if (reminders.isEmpty()) {
+                    // If empty, add a default reminder with the message
+                    val defaultReminder = Reminders("", "You have no reminders to show!", "", "", null)
+                    reminders.add(defaultReminder)
+                }
+
                 adapter.notifyDataSetChanged()
             }
 
