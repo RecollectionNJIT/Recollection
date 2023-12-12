@@ -29,7 +29,7 @@ class WeatherAdapter (private val context: Context, private val weatherList: Lis
     override fun onBindViewHolder(holder: WeatherAdapter.ViewHolder, position: Int) {
         val item = weatherList[position]
         holder.weatherNameView.text = item.name
-        holder.weatherTempView.text = item.temperature.toString()
+        holder.weatherTempView.text = item.temperature.toString() + "°"
         val forecast = item.shortForecast
         when {
             forecast.contains("Rain") -> {
