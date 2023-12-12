@@ -22,16 +22,23 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 import android.Manifest
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.graphics.BitmapFactory
+import android.icu.text.SimpleDateFormat
 import android.util.Log
+import android.widget.CheckBox
+import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import java.io.IOException
 import java.io.OutputStream
+import java.util.Calendar
+import java.util.Locale
 
 
 class AddNotesFragment : Fragment() {
@@ -44,6 +51,12 @@ class AddNotesFragment : Fragment() {
     private lateinit var pageTitle: TextView
     private val CAMERA_PERMISSION_REQUEST = 1001
     private var imagePathForNote: String? = null
+    lateinit var sendToCal : CheckBox
+    lateinit var sendToReminders : CheckBox
+    lateinit var selectNoteDate: EditText
+    lateinit var selectNoteTime: EditText
+    lateinit var myCalendar: Calendar
+    lateinit var editNote: Note
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,6 +114,7 @@ class AddNotesFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add_notes, container, false)
+        myCalendar = Calendar.getInstance()
 
 
         fun loadImage(imageUri: Uri?) {
@@ -134,6 +148,24 @@ class AddNotesFragment : Fragment() {
             loadImage(selectedImageUri)
         }
 
+        fun updateLabel() {
+            val myFormat = "MMMM dd, yyyy"
+            val dateFormat = SimpleDateFormat(myFormat, Locale.US)
+            selectNoteDate.setText(dateFormat.format(myCalendar.time))
+        }
+
+        fun updateTimeLabel() {
+            val myFormat = "hh:mm a"
+            val timeFormat = SimpleDateFormat(myFormat, Locale.US)
+            selectNoteTime.setText(timeFormat.format(myCalendar.time))
+        }
+
+        fun calendarDate(oldDate: String) : String {
+            val oldFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
+            val newFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+            return newFormat.format(oldFormat.parse(oldDate))
+        }
+
         val takePhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
@@ -152,15 +184,73 @@ class AddNotesFragment : Fragment() {
         imagePreview = view.findViewById(R.id.imagePreview)
         btnTakePhoto = view.findViewById(R.id.btnTakePhoto)
         pageTitle = view.findViewById(R.id.tvAddNoteHeader)
+        sendToCal = view.findViewById(R.id.checkboxAddToCalendar)
+        sendToReminders = view.findViewById(R.id.checkboxAddToReminders)
+        selectNoteTime = view.findViewById(R.id.selectNoteTime)
+        selectNoteDate = view.findViewById(R.id.selectNoteDate)
+        val dateListener =
+            DatePickerDialog.OnDateSetListener { _, year, month, day ->
+                myCalendar.set(Calendar.YEAR, year)
+                myCalendar.set(Calendar.MONTH, month)
+                myCalendar.set(Calendar.DAY_OF_MONTH, day)
+                updateLabel()
+            }
+
+        selectNoteDate.setOnClickListener {
+            val dpd = DatePickerDialog(
+                view.context,
+                dateListener,
+                myCalendar.get(Calendar.YEAR),
+                myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)
+            )
+            //dpd.datePicker.maxDate = System.currentTimeMillis() - 1000
+            //dpd.show()
+            dpd.datePicker.maxDate = Long.MAX_VALUE;
+            dpd.show();
+        }
+
+        val timeListener =
+            TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+                myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                myCalendar.set(Calendar.MINUTE, minute)
+                updateTimeLabel()
+            }
+
+        selectNoteTime.setOnClickListener {
+            val tpd = TimePickerDialog(
+                view.context,
+                timeListener,
+                myCalendar.get(Calendar.HOUR_OF_DAY),
+                myCalendar.get(Calendar.MINUTE),
+                false
+            )
+            tpd.show()
+        }
+
+        val checkBoxListener = CompoundButton.OnCheckedChangeListener { _, _ ->
+            // Check if at least one checkbox is checked
+            val isVisible = sendToCal.isChecked || sendToReminders.isChecked
+
+            // Set the visibility based on the condition
+            selectNoteTime.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+            selectNoteDate.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+        }
+
+        sendToCal.setOnCheckedChangeListener(checkBoxListener)
+        sendToReminders.setOnCheckedChangeListener(checkBoxListener)
+
         val editBool = activity?.intent?.extras?.getBoolean("edit",false)
 
         if (editBool == true) {
-
-            val editNote = activity?.intent?.extras?.getSerializable("editEntry") as Note
-            pageTitle.setText("Editing Note")
-            createButton.setText("Submit Save Edits")
+            editNote = activity?.intent?.extras?.getSerializable("editEntry") as Note
+            pageTitle.text = "Editing Note"
+            createButton.text = "Submit Save Edits"
             titleEditText.setText(editNote.title)
             bodyEditText.setText(editNote.body)
+            sendToReminders.visibility = View.INVISIBLE
+            sendToCal.visibility = View.INVISIBLE
+
             fun normalizeImageUri(uri: String?): String? {
                 if (uri?.startsWith("/external_primary/images") == true) {
                     // Handle the relative path case, construct a content URI if possible
@@ -211,17 +301,77 @@ class AddNotesFragment : Fragment() {
             }
         }
 
-
-        // do stuff here
-        // this would be where we store the data to the database
+        // this is where we store the data to the database
         createButton.setOnClickListener{
+
             val title = titleEditText.text.toString()
             val body = bodyEditText.text.toString()
+            //if it's being edited, won't allow checkboxes or add to calendar
+            if(editBool == true) {
+                //check if they swapped the image
+                if(imagePathForNote == null) {
+                    val postValues = mapOf(
+                        "title" to title,
+                        "body" to body,
+                        "imageLocation" to editNote.imageLocation, // Keep the existing image location
+                        "key" to editNote.key
+                    )
 
-            val newNote = Note(title,body,imagePathForNote)
-            val auth = FirebaseAuth.getInstance()
-            val newNoteEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").push()
-            newNoteEntryRef.setValue(newNote)
+                    val auth = FirebaseAuth.getInstance()
+                    val updateNoteRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(editNote.key!!)
+                    updateNoteRef.updateChildren(postValues)
+                    activity?.finish()
+                }
+                // else get the new path that has been edited
+                else {
+                    val postValues = mapOf(
+                        "title" to title,
+                        "body" to body,
+                        "imageLocation" to imagePathForNote, // Keep the existing image location
+                        "key" to editNote.key
+                    )
+
+                    val auth = FirebaseAuth.getInstance()
+                    val updateNoteRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(editNote.key!!)
+                    updateNoteRef.updateChildren(postValues)
+                    activity?.finish()
+                }
+            }
+            else {
+                var newNote = Note(title,body,imagePathForNote)
+                val auth = FirebaseAuth.getInstance()
+                val toCal = sendToCal.isChecked
+                val toRem = sendToReminders.isChecked
+                val newNoteEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").push()
+                newNoteEntryRef.setValue(newNote)
+                newNote.key = newNoteEntryRef.key
+                newNote.addToCal = sendToCal.isChecked
+                newNote.addToReminders = sendToReminders.isChecked
+                newNoteEntryRef.setValue(newNote)
+
+                if (toCal || toRem) {
+                    val date = selectNoteDate.text.toString()
+                    val time = selectNoteTime.text.toString()
+                    val calDate = calendarDate(date)
+                    if(toCal) {
+                        val calendarEnt = CalendarEntry(calDate, title, body, time, "N/A", newNote.key)
+                        val auth = FirebaseAuth.getInstance()
+                        val newCalendarEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(newNote.key!!)
+                        newCalendarEntryRef.setValue(calendarEnt)
+                    }
+                    if(toRem) {
+                        val newRem = Reminders(title,body,date,time,newNote.key)
+                        val auth = FirebaseAuth.getInstance()
+                        val newReminderEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("reminders").child(newNote.key!!)
+                        newReminderEntryRef.setValue(newRem)
+                    }
+
+                }
+                activity?.finish()
+            }
+
+
+
             activity?.finish()
         }
 
