@@ -1,5 +1,6 @@
 package edu.njit.recollection
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -22,8 +24,8 @@ import com.google.firebase.database.ValueEventListener
 
 class DetailsNotesFragment : Fragment() {
 
-    private lateinit var titleTextView: EditText
-    private lateinit var bodyTextView: EditText
+    private lateinit var titleTextView: TextView
+    private lateinit var bodyTextView: TextView
     private lateinit var detailNote: Note
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,8 +41,8 @@ class DetailsNotesFragment : Fragment() {
         val detailNote = activity?.intent?.getSerializableExtra("note") as Note
 
         // do stuff here
-        titleTextView = view.findViewById<EditText>(R.id.detailsTitleTextView)
-        bodyTextView = view.findViewById<EditText>(R.id.detailsBodyTextView)
+        titleTextView = view.findViewById<TextView>(R.id.detailsTitleTextView)
+        bodyTextView = view.findViewById<TextView>(R.id.detailsBodyTextView)
         val imageView = view.findViewById<ImageView>(R.id.detailsImageView)
 
         // Set data to TextViews and ImageView
@@ -84,15 +86,23 @@ class DetailsNotesFragment : Fragment() {
             imageView.setImageDrawable(null) // Set to null or provide a placeholder image
         }*/
 
-        val updateButton = view.findViewById<Button>(R.id.btnUpdateDB)
+        val updateButton = view.findViewById<ImageButton>(R.id.btnUpdateDB)
 
         updateButton.setOnClickListener {
-            val newTitle = titleTextView.text.toString()
-            val newBody = bodyTextView.text.toString()
+            //val newTitle = titleTextView.text.toString()
+            //val newBody = bodyTextView.text.toString()
 
-            val postValues = mapOf(
-                "title" to newTitle,
-                "body" to newBody,
+
+            val i = Intent(view.context, AddActivity::class.java)
+            i.putExtra("fragment", "notes")
+            i.putExtra("edit", true)
+            i.putExtra("editEntry", detailNote)
+            startActivity(i)
+
+
+            /*val postValues = mapOf(
+                "title" to detailNote.title,
+                "body" to detailNote.body,
                 "imageLocation" to detailNote.imageLocation, // Keep the existing image location
                 "key" to detailNote.key
             )
@@ -100,7 +110,7 @@ class DetailsNotesFragment : Fragment() {
             val auth = FirebaseAuth.getInstance()
             val updateNoteRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(detailNote.key!!)
             updateNoteRef.updateChildren(postValues)
-            activity?.finish()
+            activity?.finish()*/
         }
 
 

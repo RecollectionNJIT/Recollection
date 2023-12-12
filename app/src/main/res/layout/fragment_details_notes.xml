@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <EditText
+        <TextView
             android:id="@+id/detailsTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
+        <TextView
             android:id="@+id/detailsBodyTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,13 +42,13 @@
             app:layout_constraintTop_toBottomOf="@+id/detailsTitleTextView" />
 
 
-        <Button
+        <ImageButton
             android:id="@+id/btnUpdateDB"
-            android:layout_width="126dp"
+            android:layout_width="52dp"
             android:layout_height="52dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/rounded_corners"
-            android:text="Update Note"
+            android:background="@null"
+            app:srcCompat="@drawable/edit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:theme="@style/White"
