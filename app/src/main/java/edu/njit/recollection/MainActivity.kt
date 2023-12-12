@@ -1,6 +1,11 @@
 package edu.njit.recollection
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -10,6 +15,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        // Create the notification channel
+        createNotificationChannel()
 
         // Declare MainActivity fragments
         val mainCalendarFragment: Fragment = MainCalendarFragment()
@@ -45,5 +52,32 @@ class MainActivity : AppCompatActivity() {
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.main_frame_layout, fragment)
         fragmentTransaction.commit()
+    }
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "ReminderChannel"
+            val descriptionText = "Channel for reminder notifications"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channelId = "REMINDER_CHANNEL_ID"
+
+            // Log messages to track the execution flow
+            Log.d("NotificationChannel", "Creating Notification Channel")
+
+            val channel = NotificationChannel(channelId, name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            // Log messages to track the execution flow
+            Log.d("NotificationChannel", "Notification Manager retrieved")
+
+            notificationManager.createNotificationChannel(channel)
+
+            // Log messages to track the execution flow
+            Log.d("NotificationChannel", "Notification Channel created")
+
+
+        }
     }
 }
