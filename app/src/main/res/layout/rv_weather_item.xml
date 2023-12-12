@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Name"
         android:textColor="@color/white"
-        android:textSize="12sp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,11 +23,19 @@
         android:layout_height="wrap_content"
         android:text="Temperature"
         android:textColor="@color/white"
-        android:textSize="12sp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rvWeatherName" />
 
-    <TextView
+    <ImageView
+        android:id="@+id/rvWeatherPicture"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:layout_constraintStart_toEndOf="@+id/rvWeatherTemperature"
+        app:layout_constraintTop_toBottomOf="@+id/rvWeatherName"
+        app:tint="@color/white" />
+
+    <!--<TextView
         android:id="@+id/rvWeatherForecast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,5 +43,5 @@
         android:textColor="@color/white"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvWeatherTemperature" />
+        app:layout_constraintTop_toBottomOf="@+id/rvWeatherTemperature" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>
