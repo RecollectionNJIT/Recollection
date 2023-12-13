@@ -39,6 +39,8 @@ import java.io.IOException
 import java.io.OutputStream
 import java.util.Calendar
 import java.util.Locale
+import android.util.Base64
+import java.io.ByteArrayOutputStream
 
 
 class AddNotesFragment : Fragment() {
@@ -57,55 +59,26 @@ class AddNotesFragment : Fragment() {
     lateinit var selectNoteTime: EditText
     lateinit var myCalendar: Calendar
     lateinit var editNote: Note
+    lateinit var photoBase64: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
-
-    fun savePhotoAndGetUri(bitmap: Bitmap?): Uri? {
+    fun bitmapToBase64(bitmap: Bitmap?): String? {
         if (bitmap == null) {
             return null
         }
 
-        // Get the content resolver
-        val contentResolver: ContentResolver = requireActivity().contentResolver
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
 
-        val timestamp = System.currentTimeMillis()
+        return Base64.encodeToString(byteArray, Base64.DEFAULT)
+    }
 
-        val imageName = "Image_$timestamp.jpg"
-
-        // Define the image details
-        val contentValues = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, imageName) // Display name of the image
-            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-            put(MediaStore.Images.Media.WIDTH, bitmap.width)
-            put(MediaStore.Images.Media.HEIGHT, bitmap.height)
-        }
-
-        // Define the external content URI to save the image to the Pictures directory
-        val imageCollection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-
-        // Insert the image details into the MediaStore
-        val imageUri = contentResolver.insert(imageCollection, contentValues)
-        imagePathForNote = imageUri?.path.toString()
-
-        // Log the URI
-        Log.d("MyApp", "Image URI: $imageUri")
-
-        // Open an output stream to the content URI
-        imageUri?.let { uri ->
-            try {
-                val outputStream: OutputStream? = contentResolver.openOutputStream(uri)
-                outputStream?.use { os ->
-                    // Compress and write the bitmap to the output stream
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
-        return imageUri
+    fun savePhotoAndGetBase64(bitmap: Bitmap?): String? {
+        return bitmapToBase64(bitmap)
     }
 
     override fun onCreateView(
@@ -117,10 +90,10 @@ class AddNotesFragment : Fragment() {
         myCalendar = Calendar.getInstance()
 
 
-        fun loadImage(imageUri: Uri?) {
-            Log.d("MyApp", "Loading image from URI: $imageUri")
+        fun loadImage(base64String: String?) {
+            Log.d("MyApp", "Loading image from Base64 string")
 
-            if (imageUri != null) {
+            if (!base64String.isNullOrBlank()) {
                 // Display the selected image in the ImageView using Glide
 
                 imagePreview.visibility = View.VISIBLE
@@ -129,23 +102,29 @@ class AddNotesFragment : Fragment() {
                 Glide.with(this)
                     .clear(imagePreview)
 
+                // Decode the base64 string into a Bitmap
+                val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+                val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
 
+                // Load the Bitmap into the ImageView
                 Glide.with(this)
-                    .load(imageUri)
+                    .load(bitmap)
                     .into(imagePreview)
             }
         }
 
         fun handleCameraResult(data: Intent?) {
             val photo: Bitmap? = data?.getParcelableExtra("data")
-            val photoUri = savePhotoAndGetUri(photo)
-            loadImage(photoUri)
+            photoBase64 = savePhotoAndGetBase64(photo).toString()
+            loadImage(photoBase64)
+            // Use photoBase64 as needed
         }
 
         fun handleGalleryResult(data: Intent?) {
             val selectedImageUri: Uri? = data?.data
-            imagePathForNote = selectedImageUri?.path.toString()
-            loadImage(selectedImageUri)
+            photoBase64 = savePhotoAndGetBase64(MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, selectedImageUri)).toString()
+            loadImage(photoBase64)
+            // Use photoBase64 as needed
         }
 
         fun updateLabel() {
@@ -327,7 +306,7 @@ class AddNotesFragment : Fragment() {
                     val postValues = mapOf(
                         "title" to title,
                         "body" to body,
-                        "imageLocation" to imagePathForNote, // Keep the existing image location
+                        "imageLocation" to photoBase64, // Keep the existing image location
                         "key" to editNote.key
                     )
 
@@ -338,7 +317,7 @@ class AddNotesFragment : Fragment() {
                 }
             }
             else {
-                var newNote = Note(title,body,imagePathForNote)
+                var newNote = Note(title,body,photoBase64)
                 val auth = FirebaseAuth.getInstance()
                 val toCal = sendToCal.isChecked
                 val toRem = sendToReminders.isChecked

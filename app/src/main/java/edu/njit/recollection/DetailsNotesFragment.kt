@@ -1,9 +1,11 @@
 package edu.njit.recollection
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Base64
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -49,29 +51,21 @@ class DetailsNotesFragment : Fragment() {
         titleTextView.setText(detailNote.title)
         bodyTextView.setText(detailNote.body)
 
-        fun normalizeImageUri(uri: String?): String? {
-            if (uri?.startsWith("/external_primary/images") == true) {
-                // Handle the relative path case, construct a content URI if possible
-                // Example: content://media/external/images/media/1000000047
-                return "content://media$uri"
-            }
-            if (uri?.startsWith("content://media/external/images/media/") == true) {
-                return uri
-            }
-            val normalizedUri = uri?.substringAfter("/external/images/media/")
-            return "content://media/external/images/media/$normalizedUri"
-        }
+        if (!detailNote.imageLocation.isNullOrBlank()) {
+            // Display the selected image in the ImageView using Glide
 
-        val normalizedUri = normalizeImageUri(detailNote.imageLocation)
-        if (!normalizedUri.isNullOrBlank()) {
-            Log.d("MyApp", "Loading image from URI: $normalizedUri")
-            Glide.with(requireContext())
-                .load(normalizedUri)
+            // Clear any previous resources
+            Glide.with(this)
+                .clear(imageView)
+
+            // Decode the base64 string into a Bitmap
+            val decodedBytes = Base64.decode(detailNote.imageLocation, Base64.DEFAULT)
+            val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+
+            // Load the Bitmap into the ImageView
+            Glide.with(this)
+                .load(bitmap)
                 .into(imageView)
-        } else {
-            Log.d("MyApp", "No image location provided.")
-            // If there is no image, you may want to set a placeholder or handle it in some way
-            imageView.setImageDrawable(null) // Set to null or provide a placeholder image
         }
 
 
