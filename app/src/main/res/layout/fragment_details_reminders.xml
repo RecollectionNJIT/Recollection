@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetailsRemindersFragment"
-    android:background="@color/teal">
+    android:background="@color/reminders_bg">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
             android:id="@+id/editTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="150dp"
             android:layout_marginBottom="16dp"
             android:gravity="top|center"
             android:textStyle="bold"
@@ -31,7 +31,7 @@
             android:id="@+id/editDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="40dp"
             android:gravity="center_horizontal"
             android:text="Description"
             android:textColor="@color/white"
@@ -45,7 +45,7 @@
             android:id="@+id/editDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="40dp"
             android:gravity="center_horizontal"
             android:text="Date"
             android:textColor="@color/white"
@@ -59,28 +59,27 @@
             android:id="@+id/editTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:gravity="center_horizontal"
+            android:layout_marginTop="10dp"
             android:text="Time"
             android:textColor="@color/white"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/editButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editDate" />
 
         <ImageButton
             android:id="@+id/editButton"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="100dp"
             android:background="@null"
-            app:srcCompat="@drawable/edit"
+            android:textColor="@color/teal"
+            android:theme="@style/White"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:theme="@style/White"
-            android:textColor="@color/teal"
-            app:layout_constraintTop_toBottomOf="@+id/editTime" />
+            app:srcCompat="@drawable/edit_rem" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

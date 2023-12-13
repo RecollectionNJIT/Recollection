@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddFinancesFragment"
-    android:background="@color/teal">
+    android:background="@color/finance_bg">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="Adding New Entry"
             android:textSize="43sp"
-            android:fontFamily="sans-serif-smallcaps"
+            android:fontFamily="sans-serif-medium"
             android:textColor="@color/white"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toTopOf="parent"
@@ -40,8 +40,8 @@
             android:inputType="date"
             android:longClickable="false"
             android:padding="10dp"
-            android:textColor="@color/teal"
-            android:textColorHint="@color/teal"
+            android:textColor="@color/finance"
+            android:textColorHint="@color/finance"
             android:layout_marginTop="225dp"
             app:layout_constraintBottom_toTopOf="@id/typeSpinnerLayout"
             app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:spinnerMode="dropdown"
-                android:backgroundTint="@color/teal"
+                android:backgroundTint="@color/finance"
                 tools:listitem="@layout/spinner_finance_item" />
         </RelativeLayout>
 
@@ -82,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:spinnerMode="dropdown"
-                android:backgroundTint="@color/teal"
+                android:backgroundTint="@color/finance"
                 tools:listitem="@layout/spinner_finance_item"/>
         </RelativeLayout>
 
@@ -100,8 +100,8 @@
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:padding="10dp"
-            android:textColor="@color/teal"
-            android:textColorHint="@color/teal"
+            android:textColor="@color/finance"
+            android:textColorHint="@color/finance"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/categorySpinnerLayout" />
@@ -126,7 +126,7 @@
             android:text="Add Entry"
             android:transitionName="button"
             android:background="@drawable/rounded_corners"
-            android:textColor="@color/teal"
+            android:textColor="@color/finance"
             android:theme="@style/White"
             android:layout_marginBottom="100dp"
             app:layout_constraintBottom_toBottomOf="parent"

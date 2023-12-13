@@ -1,21 +1,20 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:gravity="fill"
-        android:drawable="@drawable/settings_outline_circle"
+        android:drawable="@drawable/add_outline_circle_fin"
         />
     <item
         android:gravity="center"
-        android:drawable="@drawable/settings_fill_circle"
-        android:width="39dp"
-        android:height="39dp"
+        android:drawable="@drawable/add_fill_circle"
+        android:width="45dp"
+        android:height="45dp"
         />
     <item
         android:gravity="center"
-        android:drawable="@drawable/baseline_edit_24"
+        android:drawable="@drawable/baseline_add_24_fin"
         android:top="10dp"
         android:bottom="10dp"
         android:left="10dp"
-        android:color="@color/white"
         android:right="10dp"
         />
 </layer-list>

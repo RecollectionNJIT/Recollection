@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.Button
 import android.widget.ImageButton
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -38,6 +39,11 @@ class MainNotesFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_main_notes, container, false)
+
+        requireActivity().window.statusBarColor = ContextCompat.getColor(view.context, R.color.notes)
+        bottomNavigationView.setBackgroundColor(ContextCompat.getColor(view.context, R.color.notes_dark))
+        bottomNavigationView.itemActiveIndicatorColor = ContextCompat.getColorStateList(view.context, R.color.notes)
+
         // do stuff here
         rvNotes = view.findViewById<RecyclerView>(R.id.rvNotes)
         rvNotes.layoutManager = GridLayoutManager(view.context, 2)

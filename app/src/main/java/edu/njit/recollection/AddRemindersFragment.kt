@@ -17,6 +17,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.common.primitives.Longs.max
 import com.google.firebase.Firebase
@@ -48,6 +49,7 @@ class AddRemindersFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add_reminders, container, false)
+        requireActivity().window.statusBarColor = ContextCompat.getColor(view.context, R.color.reminders)
 
         // Retrieve Title, Description, Date, and Time from User
         selectReminderTitle = view.findViewById(R.id.selectReminderTitle)
@@ -109,7 +111,7 @@ class AddRemindersFragment : Fragment() {
         if (editBool == true) {
             editReminder = activity?.intent?.extras?.getSerializable("editEntry") as Reminders
             pageTitle.text = "Editing Reminder"
-            createReminderBtn.text = "Submit Save Edits"
+            createReminderBtn.text = "Save Edits"
             selectReminderTitle.setText(editReminder.title)
             selectReminderDescription.setText(editReminder.description)
             selectReminderDate.setText(editReminder.date)

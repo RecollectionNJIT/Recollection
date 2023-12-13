@@ -16,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,10 +40,8 @@ import com.google.firebase.database.database
 import okhttp3.Headers
 import org.json.JSONException
 import org.json.JSONObject
-import org.w3c.dom.Text
 import java.text.DecimalFormat
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 
@@ -72,11 +69,14 @@ class MainHomeFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_main_home, container, false)
 
+        requireActivity().window.statusBarColor = ContextCompat.getColor(view.context, R.color.teal)
+        bottomNavigationView.setBackgroundColor(ContextCompat.getColor(view.context, R.color.dark_teal))
+        bottomNavigationView.itemActiveIndicatorColor = ContextCompat.getColorStateList(view.context, R.color.teal)
+
         view.findViewById<ImageButton>(R.id.btnSettings).setOnClickListener {
             val i = Intent(view.context, SettingsActivity::class.java)
             startActivity(i)
         }
-
 
         calendarCV = view.findViewById(R.id.cvHomepageCalendar)
         financeCV = view.findViewById(R.id.cvHomepageFinance)

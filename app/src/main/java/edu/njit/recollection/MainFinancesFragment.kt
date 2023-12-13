@@ -1,9 +1,7 @@
 package edu.njit.recollection
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -47,9 +45,15 @@ class MainFinancesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main_finances, container, false)
+
+        // Theme for Fragment
+        requireActivity().window.statusBarColor = ContextCompat.getColor(view.context, R.color.finance)
+        bottomNavigationView.setBackgroundColor(ContextCompat.getColor(view.context, R.color.finance_dark))
+        bottomNavigationView.itemActiveIndicatorColor = ContextCompat.getColorStateList(view.context, R.color.finance)
+
 
         // Set up Alltime Finances Button
         view.findViewById<Button>(R.id.btnSeeAlltimeFinances).setOnClickListener {
@@ -134,8 +138,8 @@ class MainFinancesFragment : Fragment() {
         pieChart.setDragDecelerationFrictionCoef(0.95f)
 
         pieChart.setDrawHoleEnabled(true)
-        pieChart.setHoleColor(ContextCompat.getColor(view.context, R.color.teal))
-        pieChart.setTransparentCircleColor(ContextCompat.getColor(view.context, R.color.teal))
+        pieChart.setHoleColor(ContextCompat.getColor(view.context, R.color.finance_bg))
+        pieChart.setTransparentCircleColor(ContextCompat.getColor(view.context, R.color.finance_bg))
         pieChart.setTransparentCircleAlpha(110)
         pieChart.setHoleRadius(55f)
         pieChart.setTransparentCircleRadius(58f)
@@ -231,7 +235,7 @@ class MainFinancesFragment : Fragment() {
                 else
                     return "$" + mFormat.format(value.toDouble())
             }
-            override fun getFormattedValue(value: Float): String? {
+            override fun getFormattedValue(value: Float): String {
                 return if (value == 0f) {
                     ""
                 }

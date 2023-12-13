@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -44,7 +45,7 @@ private var days = mutableListOf<CalendarEntry>()
 
 private var initialCon = true
 
-private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyyy")
+private val titleFormatter = DateTimeFormatter.ofPattern("MMMM yyyy")
 private val selectionFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
 private val reminderFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy")
 private val today = LocalDate.now()
@@ -80,6 +81,11 @@ class MainCalendarFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_main_calendar, container, false)
+
+        requireActivity().window.statusBarColor = ContextCompat.getColor(view.context, R.color.calendar)
+        bottomNavigationView.setBackgroundColor(ContextCompat.getColor(view.context, R.color.calendar_dark))
+        bottomNavigationView.itemActiveIndicatorColor = ContextCompat.getColorStateList(view.context, R.color.calendar)
+
         // do stuff here
         calendarRecycler = view.findViewById(R.id.calendarRecyclerView)
         days.clear()

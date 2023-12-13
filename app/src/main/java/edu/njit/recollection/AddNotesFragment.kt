@@ -80,6 +80,8 @@ class AddNotesFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add_notes, container, false)
+        requireActivity().window.statusBarColor = ContextCompat.getColor(view.context, R.color.notes)
+
         myCalendar = Calendar.getInstance()
 
 
@@ -217,7 +219,7 @@ class AddNotesFragment : Fragment() {
         if (editBool == true) {
             editNote = activity?.intent?.extras?.getSerializable("editEntry") as Note
             pageTitle.text = "Editing Note"
-            createButton.text = "Submit Save Edits"
+            createButton.text = "Save Edits"
             titleEditText.setText(editNote.title)
             bodyEditText.setText(editNote.body)
             sendToReminders.visibility = View.INVISIBLE
@@ -288,22 +290,22 @@ class AddNotesFragment : Fragment() {
                     updateNoteRef.updateChildren(postValues)
                     val toCal = editNote.addToCal
                     val toRem = editNote.addToReminders
-                        if(toCal == true) {
-                            val auth = FirebaseAuth.getInstance()
-                            val updateMap = HashMap<String, Any>()
-                            updateMap["title"] = title
-                            updateMap["description"] = body
-                            val calendarEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(editNote.key!!)
-                            calendarEntryRef.updateChildren(updateMap)
-                        }
-                        if(toRem == true) {
-                            val auth = FirebaseAuth.getInstance()
-                            val updateMap = HashMap<String, Any>()
-                            updateMap["title"] = title
-                            updateMap["description"] = body
-                            val reminderEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("reminders").child(editNote.key!!)
-                            reminderEntryRef.updateChildren(updateMap)
-                        }
+                    if(toCal == true) {
+                        val auth = FirebaseAuth.getInstance()
+                        val updateMap = HashMap<String, Any>()
+                        updateMap["title"] = title
+                        updateMap["description"] = body
+                        val calendarEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(editNote.key!!)
+                        calendarEntryRef.updateChildren(updateMap)
+                    }
+                    if(toRem == true) {
+                        val auth = FirebaseAuth.getInstance()
+                        val updateMap = HashMap<String, Any>()
+                        updateMap["title"] = title
+                        updateMap["description"] = body
+                        val reminderEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("reminders").child(editNote.key!!)
+                        reminderEntryRef.updateChildren(updateMap)
+                    }
 
                     activity?.finish()
                 }

@@ -16,6 +16,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
@@ -53,6 +54,8 @@ class DetailsNotesFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_details_notes, container, false)
+        requireActivity().window.statusBarColor = ContextCompat.getColor(view.context, R.color.notes)
+
         titleTextView = view.findViewById<TextView>(R.id.detailsTitleTextView)
         bodyTextView = view.findViewById<TextView>(R.id.detailsBodyTextView)
 

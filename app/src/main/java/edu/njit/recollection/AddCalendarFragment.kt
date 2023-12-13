@@ -14,6 +14,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
@@ -40,6 +41,9 @@ class AddCalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_add_calendar, container, false)
+
+        requireActivity().window.statusBarColor = ContextCompat.getColor(view.context, R.color.calendar)
+
 //        Log.v("Date received",""+activity?.intent?.extras?.getString("date"))
 //        Log.v("date", "" + activity?.intent?.extras?.getString("date"))
 //        Log.v("title", "" + activity?.intent?.extras?.getString("title"))

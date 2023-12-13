@@ -1,7 +1,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:gravity="fill"
-        android:drawable="@drawable/add_outline_circle"
+        android:drawable="@drawable/add_outline_circle_note"
         />
     <item
         android:gravity="center"
@@ -11,7 +11,7 @@
         />
     <item
         android:gravity="center"
-        android:drawable="@drawable/baseline_add_24"
+        android:drawable="@drawable/baseline_edit_24_note"
         android:top="10dp"
         android:bottom="10dp"
         android:left="10dp"

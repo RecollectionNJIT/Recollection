@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_below="@+id/reminderHomeTitle"
-            android:textColor="@color/teal"
+            android:textColor="@color/white"
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_marginBottom="5dp">

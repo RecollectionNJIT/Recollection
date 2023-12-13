@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
@@ -28,6 +29,10 @@ class MainRemindersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_main_reminders, container, false)
+
+        requireActivity().window.statusBarColor = ContextCompat.getColor(view.context, R.color.reminders)
+        bottomNavigationView.setBackgroundColor(ContextCompat.getColor(view.context, R.color.reminders_dark))
+        bottomNavigationView.itemActiveIndicatorColor = ContextCompat.getColorStateList(view.context, R.color.reminders)
 
         // Initialize the RecyclerView
         rvReminders = view.findViewById(R.id.rvReminders)

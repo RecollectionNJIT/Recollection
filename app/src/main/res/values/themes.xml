@@ -1,10 +1,13 @@
-<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Base application theme. -->
     <style name="Base.Theme.Recollection" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="colorPrimary">@color/teal</item>
         <item name="colorPrimaryDark">@color/teal</item>
+        <item name="colorPrimaryVariant">@color/teal</item>
+        <item name="android:statusBarColor">@color/teal</item>]
+        <item name="statusBarBackground">@color/teal</item>
         <item name="colorSecondary">@color/white</item>
         <item name="colorAccent">@color/dark_teal</item>
     </style>
@@ -15,7 +18,7 @@
         <item name="colorAccent">@color/white</item>
     </style>
 
-    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+    <style name="navBarHomeIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">@color/teal</item>
     </style>
 
