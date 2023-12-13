@@ -31,4 +31,9 @@
     <color name="cerise">#E63462</color>
     <color name="apricot">#FFCAB1</color>
     <color name="mantis">#7BC950</color>
+    <color name="calendar_blue">#2762EB</color>
+    <color name="finance_purple">#7B3AED</color>
+    <color name="notes_orange">#F59E0C</color>
+    <color name="reminders_pink">#EC479A</color>
+    <color name="recollection_red">#ec4747</color>
 </resources>
