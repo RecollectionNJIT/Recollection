@@ -49,8 +49,9 @@ class MainHomeFragment : Fragment() {
     lateinit var financeCV: CardView
     lateinit var remindersCV: CardView
     lateinit var weatherCV: CardView
+    lateinit var lat: String
+    lateinit var long: String
 
-    private lateinit var locationManager: LocationManager
     private lateinit var rvWeather: RecyclerView
     private lateinit var weatherAdapter: WeatherAdapter
     private val weatherVals = mutableListOf<WeatherValue>()
@@ -309,61 +310,56 @@ class MainHomeFragment : Fragment() {
             }
         })
     }
-    @SuppressLint("MissingPermission")
-    // permission is explicity asked for before it uses location info
     private fun createWeatherCV(view: View) {
-        locationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            getLatLong()
 
-        if (hasLocationPermission()) {
-            // Request location updates only once
-            locationManager.requestSingleUpdate(
-                LocationManager.GPS_PROVIDER,
-                locationListener,
-                null
-            )
-        } else {
-            requestLocationPermission()
-        }
     }
 
-    private fun hasLocationPermission(): Boolean {
-        return (ContextCompat.checkSelfPermission(
-            requireContext(),
-            android.Manifest.permission.ACCESS_FINE_LOCATION
-        ) == android.content.pm.PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION
-                ) == android.content.pm.PackageManager.PERMISSION_GRANTED)
+    private fun getLatLong() {
+        val apiLatLong = "http://ip-api.com/json/"
+        val client = AsyncHttpClient()
+        client.get(apiLatLong, object : JsonHttpResponseHandler() {
+
+
+            override fun onSuccess(
+                statusCode: Int,
+                headers: Headers?,
+                json: JsonHttpResponseHandler.JSON
+            ) {
+                Log.v("WeatherAPI", "Info Sent in first API call")
+
+                try {
+                    val lat = json.jsonObject.getDouble("lat").toString()
+                    val long = json.jsonObject.getDouble("lon").toString()
+                    getWeather(lat, long)
+
+                    // Now you can use lat and lon as needed
+                    Log.d("WeatherAPI", "Latitude: $lat, Longitude: $long")
+
+                    // Assign lat and lon to your class variables if needed
+                    // For example, if lat and lon are properties of your class, you can assign them like this:
+                    // this.lat = lat
+                    // this.lon = lon
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(
+                statusCode: Int,
+                headers: Headers?,
+                response: String?,
+                throwable: Throwable?
+            ) {
+                if (headers != null) {
+                    Log.e("APIError", "Failed to retrieve data from the first API call. Status code: $statusCode, Response: $response")
+                } else {
+                    Log.e("APIError", "Failed to retrieve data from the first API call. Headers are null. Status code: $statusCode, Response: $response")
+                }
+            }
+        })
     }
 
-    private fun requestLocationPermission() {
-        requestPermissions(
-            arrayOf(
-                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-            ),
-            1
-        )
-    }
-
-
-    private val locationListener: LocationListener = object : LocationListener {
-        override fun onLocationChanged(location: Location) {
-            // Get latitude and longitude
-            val latitude = String.format("%.4f", location.latitude)
-            val longitude = String.format("%.4f", location.longitude)
-
-            // Do something with the latitude and longitude
-            Log.d("LocationInfo", "Latitude: $latitude, Longitude: $longitude")
-            getWeather(latitude, longitude)
-
-            // Remove location updates after obtaining the initial location
-            locationManager.removeUpdates(this)
-        }
-
-        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-    }
 
     private fun getWeather(lat: String, long: String) {
         val firstAPIcall = "https://api.weather.gov/points/$lat,$long"
@@ -375,6 +371,8 @@ class MainHomeFragment : Fragment() {
                 headers: Headers,
                 json: JsonHttpResponseHandler.JSON
             ) {
+                Log.v("WeatherAPI","Info Sent in first API call")
+
                 try {
                     val properties = json.jsonObject.getJSONObject("properties")
                     val secondAPIcall = properties.getString("forecast")
@@ -404,6 +402,8 @@ class MainHomeFragment : Fragment() {
                 headers: Headers,
                 json: JsonHttpResponseHandler.JSON
             ) {
+                Log.v("WeatherAPI","Info Sent in second API call")
+
                 try {
                     val weatherList = parseWeatherResponse(json.jsonObject)
                 } catch (e: JSONException) {
@@ -451,13 +451,6 @@ class MainHomeFragment : Fragment() {
         rvWeather.adapter = weatherAdapter
         weatherAdapter.notifyDataSetChanged()
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        locationManager.removeUpdates(locationListener)
-    }
-
-
 
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = activity?.supportFragmentManager
