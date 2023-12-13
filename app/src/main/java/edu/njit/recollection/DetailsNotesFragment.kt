@@ -29,9 +29,22 @@ class DetailsNotesFragment : Fragment() {
     private lateinit var titleTextView: TextView
     private lateinit var bodyTextView: TextView
     private lateinit var detailNote: Note
+    private lateinit var imageView: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+    fun normalizeImageUri(uri: String?): String? {
+        if (uri?.startsWith("/external_primary/images") == true) {
+            // Handle the relative path case, construct a content URI if possible
+            // Example: content://media/external/images/media/1000000047
+            return "content://media$uri"
+        }
+        if (uri?.startsWith("content://media/external/images/media/") == true) {
+            return uri
+        }
+        val normalizedUri = uri?.substringAfter("/external/images/media/")
+        return "content://media/external/images/media/$normalizedUri"
     }
 
     override fun onCreateView(
@@ -40,11 +53,9 @@ class DetailsNotesFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_details_notes, container, false)
-        val detailNote = activity?.intent?.getSerializableExtra("note") as Note
-
-        // do stuff here
         titleTextView = view.findViewById<TextView>(R.id.detailsTitleTextView)
         bodyTextView = view.findViewById<TextView>(R.id.detailsBodyTextView)
+
         val imageView = view.findViewById<ImageView>(R.id.detailsImageView)
 
         // Set data to TextViews and ImageView
@@ -108,13 +119,69 @@ class DetailsNotesFragment : Fragment() {
         }
 
 
-
-
-
         return view
     }
+    override fun onStart() {
+        super.onStart()
+        val noteKey = activity?.intent?.getSerializableExtra("note").toString()
+        val auth = FirebaseAuth.getInstance()
+        val notesRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(noteKey)
 
+        notesRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val title = snapshot.child("title").value.toString()
+                    val body = snapshot.child("body").value.toString()
+                    val imageLocation = snapshot.child("imageLocation").value.toString()
+                    val key = snapshot.child("key").value.toString()
+                    val addToReminders = snapshot.child("addToReminders").value
+                    val addToCal = snapshot.child("addToCal").value
 
+                    // Do something with the retrieved data
+                    detailNote = Note(title,body,imageLocation,key,
+                        addToReminders as Boolean?, addToCal as Boolean?
+                    )
+                    Log.v("Details", detailNote.key.toString())
+
+                    titleTextView.text = detailNote.title
+                    bodyTextView.text = detailNote.body
+
+                    val normalizedUri = normalizeImageUri(detailNote.imageLocation)
+                    if (!normalizedUri.isNullOrBlank()) {
+                        Log.d("MyApp", "Loading image from URI: $normalizedUri")
+                        Glide.with(requireContext())
+                            .load(normalizedUri)
+                            .into(imageView)
+                    } else {
+                        Log.d("MyApp", "No image location provided.")
+                        // If there is no image, you may want to set a placeholder or handle it in some way
+                        imageView.setImageDrawable(null) // Set to null or provide a placeholder image
+                    }
+                    val updateButton = view!!.findViewById<ImageButton>(R.id.btnUpdateDB)
+
+                    updateButton.setOnClickListener {
+                        //val newTitle = titleTextView.text.toString()
+                        //val newBody = bodyTextView.text.toString()
+                        Log.v("Details", detailNote.key.toString())
+
+                        val i = Intent(view!!.context, AddActivity::class.java)
+                        i.putExtra("fragment", "notes")
+                        i.putExtra("edit", true)
+                        i.putExtra("editEntry", detailNote)
+                        startActivity(i)
+                    }
+
+                } else {
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle any errors that occurred during the data retrieval
+                Log.e("FirebaseError", "Error getting data: ${error.message}")
+            }
+        })
+    }
 
     companion object {
         fun newInstance() : DetailsNotesFragment {

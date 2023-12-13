@@ -43,7 +43,7 @@ class NotesAdapter (private val context: Context, private val notesList: Mutable
         holder.itemView.setOnClickListener {
             val i = Intent(context, DetailsActivity::class.java)
             i.putExtra("fragment","notes")
-            i.putExtra("note",note)
+            i.putExtra("note",note.key)
             context.startActivity(i)
         }
         holder.itemView.setOnLongClickListener(object : View.OnLongClickListener {
