@@ -9,38 +9,43 @@
     app:cardCornerRadius="10dp"
     app:cardElevation="8dp"
     app:cardMaxElevation="10dp">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="20dp"
-        android:gravity="left">
+        android:gravity="center">
 
 
         <TextView
             android:id="@+id/calendarHomeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:text="Title"
+            android:fontFamily="sans-serif-medium"
             android:textColor="@color/teal"
             android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
+            android:layout_centerInParent="true"
             />
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/teal"
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/calendarHomeTitle"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginBottom="5dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Start: "
+                android:fontFamily="sans-serif"
+                android:textSize="18sp"
                 android:textColor="@color/teal"
-                android:textSize="16sp"
                 />
             <TextView
                 android:id="@+id/calendarHomeTimeStart"
@@ -48,7 +53,8 @@
                 android:layout_height="wrap_content"
                 android:text="Time1"
                 android:textColor="@color/teal"
-                android:textSize="16sp"
+                android:fontFamily="sans-serif"
+                android:textSize="18sp"
                 />
             <TextView
                 android:id="@+id/calendarHomeEnd"
@@ -58,7 +64,8 @@
                 android:layout_weight="1"
                 android:textColor="@color/teal"
                 android:text="End: "
-                android:textSize="16sp"
+                android:fontFamily="sans-serif"
+                android:textSize="18sp"
                 />
             <TextView
                 android:id="@+id/calendarHomeTimeEnd"
@@ -67,8 +74,9 @@
                 android:layout_weight="1"
                 android:text="Time2"
                 android:textColor="@color/teal"
-                android:textSize="16sp"
+                android:fontFamily="sans-serif"
+                android:textSize="18sp"
                 />
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>

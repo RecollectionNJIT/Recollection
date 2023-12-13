@@ -3,6 +3,8 @@ package edu.njit.recollection
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.icu.text.SimpleDateFormat
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,9 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class RemindersAdapter(private val context: Context, private val items: List<Reminders>) : RecyclerView.Adapter<RemindersAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -27,7 +32,13 @@ class RemindersAdapter(private val context: Context, private val items: List<Rem
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val listItem = items[position]
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy h:m a")
+        val sortedReminders = items.sortedByDescending {
+            LocalDate.parse(it.date + " " + it.time, dateTimeFormatter)
+        }.reversed()
+
+        Log.i("test", sortedReminders.toString())
+        val listItem = sortedReminders[position]
         holder.tvReminderTitle.text = listItem.title
         holder.tvReminderDescription.text = listItem.description
         holder.tvReminderDate.text = listItem.date

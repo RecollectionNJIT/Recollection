@@ -22,10 +22,10 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:text="Reminder Title"
-            android:textColor="@color/teal"
+            android:textColor="@color/reminders"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:padding="15dp" />
+            android:padding="10dp" />
 
         <!-- Description TextView (limited to 1 line) -->
         <TextView
@@ -34,11 +34,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tvReminderTitle"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="0dp"
             android:maxLines="1"
             android:ellipsize="end"
             android:text="Reminder description goes here."
-            android:textColor="@color/teal"
+            android:textColor="@color/reminders"
             android:textSize="16sp"
             android:padding="8dp" />
 
@@ -49,9 +49,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tvReminderDescription"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="0dp"
             android:text="January 2023"
-            android:textColor="@color/teal"
+            android:textColor="@color/reminders"
             android:textSize="16sp"
             android:padding="8dp" />
 
@@ -62,9 +62,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tvReminderDate"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="0dp"
             android:text="12:00 PM"
-            android:textColor="@color/teal"
+            android:textColor="@color/reminders"
             android:textSize="16sp"
             android:padding="8dp" />
 

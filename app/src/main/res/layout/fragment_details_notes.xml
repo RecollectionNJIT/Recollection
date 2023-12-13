@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetailsNotesFragment"
-    android:background="@color/teal">
+    android:background="@color/notes_bg">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,13 +16,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="150dp"
-            android:layout_marginBottom="16dp"
             android:gravity="top|center"
             android:textStyle="bold"
             android:text="Title"
             android:textColor="@color/white"
             android:textSize="24sp"
-            app:layout_constraintBottom_toTopOf="@+id/detailsBodyTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -32,11 +30,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            android:layout_marginTop="50dp"
             android:gravity="center_horizontal"
             android:text="Body"
             android:textColor="@color/white"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/detailsImageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detailsTitleTextView" />
@@ -44,25 +42,23 @@
 
         <ImageButton
             android:id="@+id/btnUpdateDB"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@null"
-            app:srcCompat="@drawable/edit"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:theme="@style/White"
-            android:textColor="@color/teal"
-            app:layout_constraintTop_toBottomOf="@+id/detailsBodyTextView" />
+            android:layout_marginBottom="100dp"
+            app:srcCompat="@drawable/edit_note" />
 
         <ImageView
             android:id="@+id/detailsImageView"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnUpdateDB" />
+            app:layout_constraintTop_toBottomOf="@+id/detailsBodyTextView" />
 
 
 

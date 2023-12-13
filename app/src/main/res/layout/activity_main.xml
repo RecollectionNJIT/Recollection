@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@color/teal">
+    android:background="@color/white">
 
     <FrameLayout
         android:id="@+id/main_frame_layout"
@@ -28,7 +28,7 @@
         app:itemIconTint="@drawable/bottom_navigation_selector"
         android:background="@color/dark_teal"
         app:labelVisibilityMode="labeled"
-        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator">
+        app:itemActiveIndicatorStyle="@style/navBarHomeIndicator">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 

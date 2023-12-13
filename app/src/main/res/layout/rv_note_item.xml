@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:textColor="@color/teal"
+            android:textColor="@color/notes"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_centerHorizontal="true"
@@ -31,10 +31,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:textColor="@color/teal"
+            android:textColor="@color/notes"
             android:layout_below="@id/noteRVTitle"
             android:textSize="20sp"
-            android:textStyle="bold"
             android:padding="8dp"
             android:layout_centerHorizontal="true" />
 

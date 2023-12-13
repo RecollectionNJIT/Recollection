@@ -42,6 +42,7 @@ class DetailsFinancesFragment : Fragment() {
     private val entries = mutableListOf<FinanceEntry>()
     private lateinit var view: View
     private lateinit var financeEntryTable: TableLayout
+    private var i = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -54,11 +55,12 @@ class DetailsFinancesFragment : Fragment() {
         val type = activity?.intent?.extras?.getString("type")
         financeEntryTable = view.findViewById<TableLayout>(R.id.financeEntryTable)
 
+        requireActivity().window.statusBarColor = ContextCompat.getColor(view.context, R.color.finance)
+
         // Change UI text to match the caller
         if (type != "alltime") {
             view.findViewById<TextView>(R.id.tvFinanceDetailsHeader).text = "Viewing: " + type
         }
-
         // Get all entries from database, sorted by date.
         val auth = FirebaseAuth.getInstance()
         val databaseRef = Firebase.database.reference
@@ -96,9 +98,13 @@ class DetailsFinancesFragment : Fragment() {
         return view
     }
     fun addRow(view:View, entry: FinanceEntry) {
+        i++
         // Create new Row
         val newTableRow = TableRow(view.context)
-        newTableRow.background = ContextCompat.getDrawable(view.context, R.color.white)
+        if (i % 2 == 0)
+            newTableRow.background = ContextCompat.getDrawable(view.context, R.color.white)
+        else
+            newTableRow.background = ContextCompat.getDrawable(view.context, R.color.light_gray)
 
         // Create new TextViews
         val dateTV = TextView(view.context)
@@ -109,21 +115,21 @@ class DetailsFinancesFragment : Fragment() {
         // Get info from Finance Entry and style the TextViews
         dateTV.text = entry.date
         dateTV.gravity = Gravity.CENTER_HORIZONTAL
-        dateTV.setTextColor(ContextCompat.getColor(view.context, R.color.teal))
+        dateTV.setTextColor(ContextCompat.getColor(view.context, R.color.finance))
         dateTV.textSize = 15F
         dateTV.setPadding(10)
         newTableRow.addView(dateTV)
 
         typeTV.text = entry.type
         typeTV.gravity = Gravity.CENTER_HORIZONTAL
-        typeTV.setTextColor(ContextCompat.getColor(view.context, R.color.teal))
+        typeTV.setTextColor(ContextCompat.getColor(view.context, R.color.finance))
         typeTV.textSize = 15F
         typeTV.setPadding(10)
         newTableRow.addView(typeTV)
 
         categoryTV.text = entry.category
         categoryTV.gravity = Gravity.CENTER_HORIZONTAL
-        categoryTV.setTextColor(ContextCompat.getColor(view.context, R.color.teal))
+        categoryTV.setTextColor(ContextCompat.getColor(view.context, R.color.finance))
         categoryTV.textSize = 15F
         categoryTV.setPadding(10)
         newTableRow.addView(categoryTV)
@@ -131,7 +137,7 @@ class DetailsFinancesFragment : Fragment() {
         amountTV.text = "$" + String.format("%.2f", entry.amount)
         amountTV.gravity = Gravity.CENTER_HORIZONTAL
         amountTV.textAlignment = View.TEXT_ALIGNMENT_GRAVITY
-        amountTV.setTextColor(ContextCompat.getColor(view.context, R.color.teal))
+        amountTV.setTextColor(ContextCompat.getColor(view.context, R.color.finance))
         amountTV.textSize = 15F
         amountTV.setPadding(10)
 
@@ -149,6 +155,8 @@ class DetailsFinancesFragment : Fragment() {
         newTableRow.setOnLongClickListener(object : View.OnLongClickListener {
             override fun onLongClick(v: View?): Boolean {
                 val auth = FirebaseAuth.getInstance()
+                if (entry.addToCalendar == true)
+                    Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(entry.key!!).child("addToCalendar").setValue("false")
                 Firebase.database.reference.child("users").child(auth.uid!!).child("finances").child(entry.key!!).removeValue()
                 financeEntryTable.removeView(newTableRow)
                 Toast.makeText(view.context, "Entry Deleted!", Toast.LENGTH_SHORT).show()
@@ -167,8 +175,8 @@ class DetailsFinancesFragment : Fragment() {
         pieChart.setDragDecelerationFrictionCoef(0.95f)
 
         pieChart.setDrawHoleEnabled(true)
-        pieChart.setHoleColor(ContextCompat.getColor(view.context, R.color.teal))
-        pieChart.setTransparentCircleColor(ContextCompat.getColor(view.context, R.color.teal))
+        pieChart.setHoleColor(ContextCompat.getColor(view.context, R.color.finance_bg))
+        pieChart.setTransparentCircleColor(ContextCompat.getColor(view.context, R.color.finance_bg))
         pieChart.setTransparentCircleAlpha(110)
         pieChart.setHoleRadius(55f)
         pieChart.setTransparentCircleRadius(58f)

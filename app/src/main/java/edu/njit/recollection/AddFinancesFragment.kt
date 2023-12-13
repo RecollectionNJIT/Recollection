@@ -16,6 +16,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.firebase.Firebase
@@ -38,6 +39,9 @@ class AddFinancesFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add_finances, container, false)
+
+        requireActivity().window.statusBarColor = ContextCompat.getColor(view.context, R.color.finance)
+
         // Instantiate all variables
         selectDateET = view.findViewById(R.id.selectDateET)
         val typeSpinner = view.findViewById<Spinner>(R.id.typeSpinner)

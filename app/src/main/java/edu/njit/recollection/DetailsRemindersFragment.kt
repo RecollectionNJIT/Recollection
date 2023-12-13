@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.firebase.Firebase
@@ -38,6 +39,7 @@ class DetailsRemindersFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_details_reminders, container, false)
+        requireActivity().window.statusBarColor = ContextCompat.getColor(view.context, R.color.reminders)
 
         // Initialize UI elements
         editTitle = view.findViewById<TextView>(R.id.editTitle)

@@ -4,6 +4,7 @@ import WeatherValue
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.icu.text.SimpleDateFormat
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -15,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,9 +40,9 @@ import com.google.firebase.database.database
 import okhttp3.Headers
 import org.json.JSONException
 import org.json.JSONObject
-import org.w3c.dom.Text
 import java.text.DecimalFormat
 import java.time.LocalDate
+import java.util.Locale
 
 
 class MainHomeFragment : Fragment() {
@@ -69,11 +69,14 @@ class MainHomeFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_main_home, container, false)
 
+        requireActivity().window.statusBarColor = ContextCompat.getColor(view.context, R.color.teal)
+        bottomNavigationView.setBackgroundColor(ContextCompat.getColor(view.context, R.color.dark_teal))
+        bottomNavigationView.itemActiveIndicatorColor = ContextCompat.getColorStateList(view.context, R.color.teal)
+
         view.findViewById<ImageButton>(R.id.btnSettings).setOnClickListener {
             val i = Intent(view.context, SettingsActivity::class.java)
             startActivity(i)
         }
-
 
         calendarCV = view.findViewById(R.id.cvHomepageCalendar)
         financeCV = view.findViewById(R.id.cvHomepageFinance)
@@ -82,7 +85,6 @@ class MainHomeFragment : Fragment() {
 
         createCalendarCV(view)
         createFinanceCV(view)
-
         createRemindersCV(view)
         createWeatherCV(view)
 
@@ -134,11 +136,17 @@ class MainHomeFragment : Fragment() {
             }
         })
 
-        recycler.setOnClickListener{
+        recycler.setOnClickListener {
+            replaceFragment(MainCalendarFragment())
+            bottomNavigationView.selectedItemId = R.id.nav_calendar
+        }
+
+        calendarCV.setOnClickListener {
             replaceFragment(MainCalendarFragment())
             bottomNavigationView.selectedItemId = R.id.nav_calendar
         }
     }
+
     fun createFinanceCV(view: View) {
         financeEntries.clear()
         val auth = FirebaseAuth.getInstance()
@@ -190,7 +198,6 @@ class MainHomeFragment : Fragment() {
         barChart.description = description
 
         view.findViewById<TextView>(R.id.tvFinanceChartHeader).text = filterMonth
-
 
         barChart.legend.isEnabled = false
         barChart.setPinchZoom(false)
@@ -273,16 +280,20 @@ class MainHomeFragment : Fragment() {
 
     fun createRemindersCV(view: View) {
         val recycler = remindersCV.findViewById<RecyclerView>(R.id.homeRemindersRecyclerView)
+        val text = remindersCV.findViewById<TextView>(R.id.homeRemindersNoEvent)
         val reminders = mutableListOf<Reminders>()
         reminders.clear()
 
-        val adapter = RemindersAdapter(view.context, reminders)
+        val adapter = HomeRemindersAdapter(view.context, reminders, activity)
         recycler.adapter = adapter
 
         val auth = FirebaseAuth.getInstance()
         val databaseRef = Firebase.database.reference
 
-        databaseRef.child("users").child(auth.uid!!).child("reminders").addValueEventListener(object :
+        val newFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
+        val oldFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+
+        databaseRef.child("users").child(auth.uid!!).child("reminders").orderByChild("date").equalTo(newFormat.format(oldFormat.parse(LocalDate.now().toString()))).addValueEventListener(object :
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 reminders.clear()
@@ -293,34 +304,40 @@ class MainHomeFragment : Fragment() {
                     val time = child.child("time").getValue().toString()
                     val id = child.key
                     val reminder = Reminders(title, description, date, time, id)
+                    reminder.addToCal = child.child("addToCal").getValue().toString().toBoolean()
+                    reminder.addToNotes = child.child("addToNotes").getValue().toString().toBoolean()
                     reminders.add(reminder)
                 }
                 // Check if reminders list is empty
                 if (reminders.isEmpty()) {
                     // If empty, add a default reminder with the message
-                    val defaultReminder = Reminders("", "You have no reminders to show!", "", "", null)
-                    reminders.add(defaultReminder)
+//                    val defaultReminder = Reminders("", "You have no reminders to show!", "", "", null)
+//                    reminders.add(defaultReminder)
+                    text.visibility = View.VISIBLE
                 }
-
                 adapter.notifyDataSetChanged()
             }
-
             override fun onCancelled(error: DatabaseError) {
                 Log.e("firebaseRemindersMain", "error", Throwable(error.toString()))
             }
         })
+        recycler.setOnClickListener {
+            replaceFragment(MainRemindersFragment())
+            bottomNavigationView.selectedItemId = R.id.nav_reminders
+        }
+        remindersCV.setOnClickListener {
+            replaceFragment(MainRemindersFragment())
+            bottomNavigationView.selectedItemId = R.id.nav_reminders
+        }
+        text.setOnClickListener {
+            replaceFragment(MainRemindersFragment())
+            bottomNavigationView.selectedItemId = R.id.nav_reminders
+        }
     }
-    private fun createWeatherCV(view: View) {
-            getLatLong()
-
-    }
-
-    private fun getLatLong() {
+    fun createWeatherCV(view: View) {
         val apiLatLong = "http://ip-api.com/json/"
         val client = AsyncHttpClient()
         client.get(apiLatLong, object : JsonHttpResponseHandler() {
-
-
             override fun onSuccess(
                 statusCode: Int,
                 headers: Headers?,
@@ -357,8 +374,6 @@ class MainHomeFragment : Fragment() {
             }
         })
     }
-
-
     private fun getWeather(lat: String, long: String) {
         val firstAPIcall = "https://api.weather.gov/points/$lat,$long"
         val client = AsyncHttpClient()
@@ -390,7 +405,6 @@ class MainHomeFragment : Fragment() {
             }
         })
     }
-
     private fun makeSecondAPICall(secondAPIcall: String) {
         val client = AsyncHttpClient()
 
@@ -419,7 +433,6 @@ class MainHomeFragment : Fragment() {
             }
         })
     }
-
     private fun parseWeatherResponse(json: JSONObject): List<WeatherValue> {
         val periodsArray = json.getJSONObject("properties").getJSONArray("periods")
         weatherVals.clear()
@@ -440,7 +453,6 @@ class MainHomeFragment : Fragment() {
 
         return weatherVals
     }
-
     private fun updateWeatherRecyclerView() {
         rvWeather = view?.findViewById(R.id.homeWeatherRecyclerView)!!
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)

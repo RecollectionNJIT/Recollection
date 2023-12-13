@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/teal"
+    android:background="@color/home_bg"
     tools:context=".SettingsActivity">
 
     <Button
@@ -14,7 +14,7 @@
         android:background="@drawable/rounded_corners"
         android:text="SIGN OUT"
         android:textSize="15dp"
-        android:textColor="@color/dark_teal"
+        android:textColor="@color/teal"
         android:theme="@style/White"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
