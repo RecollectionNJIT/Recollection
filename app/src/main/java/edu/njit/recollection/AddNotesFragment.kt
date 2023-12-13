@@ -286,6 +286,25 @@ class AddNotesFragment : Fragment() {
                     val auth = FirebaseAuth.getInstance()
                     val updateNoteRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(editNote.key!!)
                     updateNoteRef.updateChildren(postValues)
+                    val toCal = editNote.addToCal
+                    val toRem = editNote.addToReminders
+                        if(toCal == true) {
+                            val auth = FirebaseAuth.getInstance()
+                            val updateMap = HashMap<String, Any>()
+                            updateMap["title"] = title
+                            updateMap["description"] = body
+                            val calendarEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(editNote.key!!)
+                            calendarEntryRef.updateChildren(updateMap)
+                        }
+                        if(toRem == true) {
+                            val auth = FirebaseAuth.getInstance()
+                            val updateMap = HashMap<String, Any>()
+                            updateMap["title"] = title
+                            updateMap["description"] = body
+                            val reminderEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("reminders").child(editNote.key!!)
+                            reminderEntryRef.updateChildren(updateMap)
+                        }
+
                     activity?.finish()
                 }
                 // else get the new path that has been edited
@@ -300,6 +319,24 @@ class AddNotesFragment : Fragment() {
                     val auth = FirebaseAuth.getInstance()
                     val updateNoteRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(editNote.key!!)
                     updateNoteRef.updateChildren(postValues)
+                    val toCal = editNote.addToCal
+                    val toRem = editNote.addToReminders
+                    if(toCal == true) {
+                        val auth = FirebaseAuth.getInstance()
+                        val updateMap = HashMap<String, Any>()
+                        updateMap["title"] = title
+                        updateMap["description"] = body
+                        val calendarEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(editNote.key!!)
+                        calendarEntryRef.updateChildren(updateMap)
+                    }
+                    if(toRem == true) {
+                        val auth = FirebaseAuth.getInstance()
+                        val updateMap = HashMap<String, Any>()
+                        updateMap["title"] = title
+                        updateMap["description"] = body
+                        val reminderEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("reminders").child(editNote.key!!)
+                        reminderEntryRef.updateChildren(updateMap)
+                    }
                     activity?.finish()
                 }
             }
@@ -320,13 +357,13 @@ class AddNotesFragment : Fragment() {
                     val time = selectNoteTime.text.toString()
                     val calDate = calendarDate(date)
                     if(toCal) {
-                        val calendarEnt = CalendarEntry(calDate, title, body, time, "N/A", newNote.key)
+                        val calendarEnt = CalendarEntry(calDate, title, body, time, "N/A", newNote.key,toRem ,true)
                         val auth = FirebaseAuth.getInstance()
                         val newCalendarEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(newNote.key!!)
                         newCalendarEntryRef.setValue(calendarEnt)
                     }
                     if(toRem) {
-                        val newRem = Reminders(title,body,date,time,newNote.key)
+                        val newRem = Reminders(title,body,date,time,newNote.key,toCal,true)
                         val auth = FirebaseAuth.getInstance()
                         val newReminderEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("reminders").child(newNote.key!!)
                         newReminderEntryRef.setValue(newRem)
