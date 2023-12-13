@@ -46,7 +46,8 @@ class RemindersAdapter(private val context: Context, private val items: List<Rem
             //i.putExtra("reminder", listItem)
             //context.startActivity(i)
             val intent = Intent(context, DetailsActivity::class.java)
-            intent.putExtra("reminder", listItem)
+            intent.putExtra("fragment","reminders")
+            intent.putExtra("reminder", listItem.key)
             context.startActivity(intent)
         }
     }
