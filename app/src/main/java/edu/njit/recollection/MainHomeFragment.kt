@@ -40,6 +40,7 @@ import com.google.firebase.database.database
 import okhttp3.Headers
 import org.json.JSONException
 import org.json.JSONObject
+import org.w3c.dom.Text
 import java.text.DecimalFormat
 import java.time.LocalDate
 
@@ -49,8 +50,7 @@ class MainHomeFragment : Fragment() {
     lateinit var financeCV: CardView
     lateinit var remindersCV: CardView
     lateinit var weatherCV: CardView
-    lateinit var lat: String
-    lateinit var long: String
+    lateinit var titleView: TextView
 
     private lateinit var rvWeather: RecyclerView
     private lateinit var weatherAdapter: WeatherAdapter
@@ -331,15 +331,13 @@ class MainHomeFragment : Fragment() {
                 try {
                     val lat = json.jsonObject.getDouble("lat").toString()
                     val long = json.jsonObject.getDouble("lon").toString()
+                    val town = json.jsonObject.getString("city")
+                    val region = json.jsonObject.getString("regionName")
+                    titleView = view!!.findViewById(R.id.tvWeatherCV)
+                    titleView.text = "$town, $region"
+
                     getWeather(lat, long)
 
-                    // Now you can use lat and lon as needed
-                    Log.d("WeatherAPI", "Latitude: $lat, Longitude: $long")
-
-                    // Assign lat and lon to your class variables if needed
-                    // For example, if lat and lon are properties of your class, you can assign them like this:
-                    // this.lat = lat
-                    // this.lon = lon
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }

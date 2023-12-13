@@ -160,7 +160,7 @@
                     android:id="@+id/tvWeatherCV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Weather CardView"
+                    android:text="Getting Live Weather"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:textColor="@color/teal"
