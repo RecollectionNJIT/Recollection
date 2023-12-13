@@ -14,18 +14,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.widget.ImageViewCompat
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 import android.Manifest
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.ContentResolver
-import android.content.ContentValues
 import android.graphics.BitmapFactory
 import android.icu.text.SimpleDateFormat
 import android.util.Log
@@ -35,8 +31,6 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
-import java.io.IOException
-import java.io.OutputStream
 import java.util.Calendar
 import java.util.Locale
 import android.util.Base64
@@ -52,14 +46,13 @@ class AddNotesFragment : Fragment() {
     private lateinit var btnTakePhoto: Button
     private lateinit var pageTitle: TextView
     private val CAMERA_PERMISSION_REQUEST = 1001
-    private var imagePathForNote: String? = null
     lateinit var sendToCal : CheckBox
     lateinit var sendToReminders : CheckBox
     lateinit var selectNoteDate: EditText
     lateinit var selectNoteTime: EditText
     lateinit var myCalendar: Calendar
     lateinit var editNote: Note
-    lateinit var photoBase64: String
+    var photoBase64: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -230,29 +223,23 @@ class AddNotesFragment : Fragment() {
             sendToReminders.visibility = View.INVISIBLE
             sendToCal.visibility = View.INVISIBLE
 
-            fun normalizeImageUri(uri: String?): String? {
-                if (uri?.startsWith("/external_primary/images") == true) {
-                    // Handle the relative path case, construct a content URI if possible
-                    // Example: content://media/external/images/media/1000000047
-                    return "content://media$uri"
-                }
-                if (uri?.startsWith("content://media/external/images/media/") == true) {
-                    return uri
-                }
-                val normalizedUri = uri?.substringAfter("/external/images/media/")
-                return "content://media/external/images/media/$normalizedUri"
-            }
+            if (!editNote.imageLocation.isNullOrBlank()) {
+                // Display the selected image in the ImageView using Glide
 
-            val normalizedUri = normalizeImageUri(editNote.imageLocation)
-            if (!normalizedUri.isNullOrBlank()) {
-                Log.d("MyApp", "Loading image from URI: $normalizedUri")
-                Glide.with(requireContext())
-                    .load(normalizedUri)
+                imagePreview.visibility = View.VISIBLE
+
+                // Clear any previous resources
+                Glide.with(this)
+                    .clear(imagePreview)
+
+                // Decode the base64 string into a Bitmap
+                val decodedBytes = Base64.decode(editNote.imageLocation, Base64.DEFAULT)
+                val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+
+                // Load the Bitmap into the ImageView
+                Glide.with(this)
+                    .load(bitmap)
                     .into(imagePreview)
-            } else {
-                Log.d("MyApp", "No image location provided.")
-                // If there is no image, you may want to set a placeholder or handle it in some way
-                imagePreview.setImageDrawable(null) // Set to null or provide a placeholder image
             }
 
         }
@@ -288,7 +275,7 @@ class AddNotesFragment : Fragment() {
             //if it's being edited, won't allow checkboxes or add to calendar
             if(editBool == true) {
                 //check if they swapped the image
-                if(imagePathForNote == null) {
+                if(photoBase64 == null) {
                     val postValues = mapOf(
                         "title" to title,
                         "body" to body,
