@@ -56,28 +56,8 @@ class DetailsNotesFragment : Fragment() {
         titleTextView = view.findViewById<TextView>(R.id.detailsTitleTextView)
         bodyTextView = view.findViewById<TextView>(R.id.detailsBodyTextView)
 
-        val imageView = view.findViewById<ImageView>(R.id.detailsImageView)
+        imageView = view.findViewById<ImageView>(R.id.detailsImageView)
 
-        // Set data to TextViews and ImageView
-        titleTextView.setText(detailNote.title)
-        bodyTextView.setText(detailNote.body)
-
-        if (!detailNote.imageLocation.isNullOrBlank()) {
-            // Display the selected image in the ImageView using Glide
-
-            // Clear any previous resources
-            Glide.with(this)
-                .clear(imageView)
-
-            // Decode the base64 string into a Bitmap
-            val decodedBytes = Base64.decode(detailNote.imageLocation, Base64.DEFAULT)
-            val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-
-            // Load the Bitmap into the ImageView
-            Glide.with(this)
-                .load(bitmap)
-                .into(imageView)
-        }
 
 
         /*if (!detailNote.imageLocation.isNullOrBlank()) {
@@ -146,16 +126,21 @@ class DetailsNotesFragment : Fragment() {
                     titleTextView.text = detailNote.title
                     bodyTextView.text = detailNote.body
 
-                    val normalizedUri = normalizeImageUri(detailNote.imageLocation)
-                    if (!normalizedUri.isNullOrBlank()) {
-                        Log.d("MyApp", "Loading image from URI: $normalizedUri")
+                    if (!detailNote.imageLocation.isNullOrBlank()) {
+                        // Display the selected image in the ImageView using Glide
+
+                        // Clear any previous resources
                         Glide.with(requireContext())
-                            .load(normalizedUri)
+                            .clear(imageView)
+
+                        // Decode the base64 string into a Bitmap
+                        val decodedBytes = Base64.decode(detailNote.imageLocation, Base64.DEFAULT)
+                        val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+
+                        // Load the Bitmap into the ImageView
+                        Glide.with(requireContext())
+                            .load(bitmap)
                             .into(imageView)
-                    } else {
-                        Log.d("MyApp", "No image location provided.")
-                        // If there is no image, you may want to set a placeholder or handle it in some way
-                        imageView.setImageDrawable(null) // Set to null or provide a placeholder image
                     }
                     val updateButton = view!!.findViewById<ImageButton>(R.id.btnUpdateDB)
 
