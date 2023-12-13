@@ -16,7 +16,7 @@
 
 
         <TextView
-            android:id="@+id/calendarHomeTitle"
+            android:id="@+id/reminderHomeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_below="@+id/calendarHomeTitle"
+            android:layout_below="@+id/reminderHomeTitle"
             android:textColor="@color/teal"
             android:orientation="horizontal"
             android:gravity="center"
@@ -43,37 +43,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Start: "
+                android:text="Date: "
                 android:fontFamily="sans-serif"
                 android:textSize="18sp"
                 android:textColor="@color/teal"
                 />
             <TextView
-                android:id="@+id/calendarHomeTimeStart"
+                android:id="@+id/reminderHomeDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time1"
+                android:text="Date"
                 android:textColor="@color/teal"
                 android:fontFamily="sans-serif"
                 android:textSize="18sp"
                 />
             <TextView
-                android:id="@+id/calendarHomeEnd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_weight="1"
                 android:textColor="@color/teal"
-                android:text="End: "
+                android:text="Time: "
                 android:fontFamily="sans-serif"
                 android:textSize="18sp"
                 />
             <TextView
-                android:id="@+id/calendarHomeTimeEnd"
+                android:id="@+id/reminderHomeTimeStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Time2"
+                android:text="Time"
                 android:textColor="@color/teal"
                 android:fontFamily="sans-serif"
                 android:textSize="18sp"
