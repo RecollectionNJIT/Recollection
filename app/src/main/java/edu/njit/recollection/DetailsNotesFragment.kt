@@ -27,6 +27,7 @@ class DetailsNotesFragment : Fragment() {
     private lateinit var titleTextView: TextView
     private lateinit var bodyTextView: TextView
     private lateinit var detailNote: Note
+    private lateinit var imageView: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +53,12 @@ class DetailsNotesFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_details_notes, container, false)
         titleTextView = view.findViewById<TextView>(R.id.detailsTitleTextView)
         bodyTextView = view.findViewById<TextView>(R.id.detailsBodyTextView)
-        val imageView = view.findViewById<ImageView>(R.id.detailsImageView)
+        imageView = view.findViewById<ImageView>(R.id.detailsImageView)
+
+        return view
+    }
+    override fun onStart() {
+        super.onStart()
         val noteKey = activity?.intent?.getSerializableExtra("note").toString()
         val auth = FirebaseAuth.getInstance()
         val notesRef = Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(noteKey)
@@ -87,14 +93,14 @@ class DetailsNotesFragment : Fragment() {
                         // If there is no image, you may want to set a placeholder or handle it in some way
                         imageView.setImageDrawable(null) // Set to null or provide a placeholder image
                     }
-                    val updateButton = view.findViewById<ImageButton>(R.id.btnUpdateDB)
+                    val updateButton = view!!.findViewById<ImageButton>(R.id.btnUpdateDB)
 
                     updateButton.setOnClickListener {
                         //val newTitle = titleTextView.text.toString()
                         //val newBody = bodyTextView.text.toString()
                         Log.v("Details", detailNote.key.toString())
 
-                        val i = Intent(view.context, AddActivity::class.java)
+                        val i = Intent(view!!.context, AddActivity::class.java)
                         i.putExtra("fragment", "notes")
                         i.putExtra("edit", true)
                         i.putExtra("editEntry", detailNote)
@@ -111,8 +117,6 @@ class DetailsNotesFragment : Fragment() {
                 Log.e("FirebaseError", "Error getting data: ${error.message}")
             }
         })
-
-        return view
     }
 
     companion object {
