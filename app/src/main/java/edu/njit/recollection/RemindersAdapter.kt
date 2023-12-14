@@ -1,6 +1,8 @@
 package edu.njit.recollection
 
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
@@ -101,6 +103,23 @@ class RemindersAdapter(private val context: Context, private val items: List<Rem
                 Toast.makeText(context, "Failed to delete reminder", Toast.LENGTH_SHORT).show()
             }
     }
+
+    private fun cancelAlarm(reminder: Reminders) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, ReminderBroadcastReceiver::class.java)
+        val requestCode = reminder.key?.hashCode() ?: 0
+
+        Log.d("AlarmSetup", "key of adapter ${requestCode}")
+        val pendingIntent =
+            PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        // Check if the PendingIntent exists before canceling the alarm
+        if (pendingIntent != null) {
+            alarmManager.cancel(pendingIntent)
+            pendingIntent.cancel()
+        }
+    }
+
     override fun getItemCount(): Int {
         return items.size
     }

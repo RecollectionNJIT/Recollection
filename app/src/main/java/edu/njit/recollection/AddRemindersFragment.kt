@@ -210,6 +210,7 @@ class AddRemindersFragment : Fragment() {
                     view.context, requestCode, intent, PendingIntent.FLAG_IMMUTABLE
                 )
 
+                Log.d("AlarmSetup", "key of add ${requestCode}")
                 Log.d("AlarmSetup", "Setting up alarm for $title at ${myCalendar.time}")
                 Log.d("AlarmSetup", "Setting up alarm for $title at ${currentTime + adjustedAlarmTime}")
 
