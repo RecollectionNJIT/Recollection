@@ -84,6 +84,9 @@ class RemindersAdapter(private val context: Context, private val items: List<Rem
     }
 
     private fun deleteReminder(reminder: Reminders) {
+        // Cancel the alarm associated with the reminder
+        cancelAlarm(reminder)
+
         // Delete the reminder from the Firebase Realtime Database
         val auth = FirebaseAuth.getInstance()
 
