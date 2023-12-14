@@ -157,9 +157,31 @@ GIF created with [ShareX](https://getsharex.com/).
 
 ## Completed user stories
 
-- List the completed user stories from this unit
-- List any pending user stories / any user stories you decided to cut
-from the original requirements
+- Set up Homepage
+- Start Initial Style Passing
+- Show Daily Calendar on Homepage
+- Show daily reminders on Homepage
+- Show monthly financial summary on Homepage
+- Show daily weather on homepage
+- CalendarView Bug Fixes
+- Implement Reminders Push Notifications
+- Calendar To Notes Interconnectivity
+- Notes to Calendar Interconnectivity
+- Notes to Reminders Interconnectivity
+- Reminders to Notes Interconnectivity
+- Reminders to Calendar Interconnectivity
+- Calendar to Reminders Interconnectivity
+- Spreadsheet to Calendar Interconnectivity
+- Calendar to Spreadsheet Interconnectivity
+- Full Style Pass
+
+## Cut user stories
+
+- Google Calendar Integration
+- Google Sheets Integration
+- Layout Responsivity
+- Map Markers
+- Dark Mode
 
 [Add video/gif of your current application that shows build progress]
 <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
