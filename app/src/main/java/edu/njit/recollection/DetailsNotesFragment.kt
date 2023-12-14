@@ -101,6 +101,9 @@ class DetailsNotesFragment : Fragment() {
             activity?.finish()*/
         }
 
+        view.findViewById<ImageButton>(R.id.backFromNotesDVBtn).setOnClickListener {
+            activity?.finish()
+        }
 
         return view
     }
@@ -158,9 +161,6 @@ class DetailsNotesFragment : Fragment() {
                         i.putExtra("editEntry", detailNote)
                         startActivity(i)
                     }
-
-                } else {
-
                 }
             }
 

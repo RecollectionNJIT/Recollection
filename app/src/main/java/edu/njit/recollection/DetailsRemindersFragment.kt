@@ -47,6 +47,10 @@ class DetailsRemindersFragment : Fragment() {
         editDate = view.findViewById<TextView>(R.id.editDate)
         editTime = view.findViewById<TextView>(R.id.editTime)
 
+        view.findViewById<ImageButton>(R.id.backFromRemDVBtn).setOnClickListener {
+            activity?.finish()
+        }
+
         return view
     }
 
@@ -93,9 +97,6 @@ class DetailsRemindersFragment : Fragment() {
                         i.putExtra("editEntry", detailReminder)
                         startActivity(i)
                     }
-
-                } else {
-
                 }
             }
 

@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide
 import java.util.Calendar
 import java.util.Locale
 import android.util.Base64
+import android.widget.ImageButton
 import java.io.ByteArrayOutputStream
 
 
@@ -374,12 +375,11 @@ class AddNotesFragment : Fragment() {
                 }
                 activity?.finish()
             }
-
-
-
             activity?.finish()
         }
-
+        view.findViewById<ImageButton>(R.id.backFromAddNoteBtn).setOnClickListener {
+            activity?.finish()
+        }
         return view
     }
 

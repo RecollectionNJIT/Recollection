@@ -2,6 +2,7 @@ package edu.njit.recollection
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -15,6 +16,10 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.teal)
+
+        findViewById<ImageButton>(R.id.backFromSettingsBtn).setOnClickListener {
+            finish()
+        }
 
         val auth = FirebaseAuth.getInstance()
 

@@ -10,6 +10,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
@@ -94,6 +95,9 @@ class DetailsFinancesFragment : Fragment() {
                     Log.e("firebaseFinanceAdd", "error", Throwable(error.toString()))
                 }
             })
+        view.findViewById<ImageButton>(R.id.backFromFinDVBtn).setOnClickListener {
+            activity?.finish()
+        }
 
         return view
     }

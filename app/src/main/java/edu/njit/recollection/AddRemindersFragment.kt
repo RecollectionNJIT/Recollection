@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -236,6 +237,10 @@ class AddRemindersFragment : Fragment() {
                 }
                 activity?.finish()
             }
+            activity?.finish()
+        }
+
+        view.findViewById<ImageButton>(R.id.backFromAddRemBtn).setOnClickListener {
             activity?.finish()
         }
 

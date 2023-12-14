@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -143,7 +144,7 @@ class AddCalendarFragment : Fragment() {
             sendToReminder.isChecked = addToRemindersBool!!
             sendToNotes.isChecked = addToNotesBool!!
 
-            activityTitle.setText("Edit Calendar Event")
+            activityTitle.setText("Editing Event")
             titleEditText.setText( activity?.intent?.extras?.getString("title"))
             descriptionEditText.setText(activity?.intent?.extras?.getString("description"))
             startTime.setText(activity?.intent?.extras?.getString("timeStart"))
@@ -316,6 +317,10 @@ class AddCalendarFragment : Fragment() {
                     Toast.makeText(this.context,errMsg, Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+
+        view.findViewById<ImageButton>(R.id.backFromAddCalBtn).setOnClickListener {
+            activity?.finish()
         }
         return view
     }
