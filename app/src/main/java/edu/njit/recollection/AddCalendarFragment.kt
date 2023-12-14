@@ -1,10 +1,14 @@
 package edu.njit.recollection
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.text.InputFilter
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +20,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.google.common.primitives.Longs
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
@@ -32,6 +37,7 @@ class AddCalendarFragment : Fragment() {
     private lateinit var saveButton: Button
     private lateinit var sendToReminder : CheckBox
     private lateinit var sendToNotes : CheckBox
+    private lateinit var myEndCalendar: Calendar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +74,7 @@ class AddCalendarFragment : Fragment() {
 
         // Inflate the layout for this fragment
         myCalendar = Calendar.getInstance()
+        myEndCalendar = Calendar.getInstance()
 
         val timeListener =
             TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
@@ -77,8 +84,8 @@ class AddCalendarFragment : Fragment() {
             }
         val timeListener2 =
             TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                myCalendar.set(Calendar.MINUTE, minute)
+                myEndCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                myEndCalendar.set(Calendar.MINUTE, minute)
                 updateTimeLabel(endTime)
             }
         startTime.setOnClickListener {
@@ -96,8 +103,8 @@ class AddCalendarFragment : Fragment() {
             val tpd = TimePickerDialog(
                 view.context,
                 timeListener2,
-                myCalendar.get(Calendar.HOUR_OF_DAY),
-                myCalendar.get(Calendar.MINUTE),
+                myEndCalendar.get(Calendar.HOUR_OF_DAY),
+                myEndCalendar.get(Calendar.MINUTE),
                 false
             )
             tpd.show()
@@ -283,6 +290,43 @@ class AddCalendarFragment : Fragment() {
                             Firebase.database.reference.child("users").child(auth.uid!!)
                                 .child("reminders").child(event.key!!)
                         newReminderEntryRef.setValue(reminderEnt)
+
+                        // Inside createReminderBtn.setOnClickListener
+                        val alarmManager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+                        // Get the current time in milliseconds
+                        val currentTime = System.currentTimeMillis()
+
+                        // Get the time difference between the current time and the reminder time
+                        val timeDifference = myCalendar.timeInMillis - currentTime
+
+                        // Schedule an alarm 10 minutes before the reminder time
+                        val tenMinutesInMillis = 10 * 60 * 1000
+                        val alarmTime = timeDifference - tenMinutesInMillis
+
+                        // Ensure alarmTime is at least 0 to avoid negative values
+                        val adjustedAlarmTime = Longs.max(alarmTime, 0)
+
+                        val intent = Intent(view.context, ReminderBroadcastReceiver::class.java)
+                        intent.putExtra("title", title)  // pass necessary data to the receiver
+
+                        // Use a unique request code for each notification (e.g., reminder ID)
+                        val requestCode = newReminderEntryRef.key.hashCode()  // assuming newRem.key is unique
+
+                        // Add FLAG_IMMUTABLE to the PendingIntent creation
+                        val pendingIntent = PendingIntent.getBroadcast(
+                            view.context, requestCode, intent, PendingIntent.FLAG_IMMUTABLE
+                        )
+
+                        Log.d("AlarmSetup", "key of add ${requestCode}")
+                        Log.d("AlarmSetup", "Setting up alarm for $title for ${myCalendar.time}")
+                        Log.d("AlarmSetup", "Setting up alarm for $title at ${currentTime + adjustedAlarmTime}")
+
+                        alarmManager.set(
+                            AlarmManager.RTC_WAKEUP,
+                            currentTime + adjustedAlarmTime,
+                            pendingIntent
+                        )
                     }
 
                     if (sendToFinances.isChecked) {
@@ -353,3 +397,4 @@ class AddCalendarFragment : Fragment() {
         text.setText(timeFormat.format(myCalendar.time))
     }
 }
+//
