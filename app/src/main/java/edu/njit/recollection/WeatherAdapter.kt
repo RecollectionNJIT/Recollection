@@ -31,6 +31,7 @@ class WeatherAdapter (private val context: Context, private val weatherList: Lis
         holder.weatherNameView.text = item.name
         holder.weatherTempView.text = item.temperature.toString() + "°"
         val forecast = item.shortForecast
+        val day = item.isDaytime
         when {
             forecast.contains("Rain") -> {
                 holder.weatherImage.setImageResource(R.drawable.rain)
@@ -40,6 +41,12 @@ class WeatherAdapter (private val context: Context, private val weatherList: Lis
             }
             forecast.contains("Clear") -> {
                 holder.weatherImage.setImageResource(R.drawable.clear)
+            }
+            forecast.contains("Snow") -> {
+            holder.weatherImage.setImageResource(R.drawable.snow)
+            }
+            day == false -> {
+                holder.weatherImage.setImageResource(R.drawable.cloudy)
             }
             forecast.contains("Mostly Cloudy") -> {
                 holder.weatherImage.setImageResource(R.drawable.mostly_cloudy)
@@ -56,9 +63,7 @@ class WeatherAdapter (private val context: Context, private val weatherList: Lis
             forecast.contains("Sunny") -> {
                 holder.weatherImage.setImageResource(R.drawable.sunny)
             }
-            forecast.contains("Snow") -> {
-                holder.weatherImage.setImageResource(R.drawable.snow)
-            }
+
             // Add more cases as needed
 
             else -> {
