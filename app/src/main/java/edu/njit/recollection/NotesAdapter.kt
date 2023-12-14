@@ -49,6 +49,10 @@ class NotesAdapter (private val context: Context, private val notesList: Mutable
         holder.itemView.setOnLongClickListener(object : View.OnLongClickListener {
             override fun onLongClick(v: View?): Boolean {
                 val auth = FirebaseAuth.getInstance()
+                if (note.addToCal == true)
+                    Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(note.key!!).child("addToNotes").setValue("false")
+                if (note.addToReminders == true)
+                    Firebase.database.reference.child("users").child(auth.uid!!).child("reminders").child(note.key!!).child("addToNotes").setValue("false")
                 Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(note.key!!).removeValue()
                 notesList.removeAt(position)
                 notifyItemRemoved(position)

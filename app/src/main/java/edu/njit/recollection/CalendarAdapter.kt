@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -68,6 +69,13 @@ class CalendarAdapter(
 
         holder.itemView.setOnLongClickListener(object : View.OnLongClickListener {
             override fun onLongClick(v: View?): Boolean {
+                if (day.addToFinances == true)
+                    Firebase.database.reference.child("users").child(auth.uid!!).child("finances").child(day.key!!).child("addToCalendar").setValue("false")
+                if (day.addToNotes == true)
+                    Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(day.key!!).child("addToCal").setValue("false")
+                if (day.addToReminders == true)
+                    Firebase.database.reference.child("users").child(auth.uid!!).child("reminders").child(day.key!!).child("addToCal").setValue("false")
+
                 Firebase.database.reference.child("users").child(auth.uid!!).child("calendar")
                     .child(day.key!!).removeValue()
 //                Log.v("removed item and checking list", "" + calendarList)

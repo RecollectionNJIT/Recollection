@@ -60,7 +60,7 @@ class DetailsFinancesFragment : Fragment() {
 
         // Change UI text to match the caller
         if (type != "alltime") {
-            view.findViewById<TextView>(R.id.tvFinanceDetailsHeader).text = "Viewing: " + type
+            view.findViewById<TextView>(R.id.tvFinanceDetailsHeader).text = type
         }
         // Get all entries from database, sorted by date.
         val auth = FirebaseAuth.getInstance()
@@ -160,7 +160,7 @@ class DetailsFinancesFragment : Fragment() {
             override fun onLongClick(v: View?): Boolean {
                 val auth = FirebaseAuth.getInstance()
                 if (entry.addToCalendar == true)
-                    Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(entry.key!!).child("addToCalendar").setValue("false")
+                    Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(entry.key!!).child("addToFinances").setValue("false")
                 Firebase.database.reference.child("users").child(auth.uid!!).child("finances").child(entry.key!!).removeValue()
                 financeEntryTable.removeView(newTableRow)
                 Toast.makeText(view.context, "Entry Deleted!", Toast.LENGTH_SHORT).show()
