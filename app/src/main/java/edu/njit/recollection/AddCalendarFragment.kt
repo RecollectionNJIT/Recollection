@@ -86,7 +86,7 @@ class AddCalendarFragment : Fragment() {
             TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
                 myEndCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
                 myEndCalendar.set(Calendar.MINUTE, minute)
-                updateTimeLabel(endTime)
+                updateEndTimeLabel(endTime)
             }
         startTime.setOnClickListener {
             val tpd = TimePickerDialog(
@@ -395,6 +395,12 @@ class AddCalendarFragment : Fragment() {
         val myFormat = "hh:mm a"
         val timeFormat = SimpleDateFormat(myFormat, Locale.US)
         text.setText(timeFormat.format(myCalendar.time))
+    }
+
+    private fun updateEndTimeLabel(text : EditText) {
+        val myFormat = "hh:mm a"
+        val timeFormat = SimpleDateFormat(myFormat, Locale.US)
+        text.setText(timeFormat.format(myEndCalendar.time))
     }
 }
 //
