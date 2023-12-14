@@ -437,7 +437,7 @@ class MainHomeFragment : Fragment() {
         val periodsArray = json.getJSONObject("properties").getJSONArray("periods")
         weatherVals.clear()
 
-        for (i in 0 until minOf(periodsArray.length(), 7)) {
+        for (i in 0 until minOf(periodsArray.length(), 14)) {
             val periodObject = periodsArray.getJSONObject(i)
 
             val number = periodObject.getInt("number")
