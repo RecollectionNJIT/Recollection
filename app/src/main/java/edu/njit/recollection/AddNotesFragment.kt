@@ -125,7 +125,7 @@ class AddNotesFragment : Fragment() {
             val bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, selectedImageUri)
 
             // Resize the bitmap to a lower resolution (e.g., 800x600)
-            val resizedBitmap = resizeBitmap(bitmap, 400, 600)
+            val resizedBitmap = resizeBitmap(bitmap, 600, 800)
 
             // Convert the resized bitmap to Base64
             photoBase64 = savePhotoAndGetBase64(resizedBitmap)
