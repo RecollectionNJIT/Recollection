@@ -222,7 +222,7 @@ class AddRemindersFragment : Fragment() {
 
                 if (calendar) {
                     val calendarEnt =
-                        CalendarEntry(calDate, title, description, time, "N/A", newRem.key)
+                        CalendarEntry(calDate, title, description, time, "N/A", newRem.key, true , notes)
                     val newCalendarEntryRef =
                         Firebase.database.reference.child("users").child(auth.uid!!).child("calendar")
                             .child(newRem.key!!)
@@ -230,7 +230,7 @@ class AddRemindersFragment : Fragment() {
                 }
 
                 if (notes) {
-                    val notesEnt = Note(title, description, "N/A", newRem.key)
+                    val notesEnt = Note(title, description, "N/A", newRem.key, true ,calendar)
                     val newNotesEntryRef =
                         Firebase.database.reference.child("users").child(auth.uid!!).child("notes")
                             .child(newRem.key!!)

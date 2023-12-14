@@ -84,6 +84,8 @@ class MainRemindersFragment : Fragment() {
                     val time = child.child("time").getValue().toString()
                     val id = child.key // Get the ID from the database
                     val newRem = Reminders(title, description, date, time, id)
+                    newRem.addToCal = child.child("addToCal").getValue().toString().toBoolean()
+                    newRem.addToNotes = child.child("addToNotes").getValue().toString().toBoolean()
                     items.add(newRem)
                 }
 

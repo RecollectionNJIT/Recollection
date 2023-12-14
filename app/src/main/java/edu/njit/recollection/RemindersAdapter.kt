@@ -91,12 +91,12 @@ class RemindersAdapter(private val context: Context, private val items: List<Rem
         val auth = FirebaseAuth.getInstance()
 
         if (reminder.addToNotes == true)
-            Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(reminder.key!!).child("addToReminders").setValue("false")
+            Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(reminder.key!!).child("addToReminders").setValue(false)
         if (reminder.addToCal == true)
-            Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(reminder.key!!).child("addToReminders").setValue("false")
+            Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(reminder.key!!).child("addToReminders").setValue(false)
         val databaseRef = FirebaseDatabase.getInstance().reference
         val reminderRef = databaseRef.child("users").child(auth.uid!!)
-            .child("reminders").child(reminder.key ?: "")
+            .child("reminders").child(reminder.key!!)
 
         reminderRef.removeValue()
             .addOnSuccessListener {

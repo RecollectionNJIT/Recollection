@@ -87,8 +87,11 @@ class MainNotesFragment : Fragment() {
                     val body = child.child("body").getValue().toString()
                     val imageLoc = child.child("imageLocation").getValue().toString()
                     val key = child.key
-                    val newNote = Note(title, body, imageLoc, key)
+                    val toCal = child.child("addToCal").getValue().toString().toBoolean()
+                    val toRem = child.child("addToReminders").getValue().toString().toBoolean()
+                    val newNote = Note(title, body, imageLoc, key, toRem, toCal)
                     notes.add(newNote)
+
                     adapter.notifyDataSetChanged()
                 }
             }

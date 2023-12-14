@@ -212,7 +212,7 @@ class AddCalendarFragment : Fragment() {
                     if (sendToReminder.isChecked) {
                         val reminderDate = reminderDate(date!!)
                         //Log.v("Reminder Date", ""+reminderDate)
-                        val reminderEnt = Reminders(title, description, reminderDate, start, "")
+                        val reminderEnt = Reminders(title, description, reminderDate, start, key, true, sendToNotes.isChecked)
                         val newReminderEntryRef =
                             Firebase.database.reference.child("users").child(auth.uid!!)
                                 .child("reminders").child(key!!)
@@ -220,7 +220,7 @@ class AddCalendarFragment : Fragment() {
                     }
 
                     if (sendToNotes.isChecked) {
-                        val noteEnt = Note(title, description, "")
+                        val noteEnt = Note(title, description, "", key, sendToReminder.isChecked ,true)
                         val newNoteEntryRef =
                             Firebase.database.reference.child("users").child(auth.uid!!)
                                 .child("notes").child(key!!)
@@ -282,7 +282,7 @@ class AddCalendarFragment : Fragment() {
                             description,
                             reminderDate,
                             start,
-                            "",
+                            event.key,
                             addToCal = true,
                             addToNotes = sendToNotes.isChecked
                         )
@@ -346,7 +346,7 @@ class AddCalendarFragment : Fragment() {
                     }
 
                     if (sendToNotes.isChecked) {
-                        val noteEnt = Note(title, description, "")
+                        val noteEnt = Note(title, description, "", event.key, sendToReminder.isChecked, true)
                         val newNoteEntryRef =
                             Firebase.database.reference.child("users").child(auth.uid!!)
                                 .child("notes").child(event.key!!)
