@@ -353,3 +353,4 @@ class AddCalendarFragment : Fragment() {
         text.setText(timeFormat.format(myCalendar.time))
     }
 }
+//
