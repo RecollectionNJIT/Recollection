@@ -24,8 +24,7 @@
             android:text="Reminder Title"
             android:textColor="@color/reminders"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:padding="10dp" />
+            android:textStyle="bold"/>
 
         <!-- Description TextView (limited to 1 line) -->
         <TextView
@@ -39,8 +38,7 @@
             android:ellipsize="end"
             android:text="Reminder description goes here."
             android:textColor="@color/reminders"
-            android:textSize="16sp"
-            android:padding="8dp" />
+            android:textSize="16sp" />
 
         <!-- Date TextView -->
         <TextView
