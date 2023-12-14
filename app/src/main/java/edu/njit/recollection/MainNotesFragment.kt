@@ -62,12 +62,9 @@ class MainNotesFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        // Update RecyclerView & Create Pie Chart
+        // Call the new method within onViewCreated
         updateRV()
     }
-
-
-
 
     companion object {
         fun newInstance() : MainNotesFragment {
@@ -81,7 +78,7 @@ class MainNotesFragment : Fragment() {
         val databaseRef = Firebase.database.reference
         databaseRef.child("users").child(auth.uid!!).child("notes").addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val note = mutableListOf<String>()
+                notes.clear()
                 for (child in snapshot.children) {
                     val title = child.child("title").getValue().toString()
                     val body = child.child("body").getValue().toString()
@@ -91,9 +88,8 @@ class MainNotesFragment : Fragment() {
                     val toRem = child.child("addToReminders").getValue().toString().toBoolean()
                     val newNote = Note(title, body, imageLoc, key, toRem, toCal)
                     notes.add(newNote)
-
-                    adapter.notifyDataSetChanged()
                 }
+                adapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {

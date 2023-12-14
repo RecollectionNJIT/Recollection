@@ -1,5 +1,6 @@
 package edu.njit.recollection
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
@@ -34,6 +35,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import java.text.DecimalFormat
@@ -158,16 +160,41 @@ class DetailsFinancesFragment : Fragment() {
         newTableRow.addView(amountTV)
         newTableRow.setOnLongClickListener(object : View.OnLongClickListener {
             override fun onLongClick(v: View?): Boolean {
-                val auth = FirebaseAuth.getInstance()
-                if (entry.addToCalendar == true)
-                    Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(entry.key!!).child("addToFinances").setValue("false")
-                Firebase.database.reference.child("users").child(auth.uid!!).child("finances").child(entry.key!!).removeValue()
-                financeEntryTable.removeView(newTableRow)
-                Toast.makeText(view.context, "Entry Deleted!", Toast.LENGTH_SHORT).show()
+                showDeleteConfirmationDialog(entry, newTableRow)
                 return true
             }
         })
         financeEntryTable.addView(newTableRow)
+    }
+    private fun showDeleteConfirmationDialog(entry: FinanceEntry, newTableRow: TableRow) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Delete Finance Entry")
+        builder.setMessage("Are you sure you want to delete this finance entry?")
+
+        builder.setPositiveButton("Delete") { _, _ ->
+            deleteEntry(entry, newTableRow)
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    private fun deleteEntry(entry: FinanceEntry, newTableRow: TableRow) {
+        val auth = FirebaseAuth.getInstance()
+        if (entry.addToCalendar == true)
+            Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(entry.key!!).child("addToFinances").setValue("false")
+        Firebase.database.reference.child("users").child(auth.uid!!).child("finances").child(entry.key!!).removeValue()
+            .addOnSuccessListener {
+                Toast.makeText(context, "Finance Entry Deleted!", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(context, "Failed to delete Finance Entry.", Toast.LENGTH_SHORT).show()
+            }
+        financeEntryTable.removeView(newTableRow)
     }
     fun createPieChart(view: View) {
         val pieChart = view.findViewById<PieChart>(R.id.detailsPieChart)

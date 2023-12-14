@@ -76,7 +76,6 @@ class MainRemindersFragment : Fragment() {
         remindersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 items.clear()
-
                 for (child in snapshot.children) {
                     val title = child.child("title").getValue().toString()
                     val description = child.child("description").getValue().toString()
@@ -88,7 +87,6 @@ class MainRemindersFragment : Fragment() {
                     newRem.addToNotes = child.child("addToNotes").getValue().toString().toBoolean()
                     items.add(newRem)
                 }
-
                 adapter.notifyDataSetChanged()
             }
 
