@@ -188,4 +188,4 @@ GIF created with [ShareX](https://getsharex.com/).
 
 ## App Demo Video
 
-- Embed the YouTube/Vimeo link of your Completed Demo Day prep video
+[Watch the demo here!](https://youtu.be/0SmG0utlfsc)
