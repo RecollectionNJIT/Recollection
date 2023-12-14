@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -164,7 +165,7 @@ class AddFinancesFragment : Fragment() {
                     val newCalendarEntryRef = Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(newFinanceEntry.key!!)
                     val calendarDate = calendarDate(selectDateET.text.toString())
                     val newCalendarEntry = CalendarEntry(calendarDate,"Payday",
-                        "Amount: $" + DecimalFormat("###,###,##0.00").format(itemPriceET.text.toString().toDouble()),"N/A","N/A", newFinanceEntry.key!!)
+                        "Amount: $" + DecimalFormat("###,###,##0.00").format(itemPriceET.text.toString().toDouble()),"12:00 AM","N/A", newFinanceEntry.key!!)
                     newCalendarEntry.addToFinances = true
                     newCalendarEntryRef.setValue(newCalendarEntry)
                 }
@@ -185,6 +186,10 @@ class AddFinancesFragment : Fragment() {
                     newCalendarEntryRef.setValue(newCalendarEntry)
                 }
             }
+            activity?.finish()
+        }
+
+        view.findViewById<ImageButton>(R.id.backFromAddFinBtn).setOnClickListener {
             activity?.finish()
         }
         return view
