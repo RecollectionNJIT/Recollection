@@ -153,7 +153,8 @@ GIF created with [ShareX](https://getsharex.com/).
 
 ## GitHub Project board
 
-[Add screenshot of your Project Board with the updated status of issues for Milestone 3. Note that these should include the updated issues you worked on for this sprint and not be a duplicate of Milestone 2 Project board.] <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+<img src="ProjectBoardFinalUpdate.png" title='Final Project Board' width='' alt='Final Project Board'>
+<img src="ProjectBoardFinalUpdateDone.gif" title='Final Update' width='' alt='Final Update'>
 
 ## Completed user stories
 
@@ -183,8 +184,7 @@ GIF created with [ShareX](https://getsharex.com/).
 - Map Markers
 - Dark Mode
 
-[Add video/gif of your current application that shows build progress]
-<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+<img src="FinalBuildUpdate.gif" title='Final Build Update' width='' alt='Final Build Update'>
 
 ## App Demo Video
 
