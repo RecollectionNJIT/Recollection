@@ -111,14 +111,26 @@ class AddNotesFragment : Fragment() {
 
         fun handleCameraResult(data: Intent?) {
             val photo: Bitmap? = data?.getParcelableExtra("data")
-            photoBase64 = savePhotoAndGetBase64(photo).toString()
+            photoBase64 = savePhotoAndGetBase64(photo)
             loadImage(photoBase64)
             // Use photoBase64 as needed
         }
 
+        fun resizeBitmap(bitmap: Bitmap, newWidth: Int, newHeight: Int): Bitmap {
+            return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+        }
+
         fun handleGalleryResult(data: Intent?) {
             val selectedImageUri: Uri? = data?.data
-            photoBase64 = savePhotoAndGetBase64(MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, selectedImageUri)).toString()
+            val bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, selectedImageUri)
+
+            // Resize the bitmap to a lower resolution (e.g., 800x600)
+            val resizedBitmap = resizeBitmap(bitmap, 400, 600)
+
+            // Convert the resized bitmap to Base64
+            photoBase64 = savePhotoAndGetBase64(resizedBitmap)
+
+            // Load the resized image
             loadImage(photoBase64)
             // Use photoBase64 as needed
         }
