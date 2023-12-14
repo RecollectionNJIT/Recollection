@@ -11,8 +11,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.database
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -82,6 +84,11 @@ class RemindersAdapter(private val context: Context, private val items: List<Rem
     private fun deleteReminder(reminder: Reminders) {
         // Delete the reminder from the Firebase Realtime Database
         val auth = FirebaseAuth.getInstance()
+
+        if (reminder.addToNotes == true)
+            Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(reminder.key!!).child("addToReminders").setValue("false")
+        if (reminder.addToCal == true)
+            Firebase.database.reference.child("users").child(auth.uid!!).child("calendar").child(reminder.key!!).child("addToReminders").setValue("false")
         val databaseRef = FirebaseDatabase.getInstance().reference
         val reminderRef = databaseRef.child("users").child(auth.uid!!)
             .child("reminders").child(reminder.key ?: "")
