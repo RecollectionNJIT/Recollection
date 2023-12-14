@@ -146,7 +146,7 @@ class AddRemindersFragment : Fragment() {
                 val notes = sendToNotes.isChecked
                 if (calendar) {
                     val calendarEnt =
-                        CalendarEntry(calDate, title, description, time, "N/A", editReminder.key!!)
+                        CalendarEntry(calDate, title, description, time, "N/A", editReminder.key!!, true, notes)
                     val newCalendarEntryRef =
                         Firebase.database.reference.child("users").child(auth.uid!!).child("calendar")
                             .child(editReminder.key!!)
@@ -154,14 +154,15 @@ class AddRemindersFragment : Fragment() {
                 }
 
                 if (notes) {
-                    val notesEnt = Note(title, description, "N/A", editReminder.key!!)
+                    val notesEnt = Note(title, description, "N/A", editReminder.key!!, true, calendar)
                     val newNotesEntryRef =
                         Firebase.database.reference.child("users").child(auth.uid!!).child("notes")
                             .child(editReminder.key!!)
                     newNotesEntryRef.setValue(notesEnt)
                 }
-
                 newReminderEntryRef.updateChildren(postValues)
+                newReminderEntryRef.child("addToCal").setValue(calendar)
+                newReminderEntryRef.child("addToNotes").setValue(notes)
                 activity?.finish()
             }
 
