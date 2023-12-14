@@ -1,5 +1,6 @@
 package edu.njit.recollection
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -69,17 +71,9 @@ class CalendarAdapter(
 
         holder.itemView.setOnLongClickListener(object : View.OnLongClickListener {
             override fun onLongClick(v: View?): Boolean {
-                if (day.addToFinances == true)
-                    Firebase.database.reference.child("users").child(auth.uid!!).child("finances").child(day.key!!).child("addToCalendar").setValue(false)
-                if (day.addToNotes == true)
-                    Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(day.key!!).child("addToCal").setValue(false)
-                if (day.addToReminders == true)
-                    Firebase.database.reference.child("users").child(auth.uid!!).child("reminders").child(day.key!!).child("addToCal").setValue(false)
-
-                Firebase.database.reference.child("users").child(auth.uid!!).child("calendar")
-                    .child(day.key!!).removeValue()
+                showDeleteConfirmationDialog(day)
 //                Log.v("removed item and checking list", "" + calendarList)
-                  Toast.makeText(holder.itemView.context, "Event Deleted!", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(holder.itemView.context, "Event Deleted!", Toast.LENGTH_SHORT).show()
 //                calendarList.removeAt(holder.absoluteAdapterPosition)
 //                notifyItemRemoved(holder.absoluteAdapterPosition)
 //                notifyItemRangeChanged(holder.absoluteAdapterPosition, itemCount)
@@ -89,6 +83,41 @@ class CalendarAdapter(
                 return true
             }
         })
+    }
+    private fun showDeleteConfirmationDialog(day: CalendarEntry) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Delete Calendar Event")
+        builder.setMessage("Are you sure you want to delete this calendar event?")
+
+        builder.setPositiveButton("Delete") { _, _ ->
+            deleteEvent(day)
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    private fun deleteEvent(day: CalendarEntry) {
+        val auth = FirebaseAuth.getInstance()
+        if (day.addToFinances == true)
+            Firebase.database.reference.child("users").child(auth.uid!!).child("finances").child(day.key!!).child("addToCalendar").setValue(false)
+        if (day.addToNotes == true)
+            Firebase.database.reference.child("users").child(auth.uid!!).child("notes").child(day.key!!).child("addToCal").setValue(false)
+        if (day.addToReminders == true)
+            Firebase.database.reference.child("users").child(auth.uid!!).child("reminders").child(day.key!!).child("addToCal").setValue(false)
+
+        Firebase.database.reference.child("users").child(auth.uid!!).child("calendar")
+            .child(day.key!!).removeValue()
+            .addOnSuccessListener {
+                Toast.makeText(context, "Calendar Event Deleted!", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(context, "Failed to delete Calendar Event.", Toast.LENGTH_SHORT).show()
+            }
     }
 
     override fun getItemCount() = calendarList.size
